@@ -1,3 +1,23 @@
-# ludum dare 51
+# gamedev-boilerplate-love2d
 
-Theme: Every 10 seconds
+## Requirements
+
+1. Love2D is installed and added to your $PATH
+
+## Packaging
+
+```
+> npm run package
+```
+
+### Web
+
+```
+> npm run package:web
+```
+
+Test locally with:
+
+```
+> npm run serve
+```

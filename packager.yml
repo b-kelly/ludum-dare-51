@@ -1,0 +1,9 @@
+name: gamedev-boilerplate-love2d
+version: 0.0.1
+assets:
+    - "./src/*.lua"
+    - ./assets/**/*
+targets:
+    - love
+    - win-32
+    - win-64

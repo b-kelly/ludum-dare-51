@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "start",
+            "windows": {
+                "command": "love ./src"
+            },
+            "linux": {
+                "command": "love ./src"
+            },
+            "osx": {
+                "command": "open -n -a love ./src"
+            },
+            "type": "shell",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
