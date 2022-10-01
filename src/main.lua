@@ -30,12 +30,11 @@ function love.update(dt)
 end
 
 function love.draw(dt)
+    local mx, my = love.mouse.getPosition()
     drawUI(function()
       reference:draw()
+      workspace:draw(mx, my)
     end)
-  
-    local mx, my = love.mouse.getPosition()
-    workspace:draw(mx, my)
 
     if debug then
         local data = reference:getData()
