@@ -3,7 +3,7 @@ local mask_shader = love.graphics.newShader[[
     vec4 effect(vec4 colour, Image texture, vec2 texpos, vec2 scrpos)
     {
         vec4 pixel = Texel(texture, texpos) * colour;
-        if (pixel.a < 1) discard;
+        if (pixel.a < 1.0) discard;
         return pixel;
     }
 ]]
