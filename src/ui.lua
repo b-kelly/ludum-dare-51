@@ -19,11 +19,12 @@ function drawUI(fn)
     love.graphics.draw(clearButton, 160, 400)
 end
 
-function drawDebug(scorer, texture, sprite)
+function drawDebug(scorer, texture, sprite, mx, my)
     love.graphics.push()
     love.graphics.scale(0.5, 0.5)
     scorer:drawDebug(texture, sprite)
     love.graphics.pop()
+    love.graphics.printf(mx .. ", " .. my, mx+10, my, 40, "left")
 end
 
 function loadBagLocations()

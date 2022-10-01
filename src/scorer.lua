@@ -35,13 +35,14 @@ function S.new()
   return self
 end
 
-function S.update(self, referenceImgData, currentImgData)
-  self.reference["data"] = referenceImgData
+function S.update(self, referenceImgData, referenceImgQuad, currentImgData)
   
+  local data = singleImageData(referenceImgData, referenceImgQuad)
+  
+  self.reference["data"] = data
   self.current["data"] = currentImgData
   
-  --TODO
-  --self.simularity = getImageSimularity(referenceImgData, currentImgData)
+  self.simularity = getImageSimularity(data, currentImgData)
 end
 
 function S.drawDebug(self, texture, textureSprite)
@@ -55,6 +56,12 @@ function S.drawDebug(self, texture, textureSprite)
   drawMask(img, nil, 256, 0, function()
     love.graphics.draw(texture, textureSprite, 256, 0)
   end)
+
+  if self.simularity ~= nil then
+    local x, y, w, h = textureSprite:getViewport()
+    local pct = math.floor((self.simularity) * 1000) / 10
+    love.graphics.printf(pct .. "% similar", 256, 256, 10000, "left")
+  end
 end
 
 return S

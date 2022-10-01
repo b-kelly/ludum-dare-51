@@ -38,10 +38,8 @@ function love.draw(dt)
 
     if debug then
         local data = reference:getData()
-        drawDebug(scorer, data["textureImg"], data["textureSprite"])
+        drawDebug(scorer, data["textureImg"], data["textureSprite"], mx, my)
     end
-    
-    love.graphics.printf(mx .. ", " .. my, mx+10, my, 40, "left")
 end
 
 function love.mousepressed(x, y, button)
@@ -55,7 +53,8 @@ function love.mousepressed(x, y, button)
     workspace:placeItem(x, y)
     -- TODO also need to update the scorer when the player is done placing
     if debug then
-      scorer:update(maskData, workspace:getImageData())
+      local data = reference:getData()
+      scorer:update(data["maskData"], data["maskSprite"], workspace:getImageData())
     end
   --then check to see if you've clicked on an item that's already been placed
   elseif placedItem ~= 0 then
