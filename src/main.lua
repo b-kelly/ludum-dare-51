@@ -27,3 +27,9 @@ function love.draw(dt)
         love.graphics.draw(texture, 512, 512)
     end)
 end
+
+function love.mousepressed(x, y, button)
+    if button == 1 then
+       addItemToWorkspace(x, y)
+    end
+ end
