@@ -24,7 +24,7 @@ function love.draw(dt)
     drawUI(function()
       drawReference(texture, mask)
     end)
-
+  
     local mx, my = love.mouse.getPosition()
     workspace:draw(mx, my)
 
@@ -32,6 +32,8 @@ function love.draw(dt)
         local data = workspace:getImageData()
         drawDebug(data)
     end
+    
+    love.graphics.printf(mx .. ", " .. my, mx+10, my, 40, "left")
 end
 
 function love.mousepressed(x, y, button)
