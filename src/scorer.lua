@@ -64,6 +64,9 @@ function S.lockIn(self, referenceImgData, referenceImgQuad, currentImgData, poin
     self.worst = entry
     self.worst.imageData = currentImgData
   end
+  
+  self.simularity = nil
+  self.currentData = nil
 end
 
 function S.drawDebug(self, texture, textureSprite)
