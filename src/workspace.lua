@@ -25,9 +25,11 @@ end
 
 function W.new()  
   local texture = love.graphics.newImage("assets/buildingObjects.png")
+  local textureData = love.image.newImageData("assets/buildingObjects.png")
   local self = setmetatable({
     canvas = love.graphics.newCanvas(width, height),
     texture = texture,
+    textureData = textureData,
     sprites = loadSpritesheet(texture, spritesX, spritesY, spriteWidth),
     objects = {}
   }, W)
@@ -134,9 +136,10 @@ function W:itemToMoveOnCanvas(mx, my)
       x2 = obj.x + posX + spriteWidth,
       y2 = obj.y + posY + spriteWidth
     }
-    print(toCheck.x1.." "..toCheck.x2.." "..toCheck.y1.." "..toCheck.y2)
+    print(mx.. " " .. my .. " " .. toCheck.x1.." "..toCheck.x2.." "..toCheck.y1.." "..toCheck.y2)
     if hasMouseOverlap(mx, my, toCheck) then
-      local r, g, b, a = self.sprites[obj[idx]]:getPixel(mx, my)
+      print("is overlapping")
+      local r, g, b, a = singleImageData(self.textureData, self.sprites[obj["idx"]]):getPixel(mx, my)
       if a == 1 then
         return i
       end
