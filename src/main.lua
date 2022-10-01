@@ -37,9 +37,10 @@ function love.draw(dt)
 end
 
 function love.mousepressed(x, y, button)
-  if button == 1 then
-    workspace:selectItem(1)
-  else
+  local item = detectWhichItemToGrabFromBags(x, y)
+  if item ~= 0 then
+    workspace:selectItem(item)
+  elseif workspace.selectedItem ~= nil then
     workspace:placeItem(x, y)
   end
 end

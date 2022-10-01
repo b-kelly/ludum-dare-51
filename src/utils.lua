@@ -38,7 +38,11 @@ end
 
 function hasMouseOverlap(mx, my, obj)
   if mx > obj.x1 and mx < obj.x2 then
+    if my > obj.y1 and my < obj.y2 then
+      return true
+    end
   end
+  return false
 end
 
 function detectWhichItemToGrabFromBags(mx, my)
@@ -60,10 +64,12 @@ function detectWhichItemToGrabFromBags(mx, my)
   bagLocations[9] = {x1 = 530, y1 = bottomRowY, x2 = 627, y2 = bottomRowBottomY}
   bagLocations[10] = {x1 = 645, y1 = bottomRowY, x2 = 736, y2 = bottomRowBottomY}
   
-  for i = 1, i <= 10 do
+  for i = 1, #bagLocations do
     if hasMouseOverlap(mx, my, bagLocations[i]) then
       return i
     end
   end
+  
+  return 0
   
 end

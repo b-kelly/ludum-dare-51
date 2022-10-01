@@ -95,19 +95,8 @@ function W.placeItem(self, x, y)
   self.itemRotation = 0
 end
 
-function W.selectItem(self, itemType)
-  -- TODO use the itemType passed once we get click detection in
-  --self.selectedItem = itemType
-  
-  if self.selectedItem == nil then
-    self.selectedItem = 0
-  end
-  
-  self.selectedItem = self.selectedItem + 1
-  
-  if self.selectedItem > (spritesX * spritesY) then
-    self.selectedItem = 1
-  end
+function W.selectItem(self, itemIndex)
+  self.selectedItem = itemIndex
 end
 
 function W.rotateItem(self)
