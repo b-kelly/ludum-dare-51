@@ -18,8 +18,8 @@ end
 
 function drawItem(texture, quad, x, y, r)
   local offset = spriteWidth / 2
-  local tr = love.math.newTransform(x, y, r, 1, 1, offset, offset)
-  love.graphics.draw(texture, quad, tr)
+  --local tr = love.math.newTransform(x, y, r, 1, 1, offset, offset)
+  love.graphics.draw(texture, quad, x, y, r, 1, 1, offset, offset)
 end
 
 function W.new()  
@@ -38,7 +38,7 @@ function W.new()
 end
 
 function W.drawObjects(self)
-    local offset = spriteWidth / 2
+    --local offset = spriteWidth / 2
     for i=1,#self.objects do
         local obj = self.objects[i]
         drawItem(self.texture, self.sprites[obj["idx"]], obj["x"], obj["y"], obj["r"])
@@ -72,6 +72,9 @@ function W.getImageData(self)
 end
 
 function W.placeItem(self, x, y)
+  if self.selectedItem == nil then
+    return
+  end
   local sx, sy = translateParentCoords(x, y)
   
   if sx < 0 or sx > width or sy < 0 or sy > height then
@@ -107,6 +110,14 @@ end
 function W.rotateItem(self)
   -- rotate 3.6 degrees
   self.itemRotation = self.itemRotation + 0.01 * math.pi
+end
+
+function W.undoItemPlacement(self)
+  table.remove(self.objects, #self.objects)
+end
+
+function W.clearItems(self)
+  self.objects = {}
 end
 
 return W

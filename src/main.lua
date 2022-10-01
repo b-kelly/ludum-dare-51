@@ -45,5 +45,9 @@ end
 function love.keypressed(key, scancode, isrepeat)
   if key == "r" then
     workspace:rotateItem()
+  elseif key == "z" then
+    workspace:undoItemPlacement()
+  elseif key == "c" then
+    workspace:clearItems()
   end
 end
