@@ -15,20 +15,19 @@ function love.load(arg)
 end
 
 function love.update(dt)
-
 end
 
 function love.draw(dt)
-    drawUI()
-    drawReference(texture, mask)
+    drawUI(function()
+      drawReference(texture, mask)
+    end)
+
     drawWorkspace()
 
     if debug then
         local data = getWorkspaceImageData()
         drawDebug(data)
     end
-
-
 end
 
 function love.mousepressed(x, y, button)
