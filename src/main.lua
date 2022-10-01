@@ -14,6 +14,7 @@ local workspace
 local scorer
 local reference
 local gameState
+local isGameOver = false
 
 function love.load(arg)
     --require("mobdebug").start()
@@ -30,6 +31,11 @@ function love.update(dt)
 end
 
 function love.draw(dt)
+    if isGameOver then
+      drawGameOver(scorer)
+      return
+    end
+  
     local mx, my = love.mouse.getPosition()
     drawUI(function()
       reference:draw()
@@ -96,8 +102,14 @@ end
 
 function nextRound()
   local data = reference:getData()
-  scorer:update(data["maskData"], data["maskSprite"], workspace:getImageData())
+  scorer:lockIn(data["maskData"], data["maskSprite"], workspace:getImageData(), gameState.spentPoints, gameState.currentRound)
   local round = gameState:nextRound()
+  
+  if round == -1 then
+    isGameOver = true
+    return
+  end
+  
   reference:setIdx(round)
   workspace:reset()
 end

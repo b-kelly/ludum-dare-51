@@ -1,7 +1,8 @@
 GS = {}
 GS.__index = GS
 
-local maxPoints = 10
+local MAX_POINTS = 10
+local MAX_ROUNDS = 24 -- max different masks
 
 function GS.new()
   local self = setmetatable({
@@ -15,7 +16,7 @@ end
 function GS.spendPoint(self)
   local newPoints = self.spentPoints + 1
   
-  if newPoints > maxPoints then
+  if newPoints > MAX_POINTS then
     return false
   end
   
@@ -37,6 +38,12 @@ function GS.refundPoint(self)
 end
 
 function GS.nextRound(self)
+  local newRound = self.currentRound + 1
+  
+  if newRound > MAX_ROUNDS then
+    return -1
+  end
+  
   self.spentPoints = 0
   self.currentRound = self.currentRound + 1
   

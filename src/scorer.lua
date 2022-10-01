@@ -17,19 +17,19 @@ function getImageSimularity(a, b)
         if a1 == a2 then
             matchingPixelCount = matchingPixelCount + 1
         end
-       end 
+       end
     end
 
     return matchingPixelCount / (height * width)
 end
 
-function S.new()
+function S.new()  
   local self = setmetatable({
-    reference = {},
-    current = {},
-    best = {},
-    worst = {},
-    simularity = nil
+    currentData = nil,
+    best = nil,
+    worst = nil,
+    simularity = nil,
+    roundScores = {}
   }, S)
 
   return self
@@ -39,14 +39,35 @@ function S.update(self, referenceImgData, referenceImgQuad, currentImgData)
   
   local data = singleImageData(referenceImgData, referenceImgQuad)
   
-  self.reference["data"] = data
-  self.current["data"] = currentImgData
+  self.currentData = currentImgData
   
   self.simularity = getImageSimularity(data, currentImgData)
 end
 
+function S.lockIn(self, referenceImgData, referenceImgQuad, currentImgData, pointsSpent, round)
+  self:update(referenceImgData, referenceImgQuad, currentImgData)
+  
+  local entry = {
+      pointsSpent = pointsSpent,
+      round = round,
+      score = self.simularity
+  }
+  
+  table.insert(self.roundScores, entry)
+
+  if self.best == nil or self.simularity > self.best.score then
+    self.best = entry
+    self.best.imageData = currentImgData
+  end
+  
+  if self.worst == nil or self.simularity < self.worst.score then
+    self.worst = entry
+    self.worst.imageData = currentImgData
+  end
+end
+
 function S.drawDebug(self, texture, textureSprite)
-  local data = self.current["data"]
+  local data = self.currentData
   
   if data == nil then
     return
@@ -62,6 +83,13 @@ function S.drawDebug(self, texture, textureSprite)
     local pct = math.floor((self.simularity) * 1000) / 10
     love.graphics.printf(pct .. "% similar", 256, 256, 10000, "left")
   end
+end
+
+function S.getStats(self)
+  return {
+    best = self.best,
+    worst = self.worst,
+  }
 end
 
 return S
