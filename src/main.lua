@@ -4,17 +4,24 @@ require "utils"
 require "ui"
 
 local W = require "workspace"
+local S = require "scorer"
+local R = require "reference"
 
 debug = true
+
+local texture
+local mask
+local workspace
+local scorer
+local reference
 
 function love.load(arg)
     --require("mobdebug").start()
     love.keyboard.setKeyRepeat(true)
-    texture = love.graphics.newImage('assets/texture.png')
-    mask = love.graphics.newImage('assets/mask.png')
     loadUI()
-    loadReference()
     workspace = W.new()
+    scorer = S.new()
+    reference = R.new()
 end
 
 function love.update(dt)
@@ -22,15 +29,15 @@ end
 
 function love.draw(dt)
     drawUI(function()
-      drawReference(texture, mask)
+      reference:draw()
     end)
   
     local mx, my = love.mouse.getPosition()
     workspace:draw(mx, my)
 
     if debug then
-        local data = workspace:getImageData()
-        drawDebug(data)
+        local data = reference:getData()
+        drawDebug(scorer, data["textureImg"], data["textureSprite"])
     end
     
     love.graphics.printf(mx .. ", " .. my, mx+10, my, 40, "left")
@@ -41,6 +48,11 @@ function love.mousepressed(x, y, button)
     workspace:selectItem(1)
   else
     workspace:placeItem(x, y)
+    
+    -- TODO also need to update the scorer when the player is done placing
+    if debug then
+      scorer:update(maskData, workspace:getImageData())
+    end
   end
 end
 
@@ -51,5 +63,7 @@ function love.keypressed(key, scancode, isrepeat)
     workspace:undoItemPlacement()
   elseif key == "c" then
     workspace:clearItems()
+  elseif key == "space" then
+    reference:setIdx(0)
   end
 end
