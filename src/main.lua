@@ -9,6 +9,7 @@ debug = true
 
 function love.load(arg)
     --require("mobdebug").start()
+    love.keyboard.setKeyRepeat(true)
     texture = love.graphics.newImage('assets/texture.png')
     mask = love.graphics.newImage('assets/mask.png')
     loadUI()
@@ -42,10 +43,6 @@ function love.mousepressed(x, y, button)
 end
 
 function love.keypressed(key, scancode, isrepeat)
-  if isrepeat then
-    return
-  end
-  
   if key == "r" then
     workspace:rotateItem()
   end

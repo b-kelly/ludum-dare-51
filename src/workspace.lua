@@ -99,14 +99,14 @@ function W.selectItem(self, itemType)
   
   self.selectedItem = self.selectedItem + 1
   
-  if self.selectedItem >= (spritesX * spritesY) then
+  if self.selectedItem > (spritesX * spritesY) then
     self.selectedItem = 1
   end
 end
 
 function W.rotateItem(self)
-  -- rotate 45 degrees
-  self.itemRotation = self.itemRotation + 0.25*math.pi
+  -- rotate 3.6 degrees
+  self.itemRotation = self.itemRotation + 0.01 * math.pi
 end
 
 return W
