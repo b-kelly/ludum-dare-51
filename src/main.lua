@@ -22,6 +22,7 @@ function love.load(arg)
     workspace = W.new()
     scorer = S.new()
     reference = R.new()
+    loadBagLocations()
 end
 
 function love.update(dt)
