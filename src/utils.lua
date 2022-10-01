@@ -37,7 +37,9 @@ function drawToCanvas(canvas, fn)
 end
 
 function hasMouseOverlap(mx, my, obj)
-  if 
+  if mx > obj.x1 and mx < obj.x2 then
+  end
+end
 
 function detectWhichItemToGrabFromBags(mx, my)
   local bagLocations = {}
@@ -58,7 +60,7 @@ function detectWhichItemToGrabFromBags(mx, my)
   bagLocations[9] = {x1 = 530, y1 = bottomRowY, x2 = 627, y2 = bottomRowBottomY}
   bagLocations[10] = {x1 = 645, y1 = bottomRowY, x2 = 736, y2 = bottomRowBottomY}
   
-  for local i = 1, i <= 10 do
+  for i = 1, i <= 10 do
     if hasMouseOverlap(mx, my, bagLocations[i]) then
       return i
     end
