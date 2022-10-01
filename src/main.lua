@@ -33,7 +33,5 @@ function love.draw(dt)
 end
 
 function love.mousepressed(x, y, button)
-    if button == 1 then
-       workspace:addItem(x, y, 1)
-    end
- end
+  workspace:addItem(x, y, button)
+end
