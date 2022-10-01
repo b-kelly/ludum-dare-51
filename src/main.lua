@@ -6,14 +6,14 @@ require "ui"
 local W = require "workspace"
 local S = require "scorer"
 local R = require "reference"
+local GS = require "state"
 
 debug = true
 
-local texture
-local mask
 local workspace
 local scorer
 local reference
+local gameState
 
 function love.load(arg)
     --require("mobdebug").start()
@@ -22,6 +22,7 @@ function love.load(arg)
     workspace = W.new()
     scorer = S.new()
     reference = R.new()
+    gameState = GS.new()
     loadBagLocations()
 end
 
@@ -49,8 +50,7 @@ function love.mousepressed(x, y, button)
     workspace:selectItem(item)
   --if not, then see if you're trying to place an item you have selected
   elseif workspace.selectedItem ~= nil then
-    workspace:placeItem(x, y)
-    -- TODO also need to update the scorer when the player is done placing
+    placeItem(x, y)
     if debug then
       local data = reference:getData()
       scorer:update(data["maskData"], data["maskSprite"], workspace:getImageData())
@@ -72,6 +72,20 @@ function love.keypressed(key, scancode, isrepeat)
   elseif key == "c" then
     workspace:clearItems()
   elseif key == "space" then
-    reference:setIdx(0)
+    nextRound()
   end
+end
+
+function placeItem(x, y)
+  if gameState:spendPoint() then
+    workspace:placeItem(x, y)
+  end
+end
+
+function nextRound()
+  local data = reference:getData()
+  scorer:update(data["maskData"], data["maskSprite"], workspace:getImageData())
+  local round = gameState:nextRound()
+  reference:setIdx(round)
+  workspace:reset()
 end
