@@ -1,17 +1,19 @@
 require "mask"
 require "reference"
-require "workspace"
 require "utils"
 require "ui"
+
+local W = require "workspace"
 
 debug = true
 
 function love.load(arg)
+    --require("mobdebug").start()
     texture = love.graphics.newImage('assets/texture.png')
     mask = love.graphics.newImage('assets/mask.png')
     loadUI()
     loadReference()
-    loadWorkspace()
+    workspace = W.new()
 end
 
 function love.update(dt)
@@ -22,16 +24,16 @@ function love.draw(dt)
       drawReference(texture, mask)
     end)
 
-    drawWorkspace()
+    workspace:draw()
 
     if debug then
-        local data = getWorkspaceImageData()
+        local data = workspace:getImageData()
         drawDebug(data)
     end
 end
 
 function love.mousepressed(x, y, button)
     if button == 1 then
-       addItemToWorkspace(x, y)
+       workspace:addItem(x, y, 1)
     end
  end

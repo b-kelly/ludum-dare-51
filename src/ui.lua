@@ -1,15 +1,15 @@
 local bg
 
-function loadUI(fn)
+function loadUI()
     bg = love.graphics.newImage('assets/background.png')
     referenceArea = love.graphics.newImage('assets/referenceBackground.png')
-    fn()
     referenceAreaGrid = love.graphics.newImage('assets/referenceBackground_grid.png')
 end
 
-function drawUI()
+function drawUI(fn)
     love.graphics.draw(bg, 0, 0)
     love.graphics.draw(referenceArea, 0, 0)
+    fn()
     love.graphics.draw(referenceAreaGrid, 11, 11)
 end
 
