@@ -11,6 +11,8 @@ local height = 256
 local spriteWidth = 128
 local spritesX = 5
 local spritesY = 2
+local timer = 0
+local timerMax = 10
 
 function translateParentCoords(x, y)
   return x - posX, y - posY
@@ -88,6 +90,7 @@ function W.placeItem(self, x, y)
       r = self.itemRotation
   })
   
+  self.updateTimer()
   self.selectedItem = nil
   self.itemRotation = 0
 end
@@ -118,6 +121,16 @@ end
 
 function W.clearItems(self)
   self.objects = {}
+end
+
+--right now this is only called when we place an item, we may want to call it other places as well
+function W.updateTimer()
+  if timer < timerMax then
+    timer = timer + 1
+  else
+    --confirmFinished(), then check match TODO
+    --timer = 0
+  end
 end
 
 return W
