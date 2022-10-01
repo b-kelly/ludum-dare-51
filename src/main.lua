@@ -24,7 +24,8 @@ function love.draw(dt)
       drawReference(texture, mask)
     end)
 
-    workspace:draw()
+    local mx, my = love.mouse.getPosition()
+    workspace:draw(mx, my)
 
     if debug then
         local data = workspace:getImageData()
@@ -33,5 +34,19 @@ function love.draw(dt)
 end
 
 function love.mousepressed(x, y, button)
-  workspace:addItem(x, y, button)
+  if button == 1 then
+    workspace:selectItem(1)
+  else
+    workspace:placeItem(x, y)
+  end
+end
+
+function love.keypressed(key, scancode, isrepeat)
+  if isrepeat then
+    return
+  end
+  
+  if key == "r" then
+    workspace:rotateItem()
+  end
 end
