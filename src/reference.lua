@@ -57,6 +57,7 @@ end
 function R.getData(self)
   return {
     textureImg = self.textureImg,
+    maskData = self.maskData,
     textureSprite = self.textures[self.currentIdx],
     maskSprite = self.masks[self.currentIdx],
   }
