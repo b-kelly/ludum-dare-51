@@ -20,7 +20,6 @@ end
 
 function drawItem(texture, quad, x, y, r)
   local offset = spriteWidth / 2
-  --local tr = love.math.newTransform(x, y, r, 1, 1, offset, offset)
   love.graphics.draw(texture, quad, x, y, r, 1, 1, offset, offset)
 end
 
@@ -40,7 +39,6 @@ function W.new()
 end
 
 function W.drawObjects(self)
-    --local offset = spriteWidth / 2
     for i=1,#self.objects do
         local obj = self.objects[i]
         drawItem(self.texture, self.sprites[obj["idx"]], obj["x"], obj["y"], obj["r"])

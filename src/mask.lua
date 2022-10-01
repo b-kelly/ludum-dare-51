@@ -8,16 +8,20 @@ local mask_shader = love.graphics.newShader[[
     }
 ]]
 
-local function drawStencil(mask, x, y)
+local function drawStencil(mask, quad, x, y)
+  if quad == nil then
+    quad = love.graphics.newQuad(0, 0, mask:getWidth(), mask:getHeight(), mask)
+  end
+  
    love.graphics.setShader(mask_shader)
-   love.graphics.draw(mask, x, y)
+   love.graphics.draw(mask, quad, x, y)
    love.graphics.setShader()
 end
 
 -- mask is love.Image
-function drawMask(mask, x, y, fn)
+function drawMask(mask, quad, x, y, fn)
     love.graphics.stencil(function()
-        drawStencil(mask, x, y)
+        drawStencil(mask, quad, x, y)
     end, "replace", 1)
     love.graphics.setStencilTest("greater", 0)
     fn()

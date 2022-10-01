@@ -19,11 +19,9 @@ function drawUI(fn)
     love.graphics.draw(clearButton, 160, 400)
 end
 
-function drawDebug(data)
+function drawDebug(scorer, texture, sprite)
     love.graphics.push()
     love.graphics.scale(0.5, 0.5)
-    drawMask(love.graphics.newImage(data), 256, 0, function()
-        love.graphics.draw(texture, 256, 0)
-    end)
+    scorer:drawDebug(texture, sprite)
     love.graphics.pop()
 end
