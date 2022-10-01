@@ -44,7 +44,8 @@ end
 
 function love.mousepressed(x, y, button)
   --first, check to see if you're trying to pick up an item from a bag
-  local item = detectWhichItemToGrabFromBags(x, y)
+  local item = detectWhichObjPressed(x, y, bagLocations)
+  local UIButton = detectWhichObjPressed(x, y, buttons)
   if item ~= 0 then
     workspace:selectItem(item)
   --if not, then see if you're trying to place an item you have selected
@@ -54,6 +55,12 @@ function love.mousepressed(x, y, button)
     if debug then
       local data = reference:getData()
       scorer:update(data["maskData"], data["maskSprite"], workspace:getImageData())
+    end
+  elseif UIButton ~= 0 then
+    if UIButton == 2 then
+      workspace:undoItemPlacement()
+    elseif UIButton == 3 then
+      workspace:clearItems()
     end
   --then check to see if you've clicked on an item that's already been placed
   else

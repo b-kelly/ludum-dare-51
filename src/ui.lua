@@ -4,9 +4,17 @@ function loadUI()
     bg = love.graphics.newImage('assets/background.png')
     referenceArea = love.graphics.newImage('assets/referenceBackground.png')
     referenceAreaGrid = love.graphics.newImage('assets/referenceBackground_grid.png')
+    
+    
     undoButton = love.graphics.newImage('assets/undoButton.png')
     rotateButton = love.graphics.newImage('assets/rotateButton.png')
     clearButton = love.graphics.newImage('assets/clearButton.png')
+    buttons = {}
+    local canvasButtonX = 160
+    buttons[1] = newButton(rotateButton, canvasButtonX, 260)
+    buttons[2] = newButton(undoButton, canvasButtonX, 330)
+    buttons[3] = newButton(clearButton, canvasButtonX, 400)
+    
 end
 
 function drawUI(fn)
@@ -14,9 +22,10 @@ function drawUI(fn)
     love.graphics.draw(referenceArea, 0, 0)
     fn()
     love.graphics.draw(referenceAreaGrid, 11, 11)
-    love.graphics.draw(rotateButton, 160, 260)
-    love.graphics.draw(undoButton, 160, 330)
-    love.graphics.draw(clearButton, 160, 400)
+    for i=1, #buttons do
+      local b = buttons[i]
+      love.graphics.draw(b.img, b.x1, b.y1)
+    end
 end
 
 function drawDebug(scorer, texture, sprite, mx, my)
@@ -44,4 +53,14 @@ function loadBagLocations()
   bagLocations[8] = {x1 = 450, y1 = bottomRowY, x2 = 520, y2 = bottomRowBottomY}
   bagLocations[9] = {x1 = 530, y1 = bottomRowY, x2 = 627, y2 = bottomRowBottomY}
   bagLocations[10] = {x1 = 645, y1 = bottomRowY, x2 = 736, y2 = bottomRowBottomY}
+end
+
+function newButton(buttonImg, buttonX, buttonY)
+  return {
+    img = buttonImg,
+    x1 = buttonX,
+    y1 = buttonY,
+    x2 = buttonX + buttonImg:getWidth(),
+    y2 = buttonY + buttonImg:getHeight()
+  }
 end

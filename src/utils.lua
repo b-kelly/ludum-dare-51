@@ -23,14 +23,11 @@ function hasMouseOverlap(mx, my, obj)
   return false
 end
 
-function detectWhichItemToGrabFromBags(mx, my)
-  
-  for i = 1, #bagLocations do
-    if hasMouseOverlap(mx, my, bagLocations[i]) then
+function detectWhichObjPressed(mx, my, tbl)
+  for i = 1, #tbl do
+    if hasMouseOverlap(mx, my, tbl[i]) then
       return i
     end
   end
-  
   return 0
-  
 end
