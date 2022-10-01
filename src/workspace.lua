@@ -107,7 +107,7 @@ end
 
 function W.rotateItem(self)
   -- rotate 3.6 degrees
-  self.itemRotation = self.itemRotation + 0.01 * math.pi
+  self.itemRotation = self.itemRotation + 0.05 * math.pi
 end
 
 function W.undoItemPlacement(self)
