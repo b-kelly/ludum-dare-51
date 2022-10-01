@@ -33,7 +33,6 @@ function loadBagLocations()
   local bottomRowY = 195
   local bottomRowBottomY = 275
   -- { top left x, top left y, bottom right x, bottom right y
-  --TODO - this all probably belongs somewhere else, maybe in loadUI() ?
   bagLocations[1] = {x1 = 276, y1 = topRowY, x2 = 360, y2 = topRowBottomY}
   bagLocations[2] = {x1 = 375, y1 = topRowY, x2 = 475, y2 = topRowBottomY}
   bagLocations[3] = {x1 = 487, y1 = topRowY, x2 = 560, y2 = topRowBottomY}

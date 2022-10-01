@@ -45,16 +45,21 @@ function love.draw(dt)
 end
 
 function love.mousepressed(x, y, button)
+  --first, check to see if you're trying to pick up an item from a bag
   local item = detectWhichItemToGrabFromBags(x, y)
+  local placedItem = workspace:itemToMoveOnCanvas(x, y)
   if item ~= 0 then
     workspace:selectItem(item)
+  --if not, then see if you're trying to place an item you have selected
   elseif workspace.selectedItem ~= nil then
     workspace:placeItem(x, y)
-    
     -- TODO also need to update the scorer when the player is done placing
     if debug then
       scorer:update(maskData, workspace:getImageData())
     end
+  --then check to see if you've clicked on an item that's already been placed
+  elseif placedItem ~= 0 then
+    workspace:removeItem(placedItem)
   end
 end
 
