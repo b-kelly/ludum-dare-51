@@ -3,8 +3,8 @@ require "utils"
 local canvas
 local texture
 
-local posX = 256
-local posY = 256
+local posX = 260
+local posY = 314
 local width = 256
 local height = 256
 
@@ -26,9 +26,9 @@ end
 
 function drawWorkspace()
     drawToCanvas(canvas, function ()
-        love.graphics.clear(0, 0, 0, 0)
-        love.graphics.setColor(1, 0, 0, 1)
+        love.graphics.setColor(1, 1, 1, 0)
         love.graphics.rectangle("fill", 0, 0, width, height)
+        love.graphics.setColor(1, 1, 1, 1)
         drawObjects()
     end)
 

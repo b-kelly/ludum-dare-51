@@ -2,13 +2,14 @@ require "mask"
 require "reference"
 require "workspace"
 require "utils"
-debug = true
+require "ui"
 
-love.graphics.setBackgroundColor(255,255,0)
+debug = true
 
 function love.load(arg)
     texture = love.graphics.newImage('assets/texture.png')
     mask = love.graphics.newImage('assets/mask.png')
+    loadUI()
     loadReference()
     loadWorkspace()
 end
@@ -18,14 +19,16 @@ function love.update(dt)
 end
 
 function love.draw(dt)
+    drawUI()
     drawReference(texture, mask)
     drawWorkspace()
 
-    local data = getWorkspaceImageData()
+    if debug then
+        local data = getWorkspaceImageData()
+        drawDebug(data)
+    end
 
-    drawMask(love.graphics.newImage(data), 512, 512, function()
-        love.graphics.draw(texture, 512, 512)
-    end)
+
 end
 
 function love.mousepressed(x, y, button)

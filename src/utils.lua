@@ -26,8 +26,10 @@ function drawToCanvas(canvas, fn)
         stencil=true
     })
 
+    love.graphics.push()
     fn()
-
+    love.graphics.reset()
+    love.graphics.pop()
 
     love.graphics.setCanvas()
 

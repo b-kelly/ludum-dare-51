@@ -8,6 +8,7 @@ end
 
 function drawReference(texture, mask)
     drawToCanvas(canvas, function ()
+        love.graphics.scale(0.5, 0.5)
         drawMask(mask, 0, 0, function()
             love.graphics.draw(texture, 0, 0)
         end)
