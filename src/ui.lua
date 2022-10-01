@@ -4,8 +4,7 @@ function loadUI()
     bg = love.graphics.newImage('assets/background.png')
     referenceArea = love.graphics.newImage('assets/referenceBackground.png')
     referenceAreaGrid = love.graphics.newImage('assets/referenceBackground_grid.png')
-    
-    
+    workspaceGrid = love.graphics.newImage('assets/workingCanvas_grid.png')
     undoButton = love.graphics.newImage('assets/undoButton.png')
     rotateButton = love.graphics.newImage('assets/rotateButton.png')
     clearButton = love.graphics.newImage('assets/clearButton.png')
@@ -14,7 +13,7 @@ function loadUI()
     buttons[1] = newButton(rotateButton, canvasButtonX, 260)
     buttons[2] = newButton(undoButton, canvasButtonX, 330)
     buttons[3] = newButton(clearButton, canvasButtonX, 400)
-    
+
 end
 
 function drawUI(fn)
@@ -22,6 +21,7 @@ function drawUI(fn)
     love.graphics.draw(referenceArea, 0, 0)
     fn()
     love.graphics.draw(referenceAreaGrid, 11, 11)
+    love.graphics.draw(workspaceGrid, 260, 314)
     for i=1, #buttons do
       local b = buttons[i]
       love.graphics.draw(b.img, b.x1, b.y1)
