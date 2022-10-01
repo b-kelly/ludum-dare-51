@@ -11,8 +11,8 @@ end
 function drawDebug(data)
     love.graphics.push()
     love.graphics.scale(0.5, 0.5)
-    drawMask(love.graphics.newImage(data), 0, 256, function()
-        love.graphics.draw(texture, 0, 256)
+    drawMask(love.graphics.newImage(data), 256, 0, function()
+        love.graphics.draw(texture, 256, 0)
     end)
     love.graphics.pop()
 end
