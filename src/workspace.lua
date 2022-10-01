@@ -99,8 +99,10 @@ function W.selectItem(self, itemIndex)
   self.selectedItem = itemIndex
 end
 
-function W.removeItem(self, itemIndex)
-  table.remove(self.objects, self.objects[itemIndex])
+function W:removeItem(itemIndex)
+  self.selectedItem = self.objects[itemIndex].idx
+  self.itemRotation = self.objects[itemIndex].r
+  table.remove(self.objects, itemIndex)
 end
 
 function W.rotateItem(self)
@@ -127,19 +129,20 @@ function W.updateTimer()
 end
 
 function W:itemToMoveOnCanvas(mx, my)
-  for i=1,#self.objects do
+  for i=#self.objects, 1, -1 do
     local obj = self.objects[i]
+    local offset = spriteWidth/2
     local toCheck = 
     {
-      x1 = obj.x + posX,
-      y1 = obj.y + posY,
-      x2 = obj.x + posX + spriteWidth,
-      y2 = obj.y + posY + spriteWidth
+      x1 = obj.x + posX - offset,
+      y1 = obj.y + posY - offset,
+      x2 = obj.x + posX + spriteWidth - offset,
+      y2 = obj.y + posY + spriteWidth - offset
     }
     print(mx.. " " .. my .. " " .. toCheck.x1.." "..toCheck.x2.." "..toCheck.y1.." "..toCheck.y2)
     if hasMouseOverlap(mx, my, toCheck) then
       print("is overlapping")
-      local r, g, b, a = singleImageData(self.textureData, self.sprites[obj["idx"]]):getPixel(mx, my)
+      local r, g, b, a = singleImageData(self.textureData, self.sprites[obj["idx"]]):getPixel(mx-toCheck.x1, my-toCheck.y1)
       if a == 1 then
         return i
       end
