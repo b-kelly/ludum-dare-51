@@ -1,6 +1,7 @@
 require "mask"
 require "reference"
 require "workspace"
+require "utils"
 debug = true
 
 love.graphics.setBackgroundColor(255,255,0)
@@ -20,9 +21,9 @@ function love.draw(dt)
     drawReference(texture, mask)
     drawWorkspace()
 
-    local data = getWorkspaceImage()
+    local data = getWorkspaceImageData()
 
-    drawMask(data, 512, 512, function()
+    drawMask(love.graphics.newImage(data), 512, 512, function()
         love.graphics.draw(texture, 512, 512)
     end)
 end

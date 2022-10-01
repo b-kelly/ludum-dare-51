@@ -1,3 +1,5 @@
+require "utils"
+
 local canvas
 local texture
 
@@ -12,19 +14,14 @@ function drawObjects()
 end
 
 function drawWorkspace()
-    love.graphics.setCanvas({
-        canvas,
-        stencil=true
-    })
 
-    drawObjects()
-
-
-    love.graphics.setCanvas()
+    drawToCanvas(canvas, function ()
+        drawObjects()
+    end)
 
     love.graphics.draw(canvas, 256, 256)
 end
 
-function getWorkspaceImage()
-    return love.graphics.newImage(canvas:newImageData())
+function getWorkspaceImageData()
+    return canvas:newImageData()
 end
