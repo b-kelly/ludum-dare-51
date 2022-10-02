@@ -56,7 +56,7 @@ end
 function GS.new()
   local self = setmetatable({
     scene = Scenes.TITLE,
-    sceneNeedsActivation = false,
+    sceneNeedsActivation = true,
     spentSeconds = 0,
     currentRound = 1,
     workspace = W.new(),
@@ -87,6 +87,8 @@ function GS.nextScene(self)
   end
 
   if self.scene == Scenes.TITLE then
+    self:setScene(Scenes.INTRO_STORY)
+  elseif self.scene == Scenes.INTRO_STORY then
     self:setScene(Scenes.INTRO_HELP)
   elseif self.scene == Scenes.INTRO_HELP or self.scene == Scenes.ROUND_END then
     self:setScene(Scenes.NEW_REQUEST)

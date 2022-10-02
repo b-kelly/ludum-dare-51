@@ -13,6 +13,7 @@ Scenes = {
   ROUND_END = 5,
   GAME_OVER = 6,
   HELP = 7,
+  INTRO_STORY = 8
 }
 
 local gameState
@@ -22,7 +23,7 @@ function love.load(arg)
     --require("mobdebug").start()
     love.keyboard.setKeyRepeat(true)
     mainTextFont = love.graphics.newFont("assets/fonts/SignikaNegative-Medium.ttf", 20)
-    love.graphics.setFont(mainTextFont)
+    
 
     -- load the scenes
     otherScenes.load()
@@ -49,6 +50,8 @@ function love.update(dt)
 end
 
 function love.draw(dt)
+  love.graphics.setFont(mainTextFont)
+  
   local scene = gameState.scene
 
   -- otherScenes handles drawing all non-game scenes

@@ -10,6 +10,7 @@ local howToPlayBg
 local beginBg
 local meta = {}
 local grandFantasy = love.audio.newSource("assets/audio/grandFantasy.mp3", "stream")
+grandFantasy:seek(2, "seconds")
 
 local function drawGameOverScreen(scorer)
   love.graphics.print("Game Over", 0, 0)
@@ -20,6 +21,11 @@ end
 
 local function drawTitleScreen()
   love.graphics.draw(titleBg, 0, 0)
+  love.graphics.print("(TODO cleanup) PRESS ENTER", 150, 330)
+end
+
+local function drawIntroStoryScreen()
+  love.graphics.draw(introBg, 0, 0)
   love.graphics.print("(TODO cleanup) PRESS ENTER", 150, 330)
 end
 
@@ -124,6 +130,8 @@ function SO.drawScene(scene, state)
     drawRoundEndScreen(state)
   elseif scene == Scenes.HELP or scene == Scenes.INTRO_HELP then
     drawHelpScreen()
+  elseif scene == Scenes.INTRO_STORY then
+    drawIntroStoryScreen()
   elseif scene == Scenes.NEW_REQUEST then
     drawNewRequestScreen()
   end
