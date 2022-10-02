@@ -10,6 +10,7 @@ local MAX_ROUNDS = 24 -- max different masks
     
   --load main scene-specific audio
 local timerSound = love.audio.newSource("assets/audio/tickTock.wav", "static")
+local timerFull = love.audio.newSource("assets/audio/timerFull.wav", "static")
 timerSound:setVolume(.5)
 
 local function canSpendSecond(spentSeconds)
@@ -98,7 +99,11 @@ function GS.placeItem(self, x, y)
   local canSpend, newSeconds = canSpendSecond(self.spentSeconds)
   if canSpend and self.workspace:_placeItem(self.selectedItem, x, y) then
     self.spentSeconds = newSeconds
-    timerSound:play()
+    if newSeconds == MAX_SECONDS then
+      timerFull:play()
+    else
+      timerSound:play()
+    end
   end
 
   self:selectItem(nil)
