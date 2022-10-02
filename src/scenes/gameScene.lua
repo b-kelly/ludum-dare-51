@@ -18,6 +18,18 @@ local function nextRound(reference, workspace, gameState, scorer)
   gameState:setScene(Scenes.ROUND_END)
 end
 
+local function placeItem(gameState, workspace, x, y)
+    if gameState:spendPoint() then
+        workspace:placeItem(x, y)
+    end
+end
+
+local function undoItem(gameState, workspace)
+    if gameState:refundPoint() then
+        workspace:undoItemPlacement()
+    end
+end
+
 function SG.load()
     loadUI()
     loadBagLocations()
@@ -42,7 +54,7 @@ function SG.drawScene(scene, reference, workspace, gameState, scorer)
   return true
 end
 
-function SG.handleMousepress(reference, workspace, scorer, x, y)
+function SG.handleMousepress(reference, workspace, gameState, scorer, x, y)
   --first, check to see if you're trying to pick up an item from a bag
   local item = detectWhichObjPressed(x, y, bagLocations)
   local UIButton = detectWhichObjPressed(x, y, buttons)
@@ -50,14 +62,14 @@ function SG.handleMousepress(reference, workspace, scorer, x, y)
     workspace:selectItem(item)
   --if not, then see if you're trying to place an item you have selected
   elseif workspace.selectedItem ~= nil then
-    placeItem(x, y)
+    placeItem(gameState, workspace, x, y)
     if debug then
       local data = reference:getData()
       scorer:update(data["maskData"], data["maskSprite"], workspace:getImageData())
     end
   elseif UIButton ~= 0 then
     if UIButton == 2 then
-      undoItem()
+      undoItem(gameState, workspace)
     elseif UIButton == 3 then
       workspace:clearItems()
     end

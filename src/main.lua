@@ -36,35 +36,23 @@ function love.draw(dt)
   -- otherScenes handles drawing all non-game scenes
   if otherScenes.drawScene(scene, scorer) then
     return
+  elseif scene == Scenes.GAME then
+    gameScene.drawScene(scene, reference, workspace, gameState, scorer)
   end
-
-  gameScene.drawScene(scene, reference, workspace, gameState, scorer)
 end
 
 function love.mousepressed(x, y, button)
   if gameState.scene ~= Scenes.GAME then
     return
+  elseif gameState.scene == Scenes.GAME then
+    gameScene.handleMousepress(reference, workspace, gameState, scorer, x, y)
   end
-
-  gameScene.handleMousepress(reference, workspace, scorer, x, y)
 end
 
 function love.keypressed(key, scancode, isrepeat)
   if otherScenes.handleKeypress(gameState, key, scancode, isrepeat) then
     return
-  end
-
-  gameScene.handleKeypress(reference, workspace, gameState, scorer, key, isrepeat)
-end
-
-function placeItem(x, y)
-  if gameState:spendPoint() then
-    workspace:placeItem(x, y)
-  end
-end
-
-function undoItem()
-  if gameState:refundPoint() then
-    workspace:undoItemPlacement()
+  elseif gameState.scene == Scenes.GAME then
+    gameScene.handleKeypress(reference, workspace, gameState, scorer, key, isrepeat)
   end
 end
