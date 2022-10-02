@@ -13,6 +13,8 @@ local clearButton
 local buttons
 local bagLocations
 local slideAnim
+local timerSpriteSheet
+local timer
 
 local DEBUG_shouldUpdateScorer = false
 
@@ -52,6 +54,7 @@ end
 
 local function loadUI()
     bg = love.graphics.newImage('assets/background.png')
+    timerSpriteSheet = love.graphics.newImage('assets/timerSpriteSheet.png')
     referenceArea = love.graphics.newImage('assets/referenceBackground.png')
     referenceAreaGrid = love.graphics.newImage('assets/referenceBackground_grid.png')
     workspaceGrid = love.graphics.newImage('assets/workingCanvas_grid.png')
@@ -61,6 +64,11 @@ local function loadUI()
     local canvasButtonX = 170
     buttons[1] = newButton(undoButton, canvasButtonX, 380)
     buttons[2] = newButton(clearButton, canvasButtonX, 440)
+    local timerWidth = 64
+    timer = {}
+    for i=0, 11 do
+      timer[i] = love.graphics.newQuad(i*timerWidth, 0, 64, 58, timerSpriteSheet)
+    end
 end
 
 local function debugUpdateScorer(state)
@@ -109,11 +117,22 @@ local function loadBagLocations()
   bagLocations[10] = {x1 = 645, y1 = bottomRowY, x2 = 736, y2 = bottomRowBottomY}
 end
 
+local function selectTimerSprite(maxSeconds, secondsSpent)
+  local secondsLeft = maxSeconds - secondsSpent
+  if secondsLeft >= 1 and secondsLeft <= maxSeconds then
+    return secondsLeft + 1
+  else
+    return 0
+  end
+end
+
 local function drawSecondsGauge(seconds)
   -- TODO some sort of gauge/graphic for seconds?
-  love.graphics.setColor(0, 0, 0)
-  love.graphics.print(seconds["spent"] .. "/" .. seconds["max"], 85, 415)
-  love.graphics.setColor(255, 255, 255)
+  local timerSprite = selectTimerSprite(seconds.max, seconds.spent)
+  love.graphics.draw(timerSpriteSheet, timer[timerSprite], 66, 390)
+  --love.graphics.setColor(0, 0, 0)
+  --love.graphics.print(seconds["spent"] .. "/" .. seconds["max"], 85, 415)
+  --love.graphics.setColor(255, 255, 255)
 end
 
 local function drawUI(state, mx, my)
