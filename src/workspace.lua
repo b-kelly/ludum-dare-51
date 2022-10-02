@@ -80,6 +80,7 @@ function W._placeItem(self, x, y)
   local sx, sy = translateParentCoords(x, y)
 
   if sx < 0 or sx > width or sy < 0 or sy > height then
+    self.selectedItem = nil
       return
   end
 

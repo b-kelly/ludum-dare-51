@@ -3,7 +3,7 @@ local utils = require("utils")
 local S = {}
 S.__index = S
 
-local function getImageSimularity(a, b)
+local function getImageSimilarity(a, b)
     -- there may be a better way of doing this...
     -- assumes both images are the same height/width
     local height = a:getHeight()
@@ -30,7 +30,7 @@ function S.new()
     currentData = nil,
     best = nil,
     worst = nil,
-    simularity = nil,
+    similarity = nil,
     roundScores = {}
   }, S)
 
@@ -42,7 +42,7 @@ function S.update(self, referenceImgData, referenceImgQuad, currentImgData)
 
   self.currentData = currentImgData
 
-  self.simularity = getImageSimularity(data, currentImgData)
+  self.similarity = getImageSimilarity(data, currentImgData)
 end
 
 function S.lockIn(self, referenceImgData, referenceImgQuad, currentImgData, secondsSpent, round)
@@ -51,22 +51,22 @@ function S.lockIn(self, referenceImgData, referenceImgQuad, currentImgData, seco
   local entry = {
       secondsSpent = secondsSpent,
       round = round,
-      score = self.simularity
+      score = self.similarity
   }
 
   table.insert(self.roundScores, entry)
 
-  if self.best == nil or self.simularity > self.best.score then
+  if self.best == nil or self.similarity > self.best.score then
     self.best = entry
     self.best.imageData = currentImgData
   end
 
-  if self.worst == nil or self.simularity < self.worst.score then
+  if self.worst == nil or self.similarity < self.worst.score then
     self.worst = entry
     self.worst.imageData = currentImgData
   end
 
-  self.simularity = nil
+  self.similarity = nil
   self.currentData = nil
 end
 
@@ -90,8 +90,8 @@ function S.drawDebug(self, texture, textureSprite)
     love.graphics.draw(texture, textureSprite, x, y)
   end)
 
-  if self.simularity ~= nil then
-    love.graphics.printf(utils.formatScore(self.simularity) .. " similar", x, y + th + 10, tw, "center")
+  if self.similarity ~= nil then
+    love.graphics.printf(utils.formatScore(self.similarity) .. " similar", x, y + th + 10, tw, "center")
   end
 end
 
