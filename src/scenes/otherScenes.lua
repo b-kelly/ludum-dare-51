@@ -9,14 +9,10 @@ local introBg
 local howToPlayBg
 local beginBg
 local meta = {}
-local grandFantasy = love.audio.newSource("assets/audio/grandFantasy.mp3", "stream")
-local backgroundBeatz = love.audio.newSource("assets/audio/backgroundBeatz.mp3", "stream")
-local goblinMischief = love.audio.newSource("assets/audio/goblinMischief.mp3", "stream")
-local gameOverMusic = love.audio.newSource("assets/audio/imperfectCopySong.mp3", "stream")
-grandFantasy:seek(2, "seconds")
-grandFantasy:setVolume(.3)
-backgroundBeatz:setVolume(.2)
-goblinMischief:setVolume(.3)
+local grandFantasy
+local backgroundBeatz
+local goblinMischief
+local gameOverMusic
 
 local function drawGameOverScreen(scorer)
   love.graphics.print("Game Over", 0, 0)
@@ -139,8 +135,14 @@ function SO.load()
   howToPlayBg = love.graphics.newImage("assets/howToPlayCard.png")
   beginBg = love.graphics.newImage("assets/beginCard.png")
   grandFantasy = love.audio.newSource("assets/audio/grandFantasy.mp3", "stream")
+  backgroundBeatz = love.audio.newSource("assets/audio/backgroundBeatz.mp3", "stream")
+  goblinMischief = love.audio.newSource("assets/audio/goblinMischief.mp3", "stream")
+  gameOverMusic = love.audio.newSource("assets/audio/imperfectCopySong.mp3", "stream")
+
   grandFantasy:seek(2, "seconds")
   grandFantasy:setVolume(.3)
+  backgroundBeatz:setVolume(.2)
+  goblinMischief:setVolume(.3)
 end
 
 function SO.activate(scene, state)
