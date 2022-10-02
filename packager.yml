@@ -1,4 +1,4 @@
-name: gamedev-boilerplate-love2d
+name: ludum-dare-51
 version: 0.0.1
 assets:
   - "./src/**/*.lua"

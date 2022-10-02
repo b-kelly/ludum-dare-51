@@ -1,18 +1,18 @@
 {
-    "name": "gamedev-boilerplate-love2d",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "package": "love-packager package",
-        "build:web": "node node_modules/love.js/index -c --title \"Love2D Game\" ./dist/0.0.1/gamedev-boilerplate-love2d-0.0.1.love ./dist/web",
-        "serve": "npm run build:web && http-server ./dist/web"
-    },
-    "author": "",
-    "license": "ISC",
-    "devDependencies": {
-        "http-server": "^14.1.1",
-        "love-packager": "^1.2.19",
-        "love.js": "^11.4.1"
-    }
+  "name": "gamedev-boilerplate-love2d",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "package": "love-packager package",
+    "build:web": "node node_modules/love.js/index -c --title \"Ludum Dare 51\" ./dist/0.0.1/ludum-dare-51-0.0.1.love ./dist/web",
+    "serve": "npm run build:web && http-server ./dist/web"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "love-packager": "^1.2.19",
+    "love.js": "^11.4.1"
+  }
 }
