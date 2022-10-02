@@ -8,16 +8,14 @@ GS.__index = GS
 local MAX_SECONDS = 10
 local MAX_ROUNDS = 24 -- max different masks
 
-local function spendSecond(self)
-  local newSeconds = self.spentSeconds + 1
+local function canSpendSecond(spentSeconds)
+  local newSeconds = spentSeconds + 1
 
   if newSeconds > MAX_SECONDS then
-    return false
+    return false, 0
   end
 
-  self.spentSeconds = newSeconds
-
-  return true
+  return true, newSeconds
 end
 
 local function refundSecond(self)
@@ -90,8 +88,9 @@ function GS.nextScene(self)
 end
 
 function GS.placeItem(self, x, y)
-  if spendSecond(self) then
-    self.workspace:_placeItem(x, y)
+  local canSpend, newSeconds = canSpendSecond(self.spentSeconds)
+  if canSpend and self.workspace:_placeItem(x, y) then
+    self.spentSeconds = newSeconds
   end
 end
 

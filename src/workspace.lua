@@ -75,13 +75,14 @@ end
 
 function W._placeItem(self, x, y)
   if self.selectedItem == nil then
-    return
+    return false
   end
+
   local sx, sy = translateParentCoords(x, y)
 
   if sx < 0 or sx > width or sy < 0 or sy > height then
     self.selectedItem = nil
-      return
+    return false
   end
 
   table.insert(self.objects, {
@@ -97,6 +98,8 @@ function W._placeItem(self, x, y)
   self.itemRotation = 0
   self.isMirrorX = false
   self.isMirrorY = false
+
+  return true
 end
 
 function W.rotateItem(self, counterClockwise)
