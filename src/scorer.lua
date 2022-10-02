@@ -45,11 +45,11 @@ function S.update(self, referenceImgData, referenceImgQuad, currentImgData)
   self.simularity = getImageSimularity(data, currentImgData)
 end
 
-function S.lockIn(self, referenceImgData, referenceImgQuad, currentImgData, pointsSpent, round)
+function S.lockIn(self, referenceImgData, referenceImgQuad, currentImgData, secondsSpent, round)
   self:update(referenceImgData, referenceImgQuad, currentImgData)
 
   local entry = {
-      pointsSpent = pointsSpent,
+      secondsSpent = secondsSpent,
       round = round,
       score = self.simularity
   }

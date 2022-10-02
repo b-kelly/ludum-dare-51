@@ -65,21 +65,21 @@ local function loadBagLocations()
   bagLocations[10] = {x1 = 645, y1 = bottomRowY, x2 = 736, y2 = bottomRowBottomY}
 end
 
-local function drawSecondsGauge(points)
+local function drawSecondsGauge(seconds)
   -- TODO some sort of gauge/graphic for seconds?
   love.graphics.setColor(0, 0, 0)
-  love.graphics.print(points["spent"] .. "/" .. points["max"], 85, 415)
+  love.graphics.print(seconds["spent"] .. "/" .. seconds["max"], 85, 415)
   love.graphics.setColor(255, 255, 255)
 end
 
-local function drawUI(fn, points)
+local function drawUI(fn, seconds)
     love.graphics.draw(bg, 0, 0)
     love.graphics.draw(referenceArea, 100, 80)
     fn()
     love.graphics.draw(referenceAreaGrid, 110, 90)
     love.graphics.draw(workspaceGrid, 260, 314)
 
-    drawSecondsGauge(points)
+    drawSecondsGauge(seconds)
 
     for i=1, #buttons do
       local b = buttons[i]
@@ -89,7 +89,7 @@ end
 
 local function nextRound(state)
   local data = state.reference:getData()
-  state.scorer:lockIn(data["maskData"], data["maskSprite"], state.workspace:getImageData(), state.spentPoints, state.currentRound)
+  state.scorer:lockIn(data["maskData"], data["maskSprite"], state.workspace:getImageData(), state.spentSeconds, state.currentRound)
   local round = state:nextRound()
 
   if round == -1 then
@@ -103,13 +103,13 @@ local function nextRound(state)
 end
 
 local function placeItem(state, x, y)
-    if state:spendPoint() then
+    if state:spendSecond() then
       state.workspace:placeItem(x, y)
     end
 end
 
 local function undoItem(state)
-    if state:refundPoint() then
+    if state:refundSecond() then
       state.workspace:undoItemPlacement()
     end
 end
@@ -128,7 +128,7 @@ function SG.drawScene(scene, state)
   drawUI(function()
     state.reference:draw()
     state.workspace:draw(mx, my)
-  end, state:points())
+  end, state:seconds())
 
   if debug then
       local data = state.reference:getData()

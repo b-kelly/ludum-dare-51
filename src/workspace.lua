@@ -89,7 +89,6 @@ function W.placeItem(self, x, y)
       r = self.itemRotation
   })
 
-  self.updateTimer()
   self.selectedItem = nil
   self.itemRotation = 0
 end
@@ -122,16 +121,6 @@ function W.reset(self)
   self.selectedItem = nil
   self.itemRotation = 0
   self:clearItems()
-end
-
---right now this is only called when we place an item, we may want to call it other places as well
-function W.updateTimer()
-  if timer < timerMax then
-    timer = timer + 1
-  else
-    --confirmFinished(), then check match TODO
-    --timer = 0
-  end
 end
 
 function W:itemToMoveOnCanvas(mx, my)

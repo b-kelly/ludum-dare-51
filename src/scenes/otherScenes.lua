@@ -17,7 +17,7 @@ local function drawRoundEndScreen(scorer)
   -- TODO
   local lastRound = scorer.roundScores[#scorer.roundScores]
   love.graphics.print("Round end screen placeholder - press ENTER", 0, 0)
-  love.graphics.print("Finished round "..lastRound.round.."; score "..lastRound.score.."; seconds "..lastRound.pointsSpent, 0, 20)
+  love.graphics.print("Finished round "..lastRound.round.."; score "..lastRound.score.."; seconds "..lastRound.secondsSpent, 0, 20)
 end
 
 local function drawHelpScreen()

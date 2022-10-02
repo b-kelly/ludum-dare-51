@@ -5,13 +5,13 @@ local R = require "reference"
 local GS = {}
 GS.__index = GS
 
-local MAX_POINTS = 10
+local MAX_SECONDS = 10
 local MAX_ROUNDS = 24 -- max different masks
 
 function GS.new()
   local self = setmetatable({
     scene = Scenes.TITLE,
-    spentPoints = 0,
+    spentSeconds = 0,
     currentRound = 1,
     workspace = W.new(),
     scorer = S.new(),
@@ -21,34 +21,34 @@ function GS.new()
   return self
 end
 
-function GS.spendPoint(self)
-  local newPoints = self.spentPoints + 1
+function GS.spendSecond(self)
+  local newSeconds = self.spentSeconds + 1
 
-  if newPoints > MAX_POINTS then
+  if newSeconds > MAX_SECONDS then
     return false
   end
 
-  self.spentPoints = newPoints
+  self.spentSeconds = newSeconds
 
   return true
 end
 
-function GS.refundPoint(self)
-  local newPoints = self.spentPoints - 1
+function GS.refundSecond(self)
+  local newSeconds = self.spentSeconds - 1
 
-  if newPoints < 0 then
+  if newSeconds < 0 then
     return false
   end
 
-  self.spentPoints = newPoints
+  self.spentSeconds = newSeconds
 
   return true
 end
 
-function GS.points(self)
+function GS.seconds(self)
   return {
-    spent = self.spentPoints,
-    max = MAX_POINTS
+    spent = self.spentSeconds,
+    max = MAX_SECONDS
   }
 end
 
@@ -59,7 +59,7 @@ function GS.nextRound(self)
     return -1
   end
 
-  self.spentPoints = 0
+  self.spentSeconds = 0
   self.currentRound = self.currentRound + 1
 
   return self.currentRound
