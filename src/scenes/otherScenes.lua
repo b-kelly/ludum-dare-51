@@ -117,6 +117,9 @@ function SO.load()
   introBg = love.graphics.newImage("assets/introCard.png")
   howToPlayBg = love.graphics.newImage("assets/howToPlayCard.png")
   beginBg = love.graphics.newImage("assets/beginCard.png")
+  grandFantasy = love.audio.newSource("assets/audio/grandFantasy.mp3", "stream")
+  grandFantasy:seek(2, "seconds")
+  grandFantasy:setVolume(.3)
 end
 
 function SO.activate(scene, state)
