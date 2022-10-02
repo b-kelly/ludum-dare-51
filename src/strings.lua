@@ -1,3 +1,4 @@
+local utils = require "utils"
 local S = {}
 S.__index = S
 
@@ -13,11 +14,13 @@ local conversations = {
 }
 
 local responses = {
-    A = {"test A1", "test A2"},
-    B = {"test B1", "test B2"},
-    C = {"test C1", "test C2"},
-    D = {"test D1", "test D2"},
-    F = {"test F1", "test F2"}
+    [ScoreRank.AA] = {"test AA1", "test AA2"},
+    [ScoreRank.B] = {"test B1", "test B2"},
+    [ScoreRank.C] = {"test C1", "test C2"},
+    [ScoreRank.D] = {"test D1", "test D2"},
+    [ScoreRank.F] = {"test F1", "test F2"},
+    [ScoreRank.FF] = {"test FF1", "test FF2"},
+    [ScoreRank.CHEATER] = {"test CHEATER1", "test CHEATER2"}
 }
 
 local requests = {
@@ -138,20 +141,8 @@ function S.getRandomConversation(itemIdx)
 end
 
 function S.getRandomScoreResponse(score)
-    local tab
-
-    -- TODO reuse same scoring structure as algo
-    if score > 0.9 then
-        tab = responses.A
-    elseif score > 0.8 then
-        tab = responses.B
-    elseif score > 0.7 then
-        tab = responses.C
-    elseif score > 0.6 then
-        tab = responses.D
-    else
-        tab = responses.F
-    end
+    local rank = utils.getScoreRank(score)
+    local tab = responses[rank]
 
     return getRandomEntry(tab)
 end

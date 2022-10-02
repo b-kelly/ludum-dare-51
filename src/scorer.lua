@@ -3,26 +3,36 @@ local utils = require("utils")
 local S = {}
 S.__index = S
 
-local function getImageSimilarity(a, b)
+local function getImageSimilarity(reference, target)
     -- there may be a better way of doing this...
     -- assumes both images are the same height/width
-    local height = a:getHeight()
-    local width = a:getWidth()
+    local height = reference:getHeight()
+    local width = reference:getWidth()
 
     local matchingPixelCount = 0
+    local nonAlphaPixelInRef = 0
 
     for x=0, width - 1 do
-       for y=0, height - 1 do
-        local r1, g1, b1, a1 = a:getPixel(x, y)
-        local r2, g2, b2, a2 = b:getPixel(x, y)
+      for y=0, height - 1 do
+        local r1, g1, b1, refAlpha = reference:getPixel(x, y)
+        local r2, g2, b2, tarAlpha = target:getPixel(x, y)
 
-        if a1 == a2 then
-            matchingPixelCount = matchingPixelCount + 1
+        -- if the reference pixel is not transparent, then add it to the max total
+        if refAlpha ~= 0 then
+          nonAlphaPixelInRef = nonAlphaPixelInRef + 1
         end
-       end
+
+        -- add one for each solid pixels the user matched
+        -- and subtract one for each pixel that was mismatched, regardless of alpha
+        if refAlpha ~= 0 and refAlpha == tarAlpha then
+          matchingPixelCount = matchingPixelCount + 1
+        elseif refAlpha == 0 and refAlpha ~= tarAlpha then
+          matchingPixelCount = matchingPixelCount - 1
+        end
+      end
     end
 
-    return matchingPixelCount / (height * width)
+    return matchingPixelCount / nonAlphaPixelInRef
 end
 
 function S.new()
