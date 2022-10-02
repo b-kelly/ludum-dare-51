@@ -11,6 +11,7 @@ local MAX_ROUNDS = 24 -- max different masks
 function GS.new()
   local self = setmetatable({
     scene = Scenes.TITLE,
+    sceneNeedsActivation = false,
     spentSeconds = 0,
     currentRound = 1,
     workspace = W.new(),
@@ -67,18 +68,21 @@ end
 
 function GS.setScene(self, scene)
   self.scene = scene
+  self.sceneNeedsActivation = true
 end
 
 function GS.nextScene(self)
   if self.scene == Scenes.GAME then
-    return
+    return false
   end
 
   if self.scene == Scenes.TITLE then
-    self.scene = Scenes.HELP
+    self:setScene(Scenes.HELP)
   elseif self.scene == Scenes.HELP or self.scene == Scenes.ROUND_END then
-    self.scene = Scenes.GAME
+    self:setScene(Scenes.GAME)
   end
+
+  return self.sceneNeedsActivation
 end
 
 return GS

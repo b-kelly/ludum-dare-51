@@ -40,7 +40,7 @@ function R.nextIdx(self, idx)
   self.currentIdx = idx
 end
 
-function R.draw(self)
+function R.draw(self, xPos)
     local data = self:getData()
 
     utils.drawToCanvas(self.canvas, function ()
@@ -51,7 +51,7 @@ function R.draw(self)
         end)
     end)
 
-    love.graphics.draw(self.canvas, 110, 90)
+    love.graphics.draw(self.canvas, xPos, 90)
 end
 
 function R.getData(self)

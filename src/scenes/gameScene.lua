@@ -12,6 +12,31 @@ local rotateButton
 local clearButton
 local buttons
 local bagLocations
+local slideAnim
+
+local function newSlideAnimation()
+  local animation = {
+    duration = 0.1,
+    time = 0,
+    positionPct = 0
+  }
+  animation.__index = animation
+
+  function animation.update(self, dt)
+    if self.positionPct == 1 then
+      return
+    end
+
+    self.time = self.time + dt
+    if self.time >= self.duration then
+      self.time = self.duration
+    end
+
+    self.positionPct = self.time / self.duration
+  end
+
+  return animation
+end
 
 local function newButton(buttonImg, buttonX, buttonY)
   return {
@@ -72,14 +97,24 @@ local function drawSecondsGauge(seconds)
   love.graphics.setColor(255, 255, 255)
 end
 
-local function drawUI(fn, seconds)
+local function drawUI(state, mx, my)
     love.graphics.draw(bg, 0, 0)
-    love.graphics.draw(referenceArea, 100, 80)
-    fn()
-    love.graphics.draw(referenceAreaGrid, 110, 90)
+
+    -- calculate the position of the reference area as it slides in
+    local refAreaEnd = 100
+    local refGridOffset = 10
+    local refAreaX = slideAnim.positionPct * refAreaEnd
+
+    -- draw the reference area bg + reference area + grid
+    love.graphics.draw(referenceArea, refAreaX, 80)
+    state.reference:draw(refAreaX + refGridOffset)
+    love.graphics.draw(referenceAreaGrid, refAreaX + refGridOffset, 90)
+
+    -- draw the workspace + grid
+    state.workspace:draw(mx, my)
     love.graphics.draw(workspaceGrid, 260, 314)
 
-    drawSecondsGauge(seconds)
+    drawSecondsGauge(state:seconds())
 
     for i=1, #buttons do
       local b = buttons[i]
@@ -130,16 +165,21 @@ function SG.load()
     loadBagLocations()
 end
 
+function SG.activate()
+  slideAnim = newSlideAnimation()
+end
+
+function SG.update(dt)
+  slideAnim:update(dt)
+end
+
 function SG.drawScene(scene, state)
   if scene ~= Scenes.GAME then
     return false
   end
 
   local mx, my = love.mouse.getPosition()
-  drawUI(function()
-    state.reference:draw()
-    state.workspace:draw(mx, my)
-  end, state:seconds())
+  drawUI(state, mx, my)
 
   if debug then
       local data = state.reference:getData()

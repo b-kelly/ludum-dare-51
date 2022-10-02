@@ -52,6 +52,7 @@ end
 function SO.handleKeypress(gameState, key, scancode, isrepeat)
   if key == "return" and gameState.scene ~= Scenes.Game then
     gameState:nextScene()
+
     return true
   end
 

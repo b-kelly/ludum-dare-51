@@ -27,6 +27,14 @@ function love.load(arg)
 end
 
 function love.update(dt)
+  if gameState.scene == Scenes.GAME then
+    if gameState.sceneNeedsActivation then
+      gameScene.activate()
+    end
+    gameScene.update(dt)
+  end
+
+  gameState.sceneNeedsActivation = false
 end
 
 function love.draw(dt)
