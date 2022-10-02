@@ -1,3 +1,7 @@
+local W = require "workspace"
+local S = require "scorer"
+local R = require "reference"
+
 local GS = {}
 GS.__index = GS
 
@@ -8,7 +12,10 @@ function GS.new()
   local self = setmetatable({
     scene = Scenes.TITLE,
     spentPoints = 0,
-    currentRound = 1
+    currentRound = 1,
+    workspace = W.new(),
+    scorer = S.new(),
+    reference = R.new()
   }, GS)
 
   return self

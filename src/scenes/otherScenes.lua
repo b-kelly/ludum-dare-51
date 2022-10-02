@@ -29,17 +29,17 @@ function SO.load()
   -- TODO load textures
 end
 
-function SO.drawScene(scene, scorer)
+function SO.drawScene(scene, state)
   if scene == Scenes.GAME then
     return false
   end
 
   if scene == Scenes.GAME_OVER then
-    drawGameOverScreen(scorer)
+    drawGameOverScreen(state.scorer)
   elseif scene == Scenes.TITLE then
     drawTitleScreen()
   elseif scene == Scenes.ROUND_END then
-    drawRoundEndScreen(scorer)
+    drawRoundEndScreen(state.scorer)
   elseif scene == Scenes.HELP then
     drawHelpScreen()
   end

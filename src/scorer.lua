@@ -38,7 +38,6 @@ function S.new()
 end
 
 function S.update(self, referenceImgData, referenceImgQuad, currentImgData)
-
   local data = utils.singleImageData(referenceImgData, referenceImgQuad)
 
   self.currentData = currentImgData

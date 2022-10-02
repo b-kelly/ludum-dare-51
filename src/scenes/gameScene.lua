@@ -87,30 +87,30 @@ local function drawUI(fn, points)
     end
 end
 
-local function nextRound(reference, workspace, gameState, scorer)
-  local data = reference:getData()
-  scorer:lockIn(data["maskData"], data["maskSprite"], workspace:getImageData(), gameState.spentPoints, gameState.currentRound)
-  local round = gameState:nextRound()
+local function nextRound(state)
+  local data = state.reference:getData()
+  state.scorer:lockIn(data["maskData"], data["maskSprite"], state.workspace:getImageData(), state.spentPoints, state.currentRound)
+  local round = state:nextRound()
 
   if round == -1 then
-    gameState:setScene(Scenes.GAME_OVER)
+    state:setScene(Scenes.GAME_OVER)
     return
   end
 
-  reference:nextIdx()
-  workspace:reset()
-  gameState:setScene(Scenes.ROUND_END)
+  state.reference:nextIdx()
+  state.workspace:reset()
+  state:setScene(Scenes.ROUND_END)
 end
 
-local function placeItem(gameState, workspace, x, y)
-    if gameState:spendPoint() then
-        workspace:placeItem(x, y)
+local function placeItem(state, x, y)
+    if state:spendPoint() then
+      state.workspace:placeItem(x, y)
     end
 end
 
-local function undoItem(gameState, workspace)
-    if gameState:refundPoint() then
-        workspace:undoItemPlacement()
+local function undoItem(state)
+    if state:refundPoint() then
+      state.workspace:undoItemPlacement()
     end
 end
 
@@ -119,59 +119,59 @@ function SG.load()
     loadBagLocations()
 end
 
-function SG.drawScene(scene, reference, workspace, gameState, scorer)
+function SG.drawScene(scene, state)
   if scene ~= Scenes.GAME then
     return false
   end
 
   local mx, my = love.mouse.getPosition()
   drawUI(function()
-    reference:draw()
-    workspace:draw(mx, my)
-  end, gameState:points())
+    state.reference:draw()
+    state.workspace:draw(mx, my)
+  end, state:points())
 
   if debug then
-      local data = reference:getData()
-      drawDebug(scorer, data["textureImg"], data["textureSprite"], mx, my)
+      local data = state.reference:getData()
+      drawDebug(state.scorer, data["textureImg"], data["textureSprite"], mx, my)
   end
 
   return true
 end
 
-function SG.handleMousepress(reference, workspace, gameState, scorer, x, y)
+function SG.handleMousepress(state, x, y)
   --first, check to see if you're trying to pick up an item from a bag
   local item = utils.detectWhichObjPressed(x, y, bagLocations)
   local UIButton = utils.detectWhichObjPressed(x, y, buttons)
   if item ~= 0 then
-    workspace:selectItem(item)
+    state.workspace:selectItem(item)
   --if not, then see if you're trying to place an item you have selected
-  elseif workspace.selectedItem ~= nil then
-    placeItem(gameState, workspace, x, y)
+  elseif state.workspace.selectedItem ~= nil then
+    placeItem(state, x, y)
     if debug then
-      local data = reference:getData()
-      scorer:update(data["maskData"], data["maskSprite"], workspace:getImageData())
+      local data = state.reference:getData()
+      state.scorer:update(data["maskData"], data["maskSprite"], state.workspace:getImageData())
     end
   elseif UIButton ~= 0 then
     if UIButton == 2 then
-      undoItem(gameState, workspace)
+      undoItem(state)
     elseif UIButton == 3 then
-      workspace:clearItems()
+      state.workspace:clearItems()
     end
   --then check to see if you've clicked on an item that's already been placed
   else
-    local placedItem = workspace:itemToMoveOnCanvas(x, y)
+    local placedItem = state.workspace:itemToMoveOnCanvas(x, y)
     if placedItem ~= 0 then
-      workspace:removeItem(placedItem)
+      state.workspace:removeItem(placedItem)
     end
   end
 end
 
-function SG.handleKeypress(reference, workspace, gameState, scorer, key, isrepeat)
+function SG.handleKeypress(state, key, isrepeat)
     if key == "r" then
-        workspace:rotateItem(false)
+      state.workspace:rotateItem(false)
         return true
     elseif key == "e" then
-        workspace:rotateItem(true)
+      state.workspace:rotateItem(true)
         return true
     end
 
@@ -180,13 +180,13 @@ function SG.handleKeypress(reference, workspace, gameState, scorer, key, isrepea
     end
 
     if key == "z" then
-        workspace:undoItemPlacement()
+      state.workspace:undoItemPlacement()
         return true
     elseif key == "c" then
-        workspace:clearItems()
+      state.workspace:clearItems()
         return true
     elseif key == "space" then
-        nextRound(reference, workspace, gameState, scorer)
+        nextRound(state)
         return true
     end
 
