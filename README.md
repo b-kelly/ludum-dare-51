@@ -1,4 +1,6 @@
-# gamedev-boilerplate-love2d
+# ludum-dare-51
+
+**Theme**: Every 10 seconds
 
 Play here: https://b-kelly.github.io/ludum-dare-51/
 
