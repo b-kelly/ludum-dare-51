@@ -73,7 +73,7 @@ function W.getImageData(self)
     return self.canvas:newImageData()
 end
 
-function W.placeItem(self, x, y)
+function W._placeItem(self, x, y)
   if self.selectedItem == nil then
     return
   end
@@ -116,24 +116,24 @@ function W.selectItem(self, itemIndex)
   self.selectedItem = itemIndex
 end
 
-function W:removeItem(itemIndex)
+function W:_removeItem(itemIndex)
   self.selectedItem = self.objects[itemIndex].idx
   self.itemRotation = self.objects[itemIndex].r
   table.remove(self.objects, itemIndex)
 end
 
-function W.undoItemPlacement(self)
+function W._undoItemPlacement(self)
   table.remove(self.objects, #self.objects)
 end
 
-function W.clearItems(self)
+function W._clearItems(self)
   self.objects = {}
 end
 
-function W.reset(self)
+function W._reset(self)
   self.selectedItem = nil
   self.itemRotation = 0
-  self:clearItems()
+  self:_clearItems()
 end
 
 function W:itemToMoveOnCanvas(mx, my)

@@ -91,25 +91,25 @@ end
 
 function GS.placeItem(self, x, y)
   if spendSecond(self) then
-    self.workspace:placeItem(x, y)
+    self.workspace:_placeItem(x, y)
   end
 end
 
 function GS.undoItem(self)
   if refundSecond(self) then
-    self.workspace:undoItemPlacement()
+    self.workspace:_undoItemPlacement()
   end
 end
 
 function GS.removeItem(self, placedItem)
   if refundSecond(self) then
-    self.workspace:removeItem(placedItem)
+    self.workspace:_removeItem(placedItem)
   end
 end
 
 function GS.clearWorkspace(self)
   resetSeconds(self)
-  self.workspace:clearItems()
+  self.workspace:_clearItems()
 end
 
 function GS.nextRound(self)
@@ -126,8 +126,8 @@ function GS.nextRound(self)
     return false
   end
 
-  self.reference:nextIdx()
-  self.workspace:reset()
+  self.reference:_nextIdx()
+  self.workspace:_reset()
   self:setScene(Scenes.ROUND_END)
 
   return true

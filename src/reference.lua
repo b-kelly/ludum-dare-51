@@ -30,7 +30,7 @@ function R.new()
   return self
 end
 
-function R.nextIdx(self, idx)
+function R._nextIdx(self, idx)
   idx = self.currentIdx + 1
 
   if idx < 1 or idx > spritesX * spritesY then
