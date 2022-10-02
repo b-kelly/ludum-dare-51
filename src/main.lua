@@ -37,7 +37,7 @@ function love.draw(dt)
       drawTitleScreen()
       return
     elseif gameState.scene == Scenes.ROUND_END then
-      drawRoundEndScreen()
+      drawRoundEndScreen(scorer)
       return
     elseif gameState.scene == Scenes.HELP then
       drawHelpScreen()
@@ -85,9 +85,9 @@ function love.mousepressed(x, y, button)
 end
 
 function love.keypressed(key, scancode, isrepeat)
-
   if key == "return" and gameState.scene ~= Scenes.Game then
     gameState:nextScene()
+    return
   end
 
   if key == "r" then
