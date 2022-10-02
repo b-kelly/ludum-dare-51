@@ -26,6 +26,7 @@ end
 
 local function drawHelpScreen()
   -- TODO
+  love.graphics.draw(howToPlayBg, 0, 0)
   love.graphics.print("Help screen placeholder - press ENTER", 0, 0)
 
   love.graphics.printf("Controls: rotate (e, r); flip (q, w); finalize (space); undo (z); clear (c); show help (h)", 0, 20, 600, "left")
@@ -33,6 +34,11 @@ end
 
 function SO.load()
   titleBg = love.graphics.newImage("assets/title.png")
+  introBg = love.graphics.newImage("assets/introCard.png")
+  howToPlayBg = love.graphics.newImage("assets/howToPlayCard.png")
+  beginBg = love.graphics.newImage("assets/beginCard.png")
+  
+  mainTextFont = love.graphics.newFont("assets/fonts/SignikaNegative-Medium.ttf")
 end
 
 function SO.drawScene(scene, state)
