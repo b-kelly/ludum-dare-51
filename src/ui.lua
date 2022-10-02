@@ -74,27 +74,3 @@ function drawSecondsGauge(points)
   love.graphics.print(points["spent"] .. "/" .. points["max"], 85, 415)
   love.graphics.setColor(255, 255, 255)
 end
-
-function drawGameOverScreen(scorer)
-  love.graphics.print("Game Over", 0, 0)
-
-  love.graphics.print("Best: " .. scorer.best.round .. " " .. scorer.best.score .. "%", 0, 20)
-  love.graphics.print("Worst: " .. scorer.worst.round .. " " .. scorer.worst.score .. "%", 0, 40)
-end
-
-function drawTitleScreen()
-  -- TODO
-  love.graphics.print("Title screen placeholder - press ENTER", 0, 0)
-end
-
-function drawRoundEndScreen(scorer)
-  -- TODO
-  local lastRound = scorer.roundScores[#scorer.roundScores]
-  love.graphics.print("Round end screen placeholder - press ENTER", 0, 0)
-  love.graphics.print("Finished round "..lastRound.round.."; score "..lastRound.score.."; seconds "..lastRound.pointsSpent, 0, 20)
-end
-
-function drawHelpScreen()
-  -- TODO
-  love.graphics.print("Help screen placeholder - press ENTER", 0, 0)
-end

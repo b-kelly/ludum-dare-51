@@ -7,6 +7,7 @@ local W = require "workspace"
 local S = require "scorer"
 local R = require "reference"
 local GS = require "gamestate"
+local otherScenes = require "scenes/otherScenes"
 
 debug = true
 
@@ -18,6 +19,7 @@ local gameState
 function love.load(arg)
     --require("mobdebug").start()
     love.keyboard.setKeyRepeat(true)
+    otherScenes.load()
     loadUI()
     workspace = W.new()
     scorer = S.new()
@@ -30,33 +32,29 @@ function love.update(dt)
 end
 
 function love.draw(dt)
-    if gameState.scene == Scenes.GAME_OVER then
-      drawGameOverScreen(scorer)
-      return
-    elseif gameState.scene == Scenes.TITLE then
-      drawTitleScreen()
-      return
-    elseif gameState.scene == Scenes.ROUND_END then
-      drawRoundEndScreen(scorer)
-      return
-    elseif gameState.scene == Scenes.HELP then
-      drawHelpScreen()
-      return
-    end
+  local scene = gameState.scene
+  -- otherScenes handles drawing all non-game scenes
+  if otherScenes.drawScene(scene, scorer) then
+    return
+  end
 
-    local mx, my = love.mouse.getPosition()
-    drawUI(function()
-      reference:draw()
-      workspace:draw(mx, my)
-    end, gameState:points())
+  local mx, my = love.mouse.getPosition()
+  drawUI(function()
+    reference:draw()
+    workspace:draw(mx, my)
+  end, gameState:points())
 
-    if debug then
-        local data = reference:getData()
-        drawDebug(scorer, data["textureImg"], data["textureSprite"], mx, my)
-    end
+  if debug then
+      local data = reference:getData()
+      drawDebug(scorer, data["textureImg"], data["textureSprite"], mx, my)
+  end
 end
 
 function love.mousepressed(x, y, button)
+  if gameState.scene ~= Scenes.GAME then
+    return
+  end
+
   --first, check to see if you're trying to pick up an item from a bag
   local item = detectWhichObjPressed(x, y, bagLocations)
   local UIButton = detectWhichObjPressed(x, y, buttons)
@@ -85,8 +83,7 @@ function love.mousepressed(x, y, button)
 end
 
 function love.keypressed(key, scancode, isrepeat)
-  if key == "return" and gameState.scene ~= Scenes.Game then
-    gameState:nextScene()
+  if otherScenes.handleKeypress(gameState, key, scancode, isrepeat) then
     return
   end
 
