@@ -1,5 +1,4 @@
 require "utils"
-require "spritesheet"
 
 W = {}
 W.__index = W
