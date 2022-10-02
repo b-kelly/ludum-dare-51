@@ -83,8 +83,7 @@ function S.drawDebug(self, texture, textureSprite)
   end)
 
   if self.simularity ~= nil then
-    local pct = math.floor((self.simularity) * 1000) / 10
-    love.graphics.printf(pct .. "% similar", 256, 256, 10000, "left")
+    love.graphics.printf(utils.formatScore(self.simularity) .. " similar", 256, 256, 10000, "left")
   end
 end
 

@@ -1,11 +1,13 @@
+local utils = require "utils"
+
 local SO = {}
 SO.__index = SO
 
 local function drawGameOverScreen(scorer)
   love.graphics.print("Game Over", 0, 0)
 
-  love.graphics.print("Best: " .. scorer.best.round .. " " .. scorer.best.score .. "%", 0, 20)
-  love.graphics.print("Worst: " .. scorer.worst.round .. " " .. scorer.worst.score .. "%", 0, 40)
+  love.graphics.print("Best round: " .. scorer.best.round .. " " .. utils.formatScore(scorer.best.score), 0, 20)
+  love.graphics.print("Worst round: " .. scorer.worst.round .. " " .. utils.formatScore(scorer.worst.score), 0, 40)
 end
 
 local function drawTitleScreen()

@@ -110,4 +110,29 @@ function U.drawMask(mask, quad, x, y, fn)
     love.graphics.setStencilTest()
 end
 
+function U.formatScore(score)
+  local output = "F"
+
+  if score == 1 then
+    output = "CHEATER"
+  elseif score > 0.95 then
+    output = "A+"
+  elseif score > 0.9 then
+    output = "A"
+  elseif score > 0.8 then
+    output = "B"
+  elseif score > 0.7 then
+    output = "C"
+  elseif score > 0.6 then
+      output = "D"
+  end
+
+  if debug then
+    local pct = math.floor(score * 1000) / 10
+    output = output .. " (" .. pct .. "%)"
+  end
+
+  return output
+end
+
 return U
