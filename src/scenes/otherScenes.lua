@@ -13,6 +13,7 @@ local grandFantasy
 local backgroundBeatz
 local goblinMischief
 local gameOverMusic
+local dialogBg
 
 local function drawGameOverScreen(scorer)
   love.graphics.print("Game Over", 0, 0)
@@ -122,6 +123,7 @@ local function activateNewRequestScreen(state)
 end
 
 local function drawNewRequestScreen()
+  love.graphics.draw(dialogBg)
   local gap = 8
   local convo = meta.conversation or {{name = "ERROR", text = "NewRequestScreen DID NOT ACTIVATE"}}
   for i=1,#convo do
@@ -134,6 +136,7 @@ function SO.load()
   introBg = love.graphics.newImage("assets/introCard.png")
   howToPlayBg = love.graphics.newImage("assets/howToPlayCard.png")
   beginBg = love.graphics.newImage("assets/beginCard.png")
+  dialogBg = love.graphics.newImage("assets/dialogueBg.png")
   grandFantasy = love.audio.newSource("assets/audio/grandFantasy.mp3", "stream")
   backgroundBeatz = love.audio.newSource("assets/audio/backgroundBeatz.mp3", "stream")
   goblinMischief = love.audio.newSource("assets/audio/goblinMischief.mp3", "stream")
