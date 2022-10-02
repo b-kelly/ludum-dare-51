@@ -10,6 +10,7 @@ local MAX_ROUNDS = 24 -- max different masks
     
   --load main scene-specific audio
 local timerSound = love.audio.newSource("assets/audio/tickTock.wav", "static")
+timerSound:setVolume(.5)
 
 local function canSpendSecond(spentSeconds)
   local newSeconds = spentSeconds + 1

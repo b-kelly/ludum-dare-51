@@ -14,6 +14,7 @@ local bagLocations
 local slideAnim
 local timerSpriteSheet
 local timer
+local grabItemSound = love.audio.newSource("assets/audio/grabFromBag.wav", "static")
 
 local DEBUG_shouldUpdateScorer = false
 
@@ -192,6 +193,7 @@ function SG.handleMousepress(state, x, y)
   --first, check to see if you're trying to pick up an item from a bag
   if item ~= 0 then
     state:selectItem(item)
+    grabItemSound:play()
 
   elseif state.selectedItem ~= nil then
     --if not, then see if you're trying to place an item you have selected
