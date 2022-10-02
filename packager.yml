@@ -1,7 +1,7 @@
 name: gamedev-boilerplate-love2d
 version: 0.0.1
 assets:
-  - "./src/*.lua"
+  - "./src/**/*.lua"
   - ./src/assets/**/*
 targets:
   - love
