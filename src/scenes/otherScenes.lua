@@ -40,13 +40,33 @@ local function drawIntroBeginScreen()
   love.graphics.print("(TODO cleanup) PRESS ENTER", 150, 330)
 end
 
-local function newTextBox(name, text, x, y)
-  love.graphics.setColor(1, 0, 0)
-  love.graphics.rectangle("fill", x, y, 800, 100)
-  love.graphics.setColor(0, 0, 0)
-  -- TODO
-  love.graphics.printf(name..": "..text, x, y, 800, "left")
+local function newTextBox(name, text, x, y, avatarIsOnRight)
+  -- TODO this could probably be better served w/ an image bg
+  -- TODO need support for image on the right vs left
+
+  local nameBoxHeight = 20
+  local nameBoxWidth = 100
+  local avatarHeight = 100
+  local inset = 8
+  local largeBoxWidth = 800 - avatarHeight - (inset)
+  local nbOffset = nameBoxHeight / 2
+  local xLeft = x + avatarHeight + inset
+  local smallXLeft = xLeft + nameBoxHeight
+  local yTop = y + nbOffset
+  local smallYTop = y
+
+  -- draw the boxes the same color as reference grid bg
+  love.graphics.setColor(0.22, 0.19, 0.29)
+  love.graphics.rectangle("fill", xLeft, yTop, largeBoxWidth, avatarHeight - nbOffset)
+  love.graphics.rectangle("fill", smallXLeft, smallYTop, nameBoxWidth, nameBoxHeight)
+
+  --draw the avatar box
   love.graphics.setColor(1, 1, 1)
+  love.graphics.rectangle("fill", x, y, avatarHeight, avatarHeight)
+
+  love.graphics.setColor(1, 1, 1)
+  love.graphics.printf(name, smallXLeft, smallYTop, nameBoxWidth, "center")
+  love.graphics.printf(text, xLeft + inset, yTop + inset + nbOffset, 800, "left")
 end
 
 local function activateRoundEndScreen(state)
@@ -106,9 +126,10 @@ local function activateNewRequestScreen(state)
 end
 
 local function drawNewRequestScreen()
+  local gap = 8
   local convo = meta.conversation or {{name = "ERROR", text = "NewRequestScreen DID NOT ACTIVATE"}}
   for i=1,#convo do
-    newTextBox(convo[i]["name"], convo[i]["text"], 0, 100 * (i - 1))
+    newTextBox(convo[i]["name"], convo[i]["text"], 0, (100 * (i - 1)) + (gap * (i - 1)))
   end
 end
 
