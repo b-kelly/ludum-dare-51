@@ -1,3 +1,5 @@
+local utils = require("utils")
+
 local SG = {}
 SG.__index = SG
 
@@ -130,8 +132,8 @@ end
 
 function SG.handleMousepress(reference, workspace, gameState, scorer, x, y)
   --first, check to see if you're trying to pick up an item from a bag
-  local item = detectWhichObjPressed(x, y, bagLocations)
-  local UIButton = detectWhichObjPressed(x, y, buttons)
+  local item = utils.detectWhichObjPressed(x, y, bagLocations)
+  local UIButton = utils.detectWhichObjPressed(x, y, buttons)
   if item ~= 0 then
     workspace:selectItem(item)
   --if not, then see if you're trying to place an item you have selected

@@ -1,12 +1,7 @@
-Scenes = {
-  TITLE = 1,
-  HELP = 2,
-  GAME = 3,
-  ROUND_END = 4,
-  GAME_OVER = 5
-}
+local U = {}
+U.__index = U
 
-function drawToCanvas(canvas, fn)
+function U.drawToCanvas(canvas, fn)
     love.graphics.setCanvas({
         canvas,
         stencil=true
@@ -22,7 +17,7 @@ function drawToCanvas(canvas, fn)
     return canvas
 end
 
-function hasMouseOverlap(mx, my, obj)
+function U.hasMouseOverlap(mx, my, obj)
   if mx > obj.x1 and mx < obj.x2 then
     if my > obj.y1 and my < obj.y2 then
       return true
@@ -31,16 +26,16 @@ function hasMouseOverlap(mx, my, obj)
   return false
 end
 
-function detectWhichObjPressed(mx, my, tbl)
+function U.detectWhichObjPressed(mx, my, tbl)
   for i = 1, #tbl do
-    if hasMouseOverlap(mx, my, tbl[i]) then
+    if U.hasMouseOverlap(mx, my, tbl[i]) then
       return i
     end
   end
   return 0
 end
 
-function shuffledArr(max)
+function U.shuffledArr(max)
   local arr = {}
 
   for i = 1, max do
@@ -57,14 +52,19 @@ function shuffledArr(max)
   return arr
 end
 
-function loadSpritesheet(sheet, xCount, yCount, spriteSize)
+local function newQuad(xCoord, yCoord, spriteSize, sheet)
+---@diagnostic disable-next-line: missing-parameter
+  return love.graphics.newQuad(xCoord, yCoord, spriteSize, spriteSize, sheet)
+end
+
+function U.loadSpritesheet(sheet, xCount, yCount, spriteSize)
   local arr = {}
 
   for y=0,yCount-1 do
     local yCoord = y * spriteSize
     for x=0,xCount-1 do
       local xCoord = x * spriteSize
-      local quad = love.graphics.newQuad(xCoord, yCoord, spriteSize, spriteSize, sheet)
+      local quad = newQuad(xCoord, yCoord, spriteSize, sheet)
       table.insert(arr, quad)
     end
   end
@@ -72,7 +72,7 @@ function loadSpritesheet(sheet, xCount, yCount, spriteSize)
   return arr
 end
 
-function singleImageData(sheetData, quad)
+function U.singleImageData(sheetData, quad)
   local x, y, w, h = quad:getViewport()
   local data = love.image.newImageData(w, h)
   data:paste(sheetData, 0, 0, x, y, w, h)
@@ -92,7 +92,7 @@ local mask_shader = love.graphics.newShader[[
 
 local function drawStencil(mask, quad, x, y)
   if quad == nil then
-    quad = love.graphics.newQuad(0, 0, mask:getWidth(), mask:getHeight(), mask)
+    quad = newQuad(0, 0, mask:getWidth(), mask)
   end
 
    love.graphics.setShader(mask_shader)
@@ -101,7 +101,7 @@ local function drawStencil(mask, quad, x, y)
 end
 
 -- mask is love.Image
-function drawMask(mask, quad, x, y, fn)
+function U.drawMask(mask, quad, x, y, fn)
     love.graphics.stencil(function()
         drawStencil(mask, quad, x, y)
     end, "replace", 1)
@@ -109,3 +109,5 @@ function drawMask(mask, quad, x, y, fn)
     fn()
     love.graphics.setStencilTest()
 end
+
+return U

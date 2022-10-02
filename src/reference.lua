@@ -1,4 +1,4 @@
-require "utils"
+local utils = require("utils")
 
 local R = {}
 R.__index = R
@@ -14,15 +14,15 @@ function R.new()
   local maskData = love.image.newImageData("assets/targetObjectMasks.png")
   local masks = love.graphics.newImage(maskData)
 
-  local randOrder = shuffledArr(spritesX * spritesY)
+  local randOrder = utils.shuffledArr(spritesX * spritesY)
 
   local self = setmetatable({
     maskData = maskData,
     maskImg = masks,
     textureImg = textures,
     canvas = love.graphics.newCanvas(width, height),
-    textures = loadSpritesheet(textures, spritesX, spritesY, spriteWidth),
-    masks = loadSpritesheet(masks, spritesX, spritesY, spriteWidth),
+    textures = utils.loadSpritesheet(textures, spritesX, spritesY, spriteWidth),
+    masks = utils.loadSpritesheet(masks, spritesX, spritesY, spriteWidth),
     currentIdx = 1,
     randOrder = randOrder
   }, R)
@@ -43,10 +43,10 @@ end
 function R.draw(self)
     local data = self:getData()
 
-    drawToCanvas(self.canvas, function ()
+    utils.drawToCanvas(self.canvas, function ()
         love.graphics.clear()
         love.graphics.scale(0.5, 0.5)
-        drawMask(self.maskImg, data.maskSprite, 0, 0, function()
+        utils.drawMask(self.maskImg, data.maskSprite, 0, 0, function()
           love.graphics.draw(self.textureImg, data.textureSprite, 0, 0)
         end)
     end)

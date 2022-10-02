@@ -1,4 +1,4 @@
-require "utils"
+local utils = require("utils")
 
 local W = {}
 W.__index = W
@@ -29,7 +29,7 @@ function W.new()
     canvas = love.graphics.newCanvas(width, height),
     texture = texture,
     textureData = textureData,
-    sprites = loadSpritesheet(texture, spritesX, spritesY, spriteWidth),
+    sprites = utils.loadSpritesheet(texture, spritesX, spritesY, spriteWidth),
     objects = {}
   }, W)
 
@@ -56,7 +56,7 @@ function W.drawSelectedItem(self, x, y)
 end
 
 function W.draw(self, mx, my)
-    drawToCanvas(self.canvas, function ()
+  utils.drawToCanvas(self.canvas, function ()
         love.graphics.clear()
         love.graphics.setColor(1, 1, 1, 0)
         love.graphics.rectangle("fill", 0, 0, width, height)
@@ -146,9 +146,9 @@ function W:itemToMoveOnCanvas(mx, my)
       y2 = obj.y + posY + spriteWidth - offset
     }
     print(mx.. " " .. my .. " " .. toCheck.x1.." "..toCheck.x2.." "..toCheck.y1.." "..toCheck.y2)
-    if hasMouseOverlap(mx, my, toCheck) then
+    if utils.hasMouseOverlap(mx, my, toCheck) then
       print("is overlapping")
-      local r, g, b, a = singleImageData(self.textureData, self.sprites[obj["idx"]]):getPixel(mx-toCheck.x1, my-toCheck.y1)
+      local r, g, b, a = utils.singleImageData(self.textureData, self.sprites[obj["idx"]]):getPixel(mx-toCheck.x1, my-toCheck.y1)
       if a == 1 then
         return i
       end

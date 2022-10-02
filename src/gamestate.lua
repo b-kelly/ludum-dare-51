@@ -1,6 +1,4 @@
-require "utils"
-
-GS = {}
+local GS = {}
 GS.__index = GS
 
 local MAX_POINTS = 10

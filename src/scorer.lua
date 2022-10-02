@@ -1,3 +1,5 @@
+local utils = require("utils")
+
 local S = {}
 S.__index = S
 
@@ -37,7 +39,7 @@ end
 
 function S.update(self, referenceImgData, referenceImgQuad, currentImgData)
 
-  local data = singleImageData(referenceImgData, referenceImgQuad)
+  local data = utils.singleImageData(referenceImgData, referenceImgQuad)
 
   self.currentData = currentImgData
 
@@ -77,7 +79,7 @@ function S.drawDebug(self, texture, textureSprite)
   end
 
   local img = love.graphics.newImage(data)
-  drawMask(img, nil, 256, 0, function()
+  utils.drawMask(img, nil, 256, 0, function()
     love.graphics.draw(texture, textureSprite, 256, 0)
   end)
 

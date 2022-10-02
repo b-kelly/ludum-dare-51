@@ -1,5 +1,3 @@
-require "utils"
-
 local SO = {}
 SO.__index = SO
 

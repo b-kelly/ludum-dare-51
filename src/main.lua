@@ -13,6 +13,15 @@ local scorer
 local reference
 local gameState
 
+-- TODO global
+Scenes = {
+  TITLE = 1,
+  HELP = 2,
+  GAME = 3,
+  ROUND_END = 4,
+  GAME_OVER = 5
+}
+
 function love.load(arg)
     --require("mobdebug").start()
     love.keyboard.setKeyRepeat(true)
