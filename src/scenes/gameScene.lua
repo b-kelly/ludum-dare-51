@@ -8,7 +8,6 @@ local referenceArea
 local referenceAreaGrid
 local workspaceGrid
 local undoButton
-local rotateButton
 local clearButton
 local buttons
 local bagLocations
@@ -131,6 +130,7 @@ local function drawUI(state, mx, my)
 
     -- draw the workspace + grid
     state.workspace:draw(mx, my)
+    state:drawSelectedItem(mx, my)
     love.graphics.draw(workspaceGrid, 260, 314)
 
     drawSecondsGauge(state:seconds())
@@ -176,9 +176,9 @@ function SG.handleMousepress(state, x, y)
 
   --first, check to see if you're trying to pick up an item from a bag
   if item ~= 0 then
-    state.workspace:selectItem(item)
+    state:selectItem(item)
 
-  elseif state.workspace.selectedItem ~= nil then
+  elseif state.selectedItem ~= nil then
     --if not, then see if you're trying to place an item you have selected
     state:placeItem(x, y)
 

@@ -55,7 +55,8 @@ function GS.new()
     currentRound = 1,
     workspace = W.new(),
     scorer = S.new(),
-    reference = R.new()
+    reference = R.new(),
+    selectedItem = nil
   }, GS)
 
   return self
@@ -89,9 +90,11 @@ end
 
 function GS.placeItem(self, x, y)
   local canSpend, newSeconds = canSpendSecond(self.spentSeconds)
-  if canSpend and self.workspace:_placeItem(x, y) then
+  if canSpend and self.workspace:_placeItem(self.selectedItem, x, y) then
     self.spentSeconds = newSeconds
   end
+
+  self:selectItem(nil)
 end
 
 function GS.undoItem(self)
@@ -102,6 +105,7 @@ end
 
 function GS.removeItem(self, placedItem)
   if refundSecond(self) then
+    self:selectItem(self.workspace.objects[placedItem].idx)
     self.workspace:_removeItem(placedItem)
   end
 end
@@ -126,10 +130,25 @@ function GS.nextRound(self)
   end
 
   self.reference:_nextIdx()
+  self.selectedItem = nil
   self.workspace:_reset()
   self:setScene(Scenes.ROUND_END)
 
   return true
+end
+
+function GS.drawSelectedItem(self, x, y)
+    if self.selectedItem == nil then
+      return
+    end
+
+    local workspace = self.workspace
+
+    workspace.drawItem(workspace.texture, workspace.sprites[self.selectedItem], x, y, workspace.itemRotation, workspace.isMirrorX, workspace.isMirrorY)
+end
+
+function GS.selectItem(self, itemIndex)
+  self.selectedItem = itemIndex
 end
 
 return GS
