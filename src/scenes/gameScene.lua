@@ -130,9 +130,6 @@ local function drawSecondsGauge(seconds)
   -- TODO some sort of gauge/graphic for seconds?
   local timerSprite = selectTimerSprite(seconds.max, seconds.spent)
   love.graphics.draw(timerSpriteSheet, timer[timerSprite], 66, 390)
-  --love.graphics.setColor(0, 0, 0)
-  --love.graphics.print(seconds["spent"] .. "/" .. seconds["max"], 85, 415)
-  --love.graphics.setColor(255, 255, 255)
 end
 
 local function drawUI(state, mx, my)
