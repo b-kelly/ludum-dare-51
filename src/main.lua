@@ -6,7 +6,7 @@ require "ui"
 local W = require "workspace"
 local S = require "scorer"
 local R = require "reference"
-local GS = require "state"
+local GS = require "gamestate"
 
 debug = true
 
