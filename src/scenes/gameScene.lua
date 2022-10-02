@@ -143,44 +143,6 @@ local function drawUI(state, mx, my)
     end
 end
 
-local function nextRound(state)
-  local data = state.reference:getData()
-  state.scorer:lockIn(data["maskData"], data["maskSprite"], state.workspace:getImageData(), state.spentSeconds, state.currentRound)
-  local round = state:nextRound()
-
-  if round == -1 then
-    state:setScene(Scenes.GAME_OVER)
-    return
-  end
-
-  state.reference:nextIdx()
-  state.workspace:reset()
-  state:setScene(Scenes.ROUND_END)
-end
-
-local function placeItem(state, x, y)
-    if state:spendSecond() then
-      state.workspace:placeItem(x, y)
-    end
-end
-
-local function undoItem(state)
-    if state:refundSecond() then
-      state.workspace:undoItemPlacement()
-    end
-end
-
-local function removeItem(state, placedItem)
-  if state:refundSecond() then
-    state.workspace:removeItem(placedItem)
-  end
-end
-
-local function clearWorkspace(state)
-  state:resetSeconds()
-  state.workspace:clearItems()
-end
-
 function SG.load()
     loadUI()
     loadBagLocations()
@@ -220,20 +182,20 @@ function SG.handleMousepress(state, x, y)
 
   elseif state.workspace.selectedItem ~= nil then
     --if not, then see if you're trying to place an item you have selected
-    placeItem(state, x, y)
+    state:placeItem(x, y)
 
   elseif UIButton ~= 0 then
     if UIButton == 2 then
-      undoItem(state)
+      state:undoItem()
     elseif UIButton == 3 then
-      clearWorkspace(state)
+      state:clearWorkspace(state)
     end
 
   else
     --then check to see if you've clicked on an item that's already been placed
     local placedItem = state.workspace:itemToMoveOnCanvas(x, y)
     if placedItem ~= 0 then
-      removeItem(placedItem)
+      state:removeItem(placedItem)
     end
   end
 
@@ -256,9 +218,9 @@ function SG.handleKeypress(state, key, isrepeat)
     local handled = true
 
     if key == "z" then
-      undoItem(state)
+      state:undoItem(state)
     elseif key == "c" then
-        clearWorkspace(state)
+      state:clearWorkspace(state)
     elseif key == "q" then
         state.workspace:mirrorItem(false)
     elseif key == "w" then
@@ -266,7 +228,7 @@ function SG.handleKeypress(state, key, isrepeat)
     elseif key == "h" then
         state:setScene(Scenes.HELP)
     elseif key == "space" then
-        nextRound(state)
+      state:nextRound()
     else
       handled = false
     end

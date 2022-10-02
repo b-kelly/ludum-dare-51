@@ -98,16 +98,6 @@ function W.placeItem(self, x, y)
   self.isMirrorY = false
 end
 
-function W.selectItem(self, itemIndex)
-  self.selectedItem = itemIndex
-end
-
-function W:removeItem(itemIndex)
-  self.selectedItem = self.objects[itemIndex].idx
-  self.itemRotation = self.objects[itemIndex].r
-  table.remove(self.objects, itemIndex)
-end
-
 function W.rotateItem(self, counterClockwise)
   local mod = counterClockwise and -1 or 1
   -- rotate 3.6 degrees
@@ -120,6 +110,16 @@ function W.mirrorItem(self, isX)
   else
     self.isMirrorY = not self.isMirrorY
   end
+end
+
+function W.selectItem(self, itemIndex)
+  self.selectedItem = itemIndex
+end
+
+function W:removeItem(itemIndex)
+  self.selectedItem = self.objects[itemIndex].idx
+  self.itemRotation = self.objects[itemIndex].r
+  table.remove(self.objects, itemIndex)
 end
 
 function W.undoItemPlacement(self)

@@ -8,6 +8,47 @@ GS.__index = GS
 local MAX_SECONDS = 10
 local MAX_ROUNDS = 24 -- max different masks
 
+local function spendSecond(self)
+  local newSeconds = self.spentSeconds + 1
+
+  if newSeconds > MAX_SECONDS then
+    return false
+  end
+
+  self.spentSeconds = newSeconds
+
+  return true
+end
+
+local function refundSecond(self)
+  local newSeconds = self.spentSeconds - 1
+
+  if newSeconds < 0 then
+    return false
+  end
+
+  self.spentSeconds = newSeconds
+
+  return true
+end
+
+local function resetSeconds(self)
+  self.spentSeconds = 0
+end
+
+local function nextRound(self)
+  local newRound = self.currentRound + 1
+
+  if newRound > MAX_ROUNDS then
+    return -1
+  end
+
+  self.spentSeconds = 0
+  self.currentRound = self.currentRound + 1
+
+  return self.currentRound
+end
+
 function GS.new()
   local self = setmetatable({
     scene = Scenes.TITLE,
@@ -22,52 +63,11 @@ function GS.new()
   return self
 end
 
-function GS.spendSecond(self)
-  local newSeconds = self.spentSeconds + 1
-
-  if newSeconds > MAX_SECONDS then
-    return false
-  end
-
-  self.spentSeconds = newSeconds
-
-  return true
-end
-
-function GS.refundSecond(self)
-  local newSeconds = self.spentSeconds - 1
-
-  if newSeconds < 0 then
-    return false
-  end
-
-  self.spentSeconds = newSeconds
-
-  return true
-end
-
-function GS.resetSeconds(self)
-  self.spentSeconds = 0
-end
-
 function GS.seconds(self)
   return {
     spent = self.spentSeconds,
     max = MAX_SECONDS
   }
-end
-
-function GS.nextRound(self)
-  local newRound = self.currentRound + 1
-
-  if newRound > MAX_ROUNDS then
-    return -1
-  end
-
-  self.spentSeconds = 0
-  self.currentRound = self.currentRound + 1
-
-  return self.currentRound
 end
 
 function GS.setScene(self, scene)
@@ -87,6 +87,50 @@ function GS.nextScene(self)
   end
 
   return self.sceneNeedsActivation
+end
+
+function GS.placeItem(self, x, y)
+  if spendSecond(self) then
+    self.workspace:placeItem(x, y)
+  end
+end
+
+function GS.undoItem(self)
+  if refundSecond(self) then
+    self.workspace:undoItemPlacement()
+  end
+end
+
+function GS.removeItem(self, placedItem)
+  if refundSecond(self) then
+    self.workspace:removeItem(placedItem)
+  end
+end
+
+function GS.clearWorkspace(self)
+  resetSeconds(self)
+  self.workspace:clearItems()
+end
+
+function GS.nextRound(self)
+  if self.spentSeconds < 1 then
+    return false
+  end
+
+  local data = self.reference:getData()
+  self.scorer:lockIn(data["maskData"], data["maskSprite"], self.workspace:getImageData(), self.spentSeconds, self.currentRound)
+  local round = nextRound(self)
+
+  if round == -1 then
+    self:setScene(Scenes.GAME_OVER)
+    return false
+  end
+
+  self.reference:nextIdx()
+  self.workspace:reset()
+  self:setScene(Scenes.ROUND_END)
+
+  return true
 end
 
 return GS
