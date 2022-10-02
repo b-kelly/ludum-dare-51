@@ -164,10 +164,8 @@ function U.formatScore(score)
       output = "AWFUL"
   end
 
-  if debug then
-    local pct = math.floor(score * 1000) / 10
-    output = output .. " (" .. pct .. "%)"
-  end
+  local pct = math.floor(score * 1000) / 10
+  output = output .. " (" .. pct .. "% similar)"
 
   return output
 end

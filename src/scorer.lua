@@ -3,30 +3,30 @@ local utils = require("utils")
 local S = {}
 S.__index = S
 
-local function getImageSimilarity(reference, target)
+local function getImageSimilarity(target, result)
     -- there may be a better way of doing this...
     -- assumes both images are the same height/width
-    local height = reference:getHeight()
-    local width = reference:getWidth()
+    local height = target:getHeight()
+    local width = target:getWidth()
 
     local matchingPixelCount = 0
     local nonAlphaPixelInRef = 0
 
     for x=0, width - 1 do
       for y=0, height - 1 do
-        local r1, g1, b1, refAlpha = reference:getPixel(x, y)
-        local r2, g2, b2, tarAlpha = target:getPixel(x, y)
+        local r1, g1, b1, tarAlpha = target:getPixel(x, y)
+        local r2, g2, b2, resAlpha = result:getPixel(x, y)
 
         -- if the reference pixel is not transparent, then add it to the max total
-        if refAlpha ~= 0 then
+        if tarAlpha ~= 0 then
           nonAlphaPixelInRef = nonAlphaPixelInRef + 1
         end
 
         -- add one for each solid pixels the user matched
         -- and subtract one for each pixel that was mismatched, regardless of alpha
-        if refAlpha ~= 0 and refAlpha == tarAlpha then
+        if tarAlpha ~= 0 and tarAlpha == resAlpha then
           matchingPixelCount = matchingPixelCount + 1
-        elseif refAlpha == 0 and refAlpha ~= tarAlpha then
+        elseif tarAlpha == 0 and tarAlpha ~= resAlpha then
           matchingPixelCount = matchingPixelCount - 1
         end
       end
@@ -102,7 +102,7 @@ function S.drawDebug(self, texture, textureSprite)
   end)
 
   if self.similarity ~= nil then
-    love.graphics.printf(utils.formatScore(self.similarity) .. " similar", x, y + th + 10, tw, "center")
+    love.graphics.printf(utils.formatScore(self.similarity), x, y + th + 10, tw, "center")
   end
 end
 

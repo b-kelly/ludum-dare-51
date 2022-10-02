@@ -62,18 +62,26 @@ local function activateRoundEndScreen(state)
 end
 
 local function drawRoundEndScreen(state)
-  -- TODO
-  local lastRound = state.scorer.roundScores[#state.scorer.roundScores]
-  love.graphics.print("Round end screen placeholder - press ENTER", 0, 0)
-  love.graphics.print("Finished round "..lastRound.round.."; score "..lastRound.score.."; seconds "..lastRound.secondsSpent, 0, 20)
+  local yTop = 0
+  local xLeft = 0
+  local imgWidth = 256
+  local gap = 8
 
-  local y = 100
-  state.reference:drawItem(meta.lastRound.referenceIdx, 0, y)
+  -- draw the reference image
+  state.reference:drawItem(meta.lastRound.referenceIdx, xLeft, yTop)
+  love.graphics.printf("Target", xLeft, yTop + gap + imgWidth, imgWidth, "center")
 
-  local x = 256
-  utils.drawMask(meta.resultImg, nil, x, y, function()
-    love.graphics.draw(meta.refData.textureImg, meta.refData.textureSprite, x, y)
+  -- draw the result image
+  local xLeft2 = xLeft + imgWidth + gap
+  utils.drawMask(meta.resultImg, nil, xLeft2, yTop, function()
+    love.graphics.draw(meta.refData.textureImg, meta.refData.textureSprite, xLeft2, yTop)
   end)
+  love.graphics.printf("Result", xLeft2, yTop + gap + imgWidth, imgWidth, "center")
+
+  local textHeight = 40 --TODO ???
+
+  -- print the score
+  love.graphics.printf(utils.formatScore(meta.lastRound.score) .. " " .. meta.lastRound.secondsSpent .. " seconds to complete", xLeft, yTop + gap + imgWidth + textHeight, 800, "center")
 
   local response = meta.response or "ERROR DID NOT ACTIVATE"
   newTextBox("Customer", response, 0, 500)
