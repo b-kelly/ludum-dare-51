@@ -11,6 +11,7 @@ local beginBg
 local meta = {}
 local grandFantasy = love.audio.newSource("assets/audio/grandFantasy.mp3", "stream")
 grandFantasy:seek(2, "seconds")
+grandFantasy:setVolume(.3)
 
 local function drawGameOverScreen(scorer)
   love.graphics.print("Game Over", 0, 0)
