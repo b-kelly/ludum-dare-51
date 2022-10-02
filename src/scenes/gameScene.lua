@@ -79,10 +79,13 @@ local function drawDebug(state, texture, sprite, mx, my)
     end
 
     love.graphics.push()
+    -- set the font globally
+    love.graphics.setNewFont(16)
 
     -- draw a mini version of what the scorer is seeing
     love.graphics.scale(0.5, 0.5)
     state.scorer:drawDebug(texture, sprite)
+    love.graphics.reset()
     love.graphics.pop()
 
     -- write the coords next to the cursor

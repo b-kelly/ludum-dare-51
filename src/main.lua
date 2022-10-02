@@ -18,6 +18,7 @@ local gameState
 function love.load(arg)
     --require("mobdebug").start()
     love.keyboard.setKeyRepeat(true)
+
     -- load the scenes
     otherScenes.load()
     gameScene.load()
@@ -38,6 +39,9 @@ function love.update(dt)
 end
 
 function love.draw(dt)
+  -- set the font globally
+  love.graphics.setNewFont(16)
+
   local scene = gameState.scene
 
   -- otherScenes handles drawing all non-game scenes
