@@ -56,13 +56,11 @@ local function loadUI()
     referenceAreaGrid = love.graphics.newImage('assets/referenceBackground_grid.png')
     workspaceGrid = love.graphics.newImage('assets/workingCanvas_grid.png')
     undoButton = love.graphics.newImage('assets/undoButton.png')
-    rotateButton = love.graphics.newImage('assets/rotateButton.png')
     clearButton = love.graphics.newImage('assets/clearButton.png')
     buttons = {}
-    local canvasButtonX = 160
-    buttons[1] = newButton(rotateButton, canvasButtonX, 260)
-    buttons[2] = newButton(undoButton, canvasButtonX, 330)
-    buttons[3] = newButton(clearButton, canvasButtonX, 400)
+    local canvasButtonX = 170
+    buttons[1] = newButton(undoButton, canvasButtonX, 380)
+    buttons[2] = newButton(clearButton, canvasButtonX, 440)
 end
 
 local function debugUpdateScorer(state)
@@ -139,7 +137,7 @@ local function drawUI(state, mx, my)
 
     for i=1, #buttons do
       local b = buttons[i]
-      love.graphics.draw(b.img, b.x1, b.y1)
+      love.graphics.draw(b.img, b.x1, b.y1, 0, .8, .8)
     end
 end
 
@@ -185,9 +183,9 @@ function SG.handleMousepress(state, x, y)
     state:placeItem(x, y)
 
   elseif UIButton ~= 0 then
-    if UIButton == 2 then
+    if UIButton == 1 then
       state:undoItem()
-    elseif UIButton == 3 then
+    elseif UIButton == 2 then
       state:clearWorkspace(state)
     end
 
