@@ -8,7 +8,6 @@ local titleBg
 local introBg
 local howToPlayBg
 local beginBg
-local mainTextFont
 local meta = {}
 
 local function drawGameOverScreen(scorer)
@@ -75,8 +74,6 @@ function SO.load()
   introBg = love.graphics.newImage("assets/introCard.png")
   howToPlayBg = love.graphics.newImage("assets/howToPlayCard.png")
   beginBg = love.graphics.newImage("assets/beginCard.png")
-
-  mainTextFont = love.graphics.newFont("assets/fonts/SignikaNegative-Medium.ttf")
 end
 
 function SO.activate(scene, state)

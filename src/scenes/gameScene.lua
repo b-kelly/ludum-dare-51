@@ -84,8 +84,6 @@ local function drawDebug(state, texture, sprite, mx, my)
     end
 
     love.graphics.push()
-    -- set the font globally
-    love.graphics.setNewFont(16)
 
     -- draw a mini version of what the scorer is seeing
     love.graphics.scale(0.5, 0.5)
@@ -132,6 +130,7 @@ local function drawSecondsGauge(seconds)
 end
 
 local function drawUI(state, mx, my)
+  
     love.graphics.draw(bg, 0, 0)
 
     -- calculate the position of the reference area as it slides in

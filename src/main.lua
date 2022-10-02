@@ -16,10 +16,13 @@ Scenes = {
 }
 
 local gameState
+local mainTextFont
 
 function love.load(arg)
     --require("mobdebug").start()
     love.keyboard.setKeyRepeat(true)
+    mainTextFont = love.graphics.newFont("assets/fonts/SignikaNegative-Medium.ttf", 20)
+    love.graphics.setFont(mainTextFont)
 
     -- load the scenes
     otherScenes.load()
@@ -46,9 +49,6 @@ function love.update(dt)
 end
 
 function love.draw(dt)
-  -- set the font globally
-  love.graphics.setNewFont(16)
-
   local scene = gameState.scene
 
   -- otherScenes handles drawing all non-game scenes
