@@ -10,8 +10,13 @@ local howToPlayBg
 local beginBg
 local meta = {}
 local grandFantasy = love.audio.newSource("assets/audio/grandFantasy.mp3", "stream")
+local backgroundBeatz = love.audio.newSource("assets/audio/backgroundBeatz.mp3", "stream")
+local goblinMischief = love.audio.newSource("assets/audio/goblinMischief.mp3", "stream")
+local gameOverMusic = love.audio.newSource("assets/audio/imperfectCopySong.mp3", "stream")
 grandFantasy:seek(2, "seconds")
 grandFantasy:setVolume(.3)
+backgroundBeatz:setVolume(.2)
+goblinMischief:setVolume(.3)
 
 local function drawGameOverScreen(scorer)
   love.graphics.print("Game Over", 0, 0)
@@ -52,6 +57,8 @@ local function activateRoundEndScreen(state)
     resultImg = love.graphics.newImage(state.lastResult),
     refData = state.reference:getData(lastRound.referenceIdx)
   }
+  love.audio.stop()
+  backgroundBeatz:play()
 end
 
 local function drawRoundEndScreen(state)
@@ -84,6 +91,10 @@ local function activateNewRequestScreen(state)
   meta = {
     conversation = strings.getRandomConversation(state.reference:getItemIdx(state.reference.currentIdx))
   }
+  if state.currentRound ~= 1 then 
+    love.audio.stop()
+    goblinMischief:play()
+  end
 end
 
 local function drawNewRequestScreen()
