@@ -34,18 +34,29 @@ end
 local function activateRoundEndScreen(state)
   local lastRound = state.scorer.roundScores[#state.scorer.roundScores]
   meta = {
-    response = strings.getRandomScoreResponse(lastRound.score)
+    lastRound = lastRound,
+    response = strings.getRandomScoreResponse(lastRound.score),
+    resultImg = love.graphics.newImage(state.lastResult),
+    refData = state.reference:getData(lastRound.referenceIdx)
   }
 end
 
-local function drawRoundEndScreen(scorer)
+local function drawRoundEndScreen(state)
   -- TODO
-  local lastRound = scorer.roundScores[#scorer.roundScores]
+  local lastRound = state.scorer.roundScores[#state.scorer.roundScores]
   love.graphics.print("Round end screen placeholder - press ENTER", 0, 0)
   love.graphics.print("Finished round "..lastRound.round.."; score "..lastRound.score.."; seconds "..lastRound.secondsSpent, 0, 20)
 
+  local y = 100
+  state.reference:drawItem(meta.lastRound.referenceIdx, 0, y)
+
+  local x = 256
+  utils.drawMask(meta.resultImg, nil, x, y, function()
+    love.graphics.draw(meta.refData.textureImg, meta.refData.textureSprite, x, y)
+  end)
+
   local response = meta.response or "ERROR DID NOT ACTIVATE"
-  newTextBox("Customer", response, 0, 40)
+  newTextBox("Customer", response, 0, 500)
 end
 
 local function drawHelpScreen()
@@ -58,7 +69,7 @@ end
 
 local function activateNewRequestScreen(state)
   meta = {
-    conversation = strings.getRandomConversation(state.reference:getCurrentItemIdx())
+    conversation = strings.getRandomConversation(state.reference:getItemIdx(state.reference.currentIdx))
   }
 end
 
@@ -108,7 +119,7 @@ function SO.drawScene(scene, state)
   elseif scene == Scenes.TITLE then
     drawTitleScreen()
   elseif scene == Scenes.ROUND_END then
-    drawRoundEndScreen(state.scorer)
+    drawRoundEndScreen(state)
   elseif scene == Scenes.HELP or scene == Scenes.INTRO_HELP then
     drawHelpScreen()
   elseif scene == Scenes.NEW_REQUEST then

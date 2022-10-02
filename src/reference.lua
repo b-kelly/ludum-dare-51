@@ -41,32 +41,34 @@ function R._nextIdx(self, idx)
 end
 
 function R.draw(self, xPos)
-    local data = self:getData()
-
     utils.drawToCanvas(self.canvas, function ()
         love.graphics.clear()
         love.graphics.scale(0.5, 0.5)
-        utils.drawMask(self.maskImg, data.maskSprite, 0, 0, function()
-          love.graphics.draw(self.textureImg, data.textureSprite, 0, 0)
-        end)
+        self:drawItem(self.currentIdx, 0, 0)
     end)
 
     love.graphics.draw(self.canvas, xPos, 90)
 end
 
-function R.getCurrentItemIdx(self)
-  return self.randOrder[self.currentIdx]
+function R.getItemIdx(self, idx)
+  return self.randOrder[idx]
 end
 
-function R.getData(self)
-  local idx = self:getCurrentItemIdx()
-
+function R.getData(self, idx)
+  idx = self:getItemIdx(idx)
   return {
     textureImg = self.textureImg,
     maskData = self.maskData,
     textureSprite = self.textures[idx],
     maskSprite = self.masks[idx],
   }
+end
+
+function R.drawItem(self, idx, x, y)
+  local data = self:getData(idx)
+  utils.drawMask(self.maskImg, data.maskSprite, x, y, function()
+    love.graphics.draw(data.textureImg, data.textureSprite, x, y)
+  end)
 end
 
 return R
