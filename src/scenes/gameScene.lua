@@ -203,7 +203,7 @@ function SG.handleKeypress(state, key, isrepeat)
         state.workspace:mirrorItem(true)
         return true
       elseif key == "h" then
-        state.setScene(Scenes.HELP)
+        state:setScene(Scenes.HELP)
         return true
     elseif key == "space" then
         nextRound(state)

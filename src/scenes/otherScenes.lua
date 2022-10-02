@@ -23,6 +23,8 @@ end
 local function drawHelpScreen()
   -- TODO
   love.graphics.print("Help screen placeholder - press ENTER", 0, 0)
+
+  love.graphics.printf("Controls: rotate (e, r); flip (q, w); finalize (space); undo (z); clear (c); show help (h)", 0, 20, 600, "left")
 end
 
 function SO.load()
