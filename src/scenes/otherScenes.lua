@@ -9,6 +9,7 @@ local introBg
 local howToPlayBg
 local beginBg
 local meta = {}
+local grandFantasy = love.audio.newSource("assets/audio/grandFantasy.mp3", "stream")
 
 local function drawGameOverScreen(scorer)
   love.graphics.print("Game Over", 0, 0)
@@ -97,7 +98,8 @@ function SO.activate(scene, state)
   if scene == Scenes.GAME_OVER then
     --activateGameOverScreen(state.scorer)
   elseif scene == Scenes.TITLE then
-    --activateTitleScreen()
+    --TODO put this in a function probs
+    grandFantasy:play()
   elseif scene == Scenes.ROUND_END then
     activateRoundEndScreen(state)
   elseif scene == Scenes.HELP or scene == Scenes.INTRO_HELP then
