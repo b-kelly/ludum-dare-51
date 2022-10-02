@@ -7,10 +7,12 @@ debug = true
 -- TODO global
 Scenes = {
   TITLE = 1,
-  HELP = 2,
-  GAME = 3,
-  ROUND_END = 4,
-  GAME_OVER = 5
+  INTRO_HELP = 2,
+  NEW_REQUEST = 3,
+  GAME = 4,
+  ROUND_END = 5,
+  GAME_OVER = 6,
+  HELP = 7,
 }
 
 local gameState
@@ -28,10 +30,15 @@ function love.load(arg)
 end
 
 function love.update(dt)
-  if gameState.scene == Scenes.GAME then
-    if gameState.sceneNeedsActivation then
+  if gameState.sceneNeedsActivation then
+    if otherScenes.activate(gameState.scene, gameState) then
+      -- do nothing
+    elseif gameState.scene == Scenes.GAME then
       gameScene.activate()
     end
+  end
+
+  if gameState.scene == Scenes.GAME then
     gameScene.update(dt)
   end
 

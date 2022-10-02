@@ -8,16 +8,14 @@ GS.__index = GS
 local MAX_SECONDS = 10
 local MAX_ROUNDS = 24 -- max different masks
 
-local function spendSecond(self)
-  local newSeconds = self.spentSeconds + 1
+local function canSpendSecond(spentSeconds)
+  local newSeconds = spentSeconds + 1
 
   if newSeconds > MAX_SECONDS then
-    return false
+    return false, 0
   end
 
-  self.spentSeconds = newSeconds
-
-  return true
+  return true, newSeconds
 end
 
 local function refundSecond(self)
@@ -57,7 +55,8 @@ function GS.new()
     currentRound = 1,
     workspace = W.new(),
     scorer = S.new(),
-    reference = R.new()
+    reference = R.new(),
+    selectedItem = nil
   }, GS)
 
   return self
@@ -81,8 +80,10 @@ function GS.nextScene(self)
   end
 
   if self.scene == Scenes.TITLE then
-    self:setScene(Scenes.HELP)
-  elseif self.scene == Scenes.HELP or self.scene == Scenes.ROUND_END then
+    self:setScene(Scenes.INTRO_HELP)
+  elseif self.scene == Scenes.INTRO_HELP or self.scene == Scenes.ROUND_END then
+    self:setScene(Scenes.NEW_REQUEST)
+  elseif self.scene == Scenes.HELP or self.scene == Scenes.NEW_REQUEST then
     self:setScene(Scenes.GAME)
   end
 
@@ -90,9 +91,12 @@ function GS.nextScene(self)
 end
 
 function GS.placeItem(self, x, y)
-  if spendSecond(self) then
-    self.workspace:_placeItem(x, y)
+  local canSpend, newSeconds = canSpendSecond(self.spentSeconds)
+  if canSpend and self.workspace:_placeItem(self.selectedItem, x, y) then
+    self.spentSeconds = newSeconds
   end
+
+  self:selectItem(nil)
 end
 
 function GS.undoItem(self)
@@ -103,6 +107,7 @@ end
 
 function GS.removeItem(self, placedItem)
   if refundSecond(self) then
+    self:selectItem(self.workspace.objects[placedItem].idx)
     self.workspace:_removeItem(placedItem)
   end
 end
@@ -127,10 +132,25 @@ function GS.nextRound(self)
   end
 
   self.reference:_nextIdx()
+  self.selectedItem = nil
   self.workspace:_reset()
   self:setScene(Scenes.ROUND_END)
 
   return true
+end
+
+function GS.drawSelectedItem(self, x, y)
+    if self.selectedItem == nil then
+      return
+    end
+
+    local workspace = self.workspace
+
+    workspace.drawItem(workspace.texture, workspace.sprites[self.selectedItem], x, y, workspace.itemRotation, workspace.isMirrorX, workspace.isMirrorY)
+end
+
+function GS.selectItem(self, itemIndex)
+  self.selectedItem = itemIndex
 end
 
 return GS

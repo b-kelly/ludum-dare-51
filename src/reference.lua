@@ -54,8 +54,12 @@ function R.draw(self, xPos)
     love.graphics.draw(self.canvas, xPos, 90)
 end
 
+function R.getCurrentItemIdx(self)
+  return self.randOrder[self.currentIdx]
+end
+
 function R.getData(self)
-  local idx = self.randOrder[self.currentIdx]
+  local idx = self:getCurrentItemIdx()
 
   return {
     textureImg = self.textureImg,

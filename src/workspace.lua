@@ -15,13 +15,6 @@ local function translateParentCoords(x, y)
   return x - posX, y - posY
 end
 
-local function drawItem(texture, quad, x, y, r, isMirrorX, isMirrorY)
-  local offset = spriteWidth / 2
-  local mirrorX = isMirrorX and -1 or 1
-  local mirrorY = isMirrorY and -1 or 1
-  love.graphics.draw(texture, quad, x, y, r, mirrorY, mirrorX, offset, offset)
-end
-
 function W.new()
   local texture = love.graphics.newImage("assets/buildingObjects.png")
   local textureData = love.image.newImageData("assets/buildingObjects.png")
@@ -31,7 +24,6 @@ function W.new()
     textureData = textureData,
     sprites = utils.loadSpritesheet(texture, spritesX, spritesY, spriteWidth),
     objects = {},
-    selectedItem = nil,
     itemRotation = 0,
     isMirrorX = false,
     isMirrorY = false
@@ -40,20 +32,18 @@ function W.new()
   return self
 end
 
+function W.drawItem(texture, quad, x, y, r, isMirrorX, isMirrorY)
+  local offset = spriteWidth / 2
+  local mirrorX = isMirrorX and -1 or 1
+  local mirrorY = isMirrorY and -1 or 1
+  love.graphics.draw(texture, quad, x, y, r, mirrorY, mirrorX, offset, offset)
+end
+
 function W.drawObjects(self)
     for i=1,#self.objects do
         local obj = self.objects[i]
-        drawItem(self.texture, self.sprites[obj["idx"]], obj["x"], obj["y"], obj["r"], obj["isMirrorX"], obj["isMirrorY"])
+        self.drawItem(self.texture, self.sprites[obj["idx"]], obj["x"], obj["y"], obj["r"], obj["isMirrorX"], obj["isMirrorY"])
     end
-end
-
-function W.drawSelectedItem(self, x, y)
-    if self.selectedItem == nil then
-      return
-    end
-
-    local sx, sy = translateParentCoords(x, y)
-    drawItem(self.texture, self.sprites[self.selectedItem], sx, sy, self.itemRotation, self.isMirrorX, self.isMirrorY)
 end
 
 function W.draw(self, mx, my)
@@ -63,7 +53,6 @@ function W.draw(self, mx, my)
         love.graphics.rectangle("fill", 0, 0, width, height)
         love.graphics.setColor(1, 1, 1, 1)
         self.drawObjects(self)
-        self.drawSelectedItem(self, mx, my)
     end)
 
     love.graphics.draw(self.canvas, posX, posY)
@@ -73,30 +62,36 @@ function W.getImageData(self)
     return self.canvas:newImageData()
 end
 
-function W._placeItem(self, x, y)
-  if self.selectedItem == nil then
-    return
+function W._placeItem(self, selectedItem, x, y)
+  local shouldPlace = true
+
+  if selectedItem == nil then
+    shouldPlace =  false
   end
+
   local sx, sy = translateParentCoords(x, y)
 
   if sx < 0 or sx > width or sy < 0 or sy > height then
-    self.selectedItem = nil
-      return
+    selectedItem = nil
+    shouldPlace =  false
   end
 
-  table.insert(self.objects, {
-      idx=self.selectedItem,
-      x=sx,
-      y=sy,
-      r = self.itemRotation,
-      isMirrorX = self.isMirrorX,
-      isMirrorY = self.isMirrorY
-  })
+  if shouldPlace then
+    table.insert(self.objects, {
+        idx=selectedItem,
+        x=sx,
+        y=sy,
+        r = self.itemRotation,
+        isMirrorX = self.isMirrorX,
+        isMirrorY = self.isMirrorY
+    })
+  else
+    self.itemRotation = 0
+    self.isMirrorX = false
+    self.isMirrorY = false
+  end
 
-  self.selectedItem = nil
-  self.itemRotation = 0
-  self.isMirrorX = false
-  self.isMirrorY = false
+  return shouldPlace
 end
 
 function W.rotateItem(self, counterClockwise)
@@ -113,12 +108,7 @@ function W.mirrorItem(self, isX)
   end
 end
 
-function W.selectItem(self, itemIndex)
-  self.selectedItem = itemIndex
-end
-
 function W:_removeItem(itemIndex)
-  self.selectedItem = self.objects[itemIndex].idx
   self.itemRotation = self.objects[itemIndex].r
   table.remove(self.objects, itemIndex)
 end
@@ -132,7 +122,6 @@ function W._clearItems(self)
 end
 
 function W._reset(self)
-  self.selectedItem = nil
   self.itemRotation = 0
   self:_clearItems()
 end
