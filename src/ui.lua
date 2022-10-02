@@ -16,12 +16,15 @@ function loadUI()
 
 end
 
-function drawUI(fn)
+function drawUI(fn, points)
     love.graphics.draw(bg, 0, 0)
-    love.graphics.draw(referenceArea, 0, 0)
+    love.graphics.draw(referenceArea, 100, 80)
     fn()
-    love.graphics.draw(referenceAreaGrid, 11, 11)
+    love.graphics.draw(referenceAreaGrid, 110, 90)
     love.graphics.draw(workspaceGrid, 260, 314)
+
+    drawSecondsGauge(points)
+
     for i=1, #buttons do
       local b = buttons[i]
       love.graphics.draw(b.img, b.x1, b.y1)
@@ -65,11 +68,16 @@ function newButton(buttonImg, buttonX, buttonY)
   }
 end
 
+function drawSecondsGauge(points)
+  -- TODO some sort of gauge/graphic for seconds?
+  love.graphics.setColor(0, 0, 0)
+  love.graphics.print(points["spent"] .. "/" .. points["max"], 85, 415)
+  love.graphics.setColor(255, 255, 255)
+end
 
 function drawGameOver(scorer)
   love.graphics.print("Game Over", 0, 0)
 
   love.graphics.print("Best: " .. scorer.best.round .. " " .. scorer.best.score .. "%", 0, 20)
   love.graphics.print("Worst: " .. scorer.worst.round .. " " .. scorer.worst.score .. "%", 0, 40)
-
 end

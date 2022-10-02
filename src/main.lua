@@ -40,7 +40,7 @@ function love.draw(dt)
     drawUI(function()
       reference:draw()
       workspace:draw(mx, my)
-    end)
+    end, gameState:points())
 
     if debug then
         local data = reference:getData()
@@ -63,7 +63,7 @@ function love.mousepressed(x, y, button)
     end
   elseif UIButton ~= 0 then
     if UIButton == 2 then
-      workspace:undoItemPlacement()
+      undoItem()
     elseif UIButton == 3 then
       workspace:clearItems()
     end
@@ -97,6 +97,12 @@ end
 function placeItem(x, y)
   if gameState:spendPoint() then
     workspace:placeItem(x, y)
+  end
+end
+
+function undoItem()
+  if gameState:refundPoint() then
+    workspace:undoItemPlacement()
   end
 end
 

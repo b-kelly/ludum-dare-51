@@ -51,7 +51,7 @@ function R.draw(self)
         end)
     end)
 
-    love.graphics.draw(self.canvas, 12, 12)
+    love.graphics.draw(self.canvas, 110, 90)
 end
 
 function R.getData(self)

@@ -37,6 +37,13 @@ function GS.refundPoint(self)
   return true
 end
 
+function GS.points(self)
+  return {
+    spent = self.spentPoints,
+    max = MAX_POINTS
+  }
+end
+
 function GS.nextRound(self)
   local newRound = self.currentRound + 1
 
