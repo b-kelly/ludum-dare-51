@@ -1,4 +1,5 @@
 local utils = require "utils"
+local strings = require "strings"
 
 local SO = {}
 SO.__index = SO
@@ -17,11 +18,23 @@ local function drawTitleScreen()
   love.graphics.print("(TODO cleanup) PRESS ENTER", 150, 330)
 end
 
+local function newTextBox(text, x, y)
+  love.graphics.setColor(1, 0, 0)
+  love.graphics.rectangle("fill", x, y, 800, 100)
+  love.graphics.setColor(0, 0, 0)
+  love.graphics.printf(text, x, y, 800, "left")
+  love.graphics.setColor(1, 1, 1)
+end
+
 local function drawRoundEndScreen(scorer)
   -- TODO
   local lastRound = scorer.roundScores[#scorer.roundScores]
   love.graphics.print("Round end screen placeholder - press ENTER", 0, 0)
   love.graphics.print("Finished round "..lastRound.round.."; score "..lastRound.score.."; seconds "..lastRound.secondsSpent, 0, 20)
+
+  -- TODO do it right! This is lazy as heck
+  response = response and response or strings.getRandomScoreResponse(lastRound.score)
+  newTextBox(response, 0, 40)
 end
 
 local function drawHelpScreen()
