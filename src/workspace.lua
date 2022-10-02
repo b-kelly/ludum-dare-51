@@ -145,9 +145,8 @@ function W:itemToMoveOnCanvas(mx, my)
       x2 = obj.x + posX + spriteWidth - offset,
       y2 = obj.y + posY + spriteWidth - offset
     }
-    print(mx.. " " .. my .. " " .. toCheck.x1.." "..toCheck.x2.." "..toCheck.y1.." "..toCheck.y2)
+
     if utils.hasMouseOverlap(mx, my, toCheck) then
-      print("is overlapping")
       local r, g, b, a = utils.singleImageData(self.textureData, self.sprites[obj["idx"]]):getPixel(mx-toCheck.x1, my-toCheck.y1)
       if a == 1 then
         return i

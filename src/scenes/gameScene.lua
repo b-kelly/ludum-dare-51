@@ -4,6 +4,14 @@ local SG = {}
 SG.__index = SG
 
 local bg
+local referenceArea
+local referenceAreaGrid
+local workspaceGrid
+local undoButton
+local rotateButton
+local clearButton
+local buttons
+local bagLocations
 
 local function newButton(buttonImg, buttonX, buttonY)
   return {
