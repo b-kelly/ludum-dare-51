@@ -14,7 +14,6 @@ local workspace
 local scorer
 local reference
 local gameState
-local isGameOver = false
 
 function love.load(arg)
     --require("mobdebug").start()
@@ -31,8 +30,17 @@ function love.update(dt)
 end
 
 function love.draw(dt)
-    if isGameOver then
-      drawGameOver(scorer)
+    if gameState.scene == Scenes.GAME_OVER then
+      drawGameOverScreen(scorer)
+      return
+    elseif gameState.scene == Scenes.TITLE then
+      drawTitleScreen()
+      return
+    elseif gameState.scene == Scenes.ROUND_END then
+      drawRoundEndScreen()
+      return
+    elseif gameState.scene == Scenes.HELP then
+      drawHelpScreen()
       return
     end
 
@@ -77,6 +85,11 @@ function love.mousepressed(x, y, button)
 end
 
 function love.keypressed(key, scancode, isrepeat)
+
+  if key == "return" and gameState.scene ~= Scenes.Game then
+    gameState:nextScene()
+  end
+
   if key == "r" then
     workspace:rotateItem(false)
   elseif key == "e" then
@@ -114,10 +127,11 @@ function nextRound()
   local round = gameState:nextRound()
 
   if round == -1 then
-    isGameOver = true
+    gameState:setScene(Scenes.GAME_OVER)
     return
   end
 
   reference:setIdx(round)
   workspace:reset()
+  gameState:setScene(Scenes.ROUND_END)
 end

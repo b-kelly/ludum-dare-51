@@ -31,3 +31,11 @@ function detectWhichObjPressed(mx, my, tbl)
   end
   return 0
 end
+
+Scenes = {
+  TITLE = 1,
+  HELP = 2,
+  GAME = 3,
+  ROUND_END = 4,
+  GAME_OVER = 5
+}

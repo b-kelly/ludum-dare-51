@@ -1,3 +1,5 @@
+require "utils"
+
 GS = {}
 GS.__index = GS
 
@@ -6,8 +8,9 @@ local MAX_ROUNDS = 24 -- max different masks
 
 function GS.new()
   local self = setmetatable({
-      spentPoints = 0,
-      currentRound = 0
+    scene = Scenes.TITLE,
+    spentPoints = 0,
+    currentRound = 0
   }, GS)
 
   return self
@@ -55,6 +58,22 @@ function GS.nextRound(self)
   self.currentRound = self.currentRound + 1
 
   return self.currentRound
+end
+
+function GS.setScene(self, scene)
+  self.scene = scene
+end
+
+function GS.nextScene(self)
+  if self.scene == Scenes.GAME then
+    return
+  end
+
+  if self.scene == Scenes.TITLE then
+    self.scene = Scenes.HELP
+  elseif self.scene == Scenes.HELP or self.scene == Scenes.ROUND_END then
+    self.scene = Scenes.GAME
+  end
 end
 
 return GS
