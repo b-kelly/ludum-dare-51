@@ -9,14 +9,10 @@ local introBg
 local howToPlayBg
 local beginBg
 local meta = {}
-local grandFantasy = love.audio.newSource("assets/audio/grandFantasy.mp3", "stream")
-local backgroundBeatz = love.audio.newSource("assets/audio/backgroundBeatz.mp3", "stream")
-local goblinMischief = love.audio.newSource("assets/audio/goblinMischief.mp3", "stream")
-local gameOverMusic = love.audio.newSource("assets/audio/imperfectCopySong.mp3", "stream")
-grandFantasy:seek(2, "seconds")
-grandFantasy:setVolume(.3)
-backgroundBeatz:setVolume(.2)
-goblinMischief:setVolume(.3)
+local grandFantasy
+local backgroundBeatz
+local goblinMischief
+local gameOverMusic
 
 local function drawGameOverScreen(scorer)
   love.graphics.print("Game Over", 0, 0)
@@ -40,13 +36,33 @@ local function drawIntroBeginScreen()
   love.graphics.print("Press 'Enter' to begin!", 360, 560)
 end
 
-local function newTextBox(name, text, x, y)
-  love.graphics.setColor(1, 0, 0)
-  love.graphics.rectangle("fill", x, y, 800, 100)
-  love.graphics.setColor(0, 0, 0)
-  -- TODO
-  love.graphics.printf(name..": "..text, x, y, 800, "left")
+local function newTextBox(name, text, x, y, avatarIsOnRight)
+  -- TODO this could probably be better served w/ an image bg
+  -- TODO need support for image on the right vs left
+
+  local nameBoxHeight = 20
+  local nameBoxWidth = 100
+  local avatarHeight = 100
+  local inset = 8
+  local largeBoxWidth = 800 - avatarHeight - (inset)
+  local nbOffset = nameBoxHeight / 2
+  local xLeft = x + avatarHeight + inset
+  local smallXLeft = xLeft + nameBoxHeight
+  local yTop = y + nbOffset
+  local smallYTop = y
+
+  -- draw the boxes the same color as reference grid bg
+  love.graphics.setColor(0.22, 0.19, 0.29)
+  love.graphics.rectangle("fill", xLeft, yTop, largeBoxWidth, avatarHeight - nbOffset)
+  love.graphics.rectangle("fill", smallXLeft, smallYTop, nameBoxWidth, nameBoxHeight)
+
+  --draw the avatar box
   love.graphics.setColor(1, 1, 1)
+  love.graphics.rectangle("fill", x, y, avatarHeight, avatarHeight)
+
+  love.graphics.setColor(1, 1, 1)
+  love.graphics.printf(name, smallXLeft, smallYTop, nameBoxWidth, "center")
+  love.graphics.printf(text, xLeft + inset, yTop + inset + nbOffset, 800, "left")
 end
 
 local function activateRoundEndScreen(state)
@@ -106,9 +122,10 @@ local function activateNewRequestScreen(state)
 end
 
 local function drawNewRequestScreen()
+  local gap = 8
   local convo = meta.conversation or {{name = "ERROR", text = "NewRequestScreen DID NOT ACTIVATE"}}
   for i=1,#convo do
-    newTextBox(convo[i]["name"], convo[i]["text"], 0, 100 * (i - 1))
+    newTextBox(convo[i]["name"], convo[i]["text"], 0, (100 * (i - 1)) + (gap * (i - 1)))
   end
 end
 
@@ -117,6 +134,15 @@ function SO.load()
   introBg = love.graphics.newImage("assets/introCard.png")
   howToPlayBg = love.graphics.newImage("assets/howToPlayCard.png")
   beginBg = love.graphics.newImage("assets/beginCard.png")
+  grandFantasy = love.audio.newSource("assets/audio/grandFantasy.mp3", "stream")
+  backgroundBeatz = love.audio.newSource("assets/audio/backgroundBeatz.mp3", "stream")
+  goblinMischief = love.audio.newSource("assets/audio/goblinMischief.mp3", "stream")
+  gameOverMusic = love.audio.newSource("assets/audio/imperfectCopySong.mp3", "stream")
+
+  grandFantasy:seek(2, "seconds")
+  grandFantasy:setVolume(.3)
+  backgroundBeatz:setVolume(.2)
+  goblinMischief:setVolume(.3)
 end
 
 function SO.activate(scene, state)
