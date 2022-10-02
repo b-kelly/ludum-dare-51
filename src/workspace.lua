@@ -10,16 +10,16 @@ local height = 256
 local spriteWidth = 128
 local spritesX = 5
 local spritesY = 2
-local timer = 0
-local timerMax = 10
 
 local function translateParentCoords(x, y)
   return x - posX, y - posY
 end
 
-local function drawItem(texture, quad, x, y, r)
+local function drawItem(texture, quad, x, y, r, isMirrorX, isMirrorY)
   local offset = spriteWidth / 2
-  love.graphics.draw(texture, quad, x, y, r, 1, 1, offset, offset)
+  local mirrorX = isMirrorX and -1 or 1
+  local mirrorY = isMirrorY and -1 or 1
+  love.graphics.draw(texture, quad, x, y, r, mirrorY, mirrorX, offset, offset)
 end
 
 function W.new()
@@ -30,11 +30,12 @@ function W.new()
     texture = texture,
     textureData = textureData,
     sprites = utils.loadSpritesheet(texture, spritesX, spritesY, spriteWidth),
-    objects = {}
+    objects = {},
+    selectedItem = nil,
+    itemRotation = 0,
+    isMirrorX = false,
+    isMirrorY = false
   }, W)
-
-  self.selectedItem = nil
-  self.itemRotation = 0
 
   return self
 end
@@ -42,7 +43,7 @@ end
 function W.drawObjects(self)
     for i=1,#self.objects do
         local obj = self.objects[i]
-        drawItem(self.texture, self.sprites[obj["idx"]], obj["x"], obj["y"], obj["r"])
+        drawItem(self.texture, self.sprites[obj["idx"]], obj["x"], obj["y"], obj["r"], obj["isMirrorX"], obj["isMirrorY"])
     end
 end
 
@@ -52,7 +53,7 @@ function W.drawSelectedItem(self, x, y)
     end
 
     local sx, sy = translateParentCoords(x, y)
-    drawItem(self.texture, self.sprites[self.selectedItem], sx, sy, self.itemRotation)
+    drawItem(self.texture, self.sprites[self.selectedItem], sx, sy, self.itemRotation, self.isMirrorX, self.isMirrorY)
 end
 
 function W.draw(self, mx, my)
@@ -86,11 +87,15 @@ function W.placeItem(self, x, y)
       idx=self.selectedItem,
       x=sx,
       y=sy,
-      r = self.itemRotation
+      r = self.itemRotation,
+      isMirrorX = self.isMirrorX,
+      isMirrorY = self.isMirrorY
   })
 
   self.selectedItem = nil
   self.itemRotation = 0
+  self.isMirrorX = false
+  self.isMirrorY = false
 end
 
 function W.selectItem(self, itemIndex)
@@ -107,6 +112,14 @@ function W.rotateItem(self, counterClockwise)
   local mod = counterClockwise and -1 or 1
   -- rotate 3.6 degrees
   self.itemRotation = self.itemRotation + 0.05 * mod * math.pi
+end
+
+function W.mirrorItem(self, isX)
+  if isX then
+    self.isMirrorX = not self.isMirrorX
+  else
+    self.isMirrorY = not self.isMirrorY
+  end
 end
 
 function W.undoItemPlacement(self)

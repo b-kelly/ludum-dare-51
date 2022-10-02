@@ -114,6 +114,17 @@ local function undoItem(state)
     end
 end
 
+local function removeItem(state, placedItem)
+  if state:refundSecond() then
+    state.workspace:removeItem(placedItem)
+  end
+end
+
+local function clearWorkspace(state)
+  --TODO state:clearSpentSeconds()
+  state.workspace:clearItems()
+end
+
 function SG.load()
     loadUI()
     loadBagLocations()
@@ -155,13 +166,13 @@ function SG.handleMousepress(state, x, y)
     if UIButton == 2 then
       undoItem(state)
     elseif UIButton == 3 then
-      state.workspace:clearItems()
+      clearWorkspace(state)
     end
-  --then check to see if you've clicked on an item that's already been placed
   else
+    --then check to see if you've clicked on an item that's already been placed
     local placedItem = state.workspace:itemToMoveOnCanvas(x, y)
     if placedItem ~= 0 then
-      state.workspace:removeItem(placedItem)
+      removeItem(placedItem)
     end
   end
 end
@@ -182,8 +193,17 @@ function SG.handleKeypress(state, key, isrepeat)
     if key == "z" then
       state.workspace:undoItemPlacement()
         return true
-    elseif key == "c" then
-      state.workspace:clearItems()
+      elseif key == "c" then
+        clearWorkspace(state)
+        return true
+      elseif key == "q" then
+        state.workspace:mirrorItem(false)
+        return true
+      elseif key == "w" then
+        state.workspace:mirrorItem(true)
+        return true
+      elseif key == "h" then
+        state.setScene(Scenes.HELP)
         return true
     elseif key == "space" then
         nextRound(state)
