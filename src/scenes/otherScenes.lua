@@ -23,11 +23,12 @@ local function drawTitleScreen()
   love.graphics.print("(TODO cleanup) PRESS ENTER", 150, 330)
 end
 
-local function newTextBox(text, x, y)
+local function newTextBox(name, text, x, y)
   love.graphics.setColor(1, 0, 0)
   love.graphics.rectangle("fill", x, y, 800, 100)
   love.graphics.setColor(0, 0, 0)
-  love.graphics.printf(text, x, y, 800, "left")
+  -- TODO
+  love.graphics.printf(name..": "..text, x, y, 800, "left")
   love.graphics.setColor(1, 1, 1)
 end
 
@@ -44,9 +45,8 @@ local function drawRoundEndScreen(scorer)
   love.graphics.print("Round end screen placeholder - press ENTER", 0, 0)
   love.graphics.print("Finished round "..lastRound.round.."; score "..lastRound.score.."; seconds "..lastRound.secondsSpent, 0, 20)
 
-  -- TODO do it right! This is lazy as heck
   local response = meta.response or "ERROR DID NOT ACTIVATE"
-  newTextBox(response, 0, 40)
+  newTextBox("Customer", response, 0, 40)
 end
 
 local function drawHelpScreen()
@@ -55,6 +55,19 @@ local function drawHelpScreen()
   love.graphics.print("Help screen placeholder - press ENTER", 0, 0)
 
   love.graphics.printf("Controls: rotate (e, r); flip (q, w); finalize (space); undo (z); clear (c); show help (h)", 0, 20, 600, "left")
+end
+
+local function activateNewRequestScreen(state)
+  meta = {
+    conversation = strings.getRandomConversation(state.reference:getCurrentItemIdx())
+  }
+end
+
+local function drawNewRequestScreen()
+  local convo = meta.conversation or {{name = "ERROR", text = "NewRequestScreen DID NOT ACTIVATE"}}
+  for i=1,#convo do
+    newTextBox(convo[i]["name"], convo[i]["text"], 0, 100 * (i - 1))
+  end
 end
 
 function SO.load()
@@ -79,8 +92,10 @@ function SO.activate(scene, state)
     --activateTitleScreen()
   elseif scene == Scenes.ROUND_END then
     activateRoundEndScreen(state)
-  elseif scene == Scenes.HELP then
+  elseif scene == Scenes.HELP or scene == Scenes.INTRO_HELP then
     --activateHelpScreen()
+  elseif scene == Scenes.NEW_REQUEST then
+    activateNewRequestScreen(state)
   end
 
   return true
@@ -97,8 +112,10 @@ function SO.drawScene(scene, state)
     drawTitleScreen()
   elseif scene == Scenes.ROUND_END then
     drawRoundEndScreen(state.scorer)
-  elseif scene == Scenes.HELP then
+  elseif scene == Scenes.HELP or scene == Scenes.INTRO_HELP then
     drawHelpScreen()
+  elseif scene == Scenes.NEW_REQUEST then
+    drawNewRequestScreen()
   end
 
   return true
