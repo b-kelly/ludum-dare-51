@@ -23,7 +23,7 @@ function drawItem(texture, quad, x, y, r)
   love.graphics.draw(texture, quad, x, y, r, 1, 1, offset, offset)
 end
 
-function W.new()  
+function W.new()
   local texture = love.graphics.newImage("assets/buildingObjects.png")
   local textureData = love.image.newImageData("assets/buildingObjects.png")
   local self = setmetatable({
@@ -36,7 +36,7 @@ function W.new()
 
   self.selectedItem = nil
   self.itemRotation = 0
-  
+
   return self
 end
 
@@ -51,7 +51,7 @@ function W.drawSelectedItem(self, x, y)
     if self.selectedItem == nil then
       return
     end
-    
+
     local sx, sy = translateParentCoords(x, y)
     drawItem(self.texture, self.sprites[self.selectedItem], sx, sy, self.itemRotation)
 end
@@ -78,7 +78,7 @@ function W.placeItem(self, x, y)
     return
   end
   local sx, sy = translateParentCoords(x, y)
-  
+
   if sx < 0 or sx > width or sy < 0 or sy > height then
       return
   end
@@ -89,7 +89,7 @@ function W.placeItem(self, x, y)
       y=sy,
       r = self.itemRotation
   })
-  
+
   self.updateTimer()
   self.selectedItem = nil
   self.itemRotation = 0
@@ -138,7 +138,7 @@ function W:itemToMoveOnCanvas(mx, my)
   for i=#self.objects, 1, -1 do
     local obj = self.objects[i]
     local offset = spriteWidth/2
-    local toCheck = 
+    local toCheck =
     {
       x1 = obj.x + posX - offset,
       y1 = obj.y + posY - offset,

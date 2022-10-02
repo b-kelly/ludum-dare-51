@@ -9,7 +9,7 @@ local width = 256
 local height = 256
 local spriteWidth = 256
 
-function R.new()  
+function R.new()
   local textures = love.graphics.newImage("assets/targetObjectTextures.png")
   local maskData = love.image.newImageData("assets/targetObjectMasks.png")
   local masks = love.graphics.newImage(maskData)
@@ -23,26 +23,26 @@ function R.new()
     masks = loadSpritesheet(masks, spritesX, spritesY, spriteWidth),
     currentIdx = 1
   }, R)
-  
+
   return self
 end
 
 function R.setIdx(self, idx)
   -- TODO
   --self.currentIdx = idx
- 
+
   idx = self.currentIdx + 1
- 
+
   if idx < 1 or idx > spritesX * spritesY then
     idx = 1
   end
-  
+
   self.currentIdx = idx
 end
 
 function R.draw(self)
     local data = self:getData()
-  
+
     drawToCanvas(self.canvas, function ()
         love.graphics.clear()
         love.graphics.scale(0.5, 0.5)

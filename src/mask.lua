@@ -12,7 +12,7 @@ local function drawStencil(mask, quad, x, y)
   if quad == nil then
     quad = love.graphics.newQuad(0, 0, mask:getWidth(), mask:getHeight(), mask)
   end
-  
+
    love.graphics.setShader(mask_shader)
    love.graphics.draw(mask, quad, x, y)
    love.graphics.setShader()

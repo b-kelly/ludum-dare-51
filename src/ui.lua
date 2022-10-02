@@ -68,8 +68,8 @@ end
 
 function drawGameOver(scorer)
   love.graphics.print("Game Over", 0, 0)
-  
+
   love.graphics.print("Best: " .. scorer.best.round .. " " .. scorer.best.score .. "%", 0, 20)
   love.graphics.print("Worst: " .. scorer.worst.round .. " " .. scorer.worst.score .. "%", 0, 40)
-  
+
 end

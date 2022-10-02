@@ -35,7 +35,7 @@ function love.draw(dt)
       drawGameOver(scorer)
       return
     end
-  
+
     local mx, my = love.mouse.getPosition()
     drawUI(function()
       reference:draw()
@@ -80,11 +80,11 @@ function love.keypressed(key, scancode, isrepeat)
   if key == "r" then
     workspace:rotateItem()
   end
-  
+
   if isrepeat then
     return
   end
-  
+
   if key == "z" then
     workspace:undoItemPlacement()
   elseif key == "c" then
@@ -104,12 +104,12 @@ function nextRound()
   local data = reference:getData()
   scorer:lockIn(data["maskData"], data["maskSprite"], workspace:getImageData(), gameState.spentPoints, gameState.currentRound)
   local round = gameState:nextRound()
-  
+
   if round == -1 then
     isGameOver = true
     return
   end
-  
+
   reference:setIdx(round)
   workspace:reset()
 end
