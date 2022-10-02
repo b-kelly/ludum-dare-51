@@ -11,6 +11,7 @@ local MAX_ROUNDS = 24 -- max different masks
   --load main scene-specific audio
 local timerSound = love.audio.newSource("assets/audio/tickTock.wav", "static")
 local timerFull = love.audio.newSource("assets/audio/timerFull.wav", "static")
+local referenceArrives = love.audio.newSource("assets/audio/referenceArriving.mp3", "static")
 timerSound:setVolume(.5)
 
 local function canSpendSecond(spentSeconds)
@@ -91,6 +92,7 @@ function GS.nextScene(self)
     self:setScene(Scenes.NEW_REQUEST)
   elseif self.scene == Scenes.HELP or self.scene == Scenes.NEW_REQUEST then
     self:setScene(Scenes.GAME)
+    referenceArrives:play()
   end
 
   return self.sceneNeedsActivation
