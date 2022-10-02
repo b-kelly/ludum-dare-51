@@ -3,6 +3,8 @@ local utils = require "utils"
 local SO = {}
 SO.__index = SO
 
+local titleBg
+
 local function drawGameOverScreen(scorer)
   love.graphics.print("Game Over", 0, 0)
 
@@ -11,8 +13,8 @@ local function drawGameOverScreen(scorer)
 end
 
 local function drawTitleScreen()
-  -- TODO
-  love.graphics.print("Title screen placeholder - press ENTER", 0, 0)
+  love.graphics.draw(titleBg, 0, 0)
+  love.graphics.print("(TODO cleanup) PRESS ENTER", 150, 330)
 end
 
 local function drawRoundEndScreen(scorer)
@@ -30,7 +32,7 @@ local function drawHelpScreen()
 end
 
 function SO.load()
-  -- TODO load textures
+  titleBg = love.graphics.newImage("assets/title.png")
 end
 
 function SO.drawScene(scene, state)

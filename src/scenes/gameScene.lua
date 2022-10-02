@@ -222,11 +222,11 @@ function SG.handleKeypress(state, key, isrepeat)
     elseif key == "c" then
       state:clearWorkspace(state)
     elseif key == "q" then
-        state.workspace:mirrorItem(false)
+      state.workspace:mirrorItem(false)
     elseif key == "w" then
-        state.workspace:mirrorItem(true)
+      state.workspace:mirrorItem(true)
     elseif key == "h" then
-        state:setScene(Scenes.HELP)
+      state:setScene(Scenes.HELP)
     elseif key == "space" then
       state:nextRound()
     else
