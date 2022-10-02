@@ -30,6 +30,11 @@ local function drawIntroStoryScreen()
   love.graphics.print("(TODO cleanup) PRESS ENTER", 150, 330)
 end
 
+local function drawIntroBeginScreen()
+  love.graphics.draw(beginBg, 0, 0)
+  love.graphics.print("(TODO cleanup) PRESS ENTER", 150, 330)
+end
+
 local function newTextBox(name, text, x, y)
   love.graphics.setColor(1, 0, 0)
   love.graphics.rectangle("fill", x, y, 800, 100)
@@ -133,6 +138,8 @@ function SO.drawScene(scene, state)
     drawHelpScreen()
   elseif scene == Scenes.INTRO_STORY then
     drawIntroStoryScreen()
+  elseif scene == Scenes.INTRO_BEGIN then
+    drawIntroBeginScreen()
   elseif scene == Scenes.NEW_REQUEST then
     drawNewRequestScreen()
   end

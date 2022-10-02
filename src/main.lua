@@ -13,7 +13,8 @@ Scenes = {
   ROUND_END = 5,
   GAME_OVER = 6,
   HELP = 7,
-  INTRO_STORY = 8
+  INTRO_STORY = 8,
+  INTRO_BEGIN = 9
 }
 
 local gameState

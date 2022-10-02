@@ -90,7 +90,9 @@ function GS.nextScene(self)
     self:setScene(Scenes.INTRO_STORY)
   elseif self.scene == Scenes.INTRO_STORY then
     self:setScene(Scenes.INTRO_HELP)
-  elseif self.scene == Scenes.INTRO_HELP or self.scene == Scenes.ROUND_END then
+  elseif self.scene == Scenes.INTRO_HELP then
+    self:setScene(Scenes.INTRO_BEGIN)
+  elseif self.scene == Scenes.INTRO_BEGIN or self.scene == Scenes.ROUND_END then
     self:setScene(Scenes.NEW_REQUEST)
   elseif self.scene == Scenes.HELP or self.scene == Scenes.NEW_REQUEST then
     self:setScene(Scenes.GAME)
