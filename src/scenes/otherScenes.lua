@@ -27,17 +27,17 @@ end
 
 local function drawTitleScreen()
   love.graphics.draw(titleBg, 0, 0)
-  love.graphics.print("(TODO cleanup) PRESS ENTER", 150, 330)
+  love.graphics.print("Press 'Enter' to continue", 160, 330)
 end
 
 local function drawIntroStoryScreen()
   love.graphics.draw(introBg, 0, 0)
-  love.graphics.print("(TODO cleanup) PRESS ENTER", 150, 330)
+  love.graphics.print("Press 'Enter' to continue", 460, 560)
 end
 
 local function drawIntroBeginScreen()
   love.graphics.draw(beginBg, 0, 0)
-  love.graphics.print("(TODO cleanup) PRESS ENTER", 150, 330)
+  love.graphics.print("Press 'Enter' to begin!", 360, 560)
 end
 
 local function newTextBox(name, text, x, y)
@@ -90,7 +90,7 @@ end
 local function drawHelpScreen()
   -- TODO
   love.graphics.draw(howToPlayBg, 0, 0)
-  love.graphics.print("Help screen placeholder - press ENTER", 0, 0)
+  love.graphics.print("Press 'Enter' to continue", 360, 560)
 
   love.graphics.printf("Controls: rotate (e, r); flip (q, w); finalize (space); undo (z); clear (c); show help (h)", 0, 20, 600, "left")
 end
