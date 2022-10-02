@@ -46,6 +46,10 @@ function GS.refundSecond(self)
   return true
 end
 
+function GS.resetSeconds(self)
+  self.spentSeconds = 0
+end
+
 function GS.seconds(self)
   return {
     spent = self.spentSeconds,

@@ -177,7 +177,7 @@ local function removeItem(state, placedItem)
 end
 
 local function clearWorkspace(state)
-  --TODO state:clearSpentSeconds()
+  state:resetSeconds()
   state.workspace:clearItems()
 end
 
@@ -256,7 +256,7 @@ function SG.handleKeypress(state, key, isrepeat)
     local handled = true
 
     if key == "z" then
-      state.workspace:undoItemPlacement()
+      undoItem(state)
     elseif key == "c" then
         clearWorkspace(state)
     elseif key == "q" then
