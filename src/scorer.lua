@@ -102,7 +102,7 @@ function S.drawDebug(self, texture, textureSprite)
   end)
 
   if self.similarity ~= nil then
-    love.graphics.printf(utils.formatScore(self.similarity) .. " similar", x, y + th + 10, tw, "center")
+    love.graphics.printf(utils.formatScore(self.similarity), x, y + th + 10, tw, "center")
   end
 end
 
