@@ -1,7 +1,7 @@
-S = {}
+local S = {}
 S.__index = S
 
-function getImageSimularity(a, b)
+local function getImageSimularity(a, b)
     -- there may be a better way of doing this...
     -- assumes both images are the same height/width
     local height = a:getHeight()
@@ -82,7 +82,6 @@ function S.drawDebug(self, texture, textureSprite)
   end)
 
   if self.simularity ~= nil then
-    local x, y, w, h = textureSprite:getViewport()
     local pct = math.floor((self.simularity) * 1000) / 10
     love.graphics.printf(pct .. "% similar", 256, 256, 10000, "left")
   end

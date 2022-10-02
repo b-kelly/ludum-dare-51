@@ -1,6 +1,6 @@
 require "utils"
 
-W = {}
+local W = {}
 W.__index = W
 
 local posX = 260
@@ -13,11 +13,11 @@ local spritesY = 2
 local timer = 0
 local timerMax = 10
 
-function translateParentCoords(x, y)
+local function translateParentCoords(x, y)
   return x - posX, y - posY
 end
 
-function drawItem(texture, quad, x, y, r)
+local function drawItem(texture, quad, x, y, r)
   local offset = spriteWidth / 2
   love.graphics.draw(texture, quad, x, y, r, 1, 1, offset, offset)
 end
@@ -156,6 +156,5 @@ function W:itemToMoveOnCanvas(mx, my)
   end
   return 0
 end
-
 
 return W

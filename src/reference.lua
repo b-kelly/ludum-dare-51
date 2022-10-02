@@ -1,7 +1,6 @@
-require "mask"
 require "utils"
 
-R = {}
+local R = {}
 R.__index = R
 
 local spritesX = 4
