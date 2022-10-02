@@ -45,13 +45,14 @@ function S.update(self, referenceImgData, referenceImgQuad, currentImgData)
   self.similarity = getImageSimilarity(data, currentImgData)
 end
 
-function S.lockIn(self, referenceImgData, referenceImgQuad, currentImgData, secondsSpent, round)
+function S.lockIn(self, referenceImgData, referenceImgQuad, currentImgData, secondsSpent, round, idx)
   self:update(referenceImgData, referenceImgQuad, currentImgData)
 
   local entry = {
       secondsSpent = secondsSpent,
       round = round,
-      score = self.similarity
+      score = self.similarity,
+      referenceIdx = idx
   }
 
   table.insert(self.roundScores, entry)

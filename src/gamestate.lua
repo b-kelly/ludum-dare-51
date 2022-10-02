@@ -60,7 +60,8 @@ function GS.new()
     workspace = W.new(),
     scorer = S.new(),
     reference = R.new(),
-    selectedItem = nil
+    selectedItem = nil,
+    lastResult = nil
   }, GS)
 
   return self
@@ -127,8 +128,9 @@ function GS.nextRound(self)
     return false
   end
 
-  local data = self.reference:getData()
-  self.scorer:lockIn(data["maskData"], data["maskSprite"], self.workspace:getImageData(), self.spentSeconds, self.currentRound)
+  local data = self.reference:getData(self.reference.currentIdx)
+  self.lastResult = self.workspace:getImageData()
+  self.scorer:lockIn(data["maskData"], data["maskSprite"], self.lastResult, self.spentSeconds, self.currentRound, self.reference.currentIdx)
   local round = nextRound(self)
 
   if round == -1 then

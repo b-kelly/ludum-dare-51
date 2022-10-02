@@ -73,7 +73,7 @@ end
 
 local function debugUpdateScorer(state)
   if debug then
-    local data = state.reference:getData()
+    local data = state.reference:getData(state.reference.currentIdx)
     state.scorer:update(data["maskData"], data["maskSprite"], state.workspace:getImageData())
   end
 end
@@ -179,7 +179,7 @@ function SG.drawScene(scene, state)
   drawUI(state, mx, my)
 
   if debug then
-      local data = state.reference:getData()
+      local data = state.reference:getData(state.reference.currentIdx)
       drawDebug(state, data["textureImg"], data["textureSprite"], mx, my)
   end
 
