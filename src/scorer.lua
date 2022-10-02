@@ -77,13 +77,21 @@ function S.drawDebug(self, texture, textureSprite)
     return
   end
 
+  local x = 620 * 2
+  local y = 380 * 2
+  local tx, ty, tw, th = textureSprite:getViewport()
+
+  love.graphics.setColor(0, 0, 0, 0.8)
+  love.graphics.rectangle("fill", x, y, tw, th + 40)
+  love.graphics.setColor(1, 1, 1)
+
   local img = love.graphics.newImage(data)
-  utils.drawMask(img, nil, 256, 0, function()
-    love.graphics.draw(texture, textureSprite, 256, 0)
+  utils.drawMask(img, nil, x, y, function()
+    love.graphics.draw(texture, textureSprite, x, y)
   end)
 
   if self.simularity ~= nil then
-    love.graphics.printf(utils.formatScore(self.simularity) .. " similar", 256, 256, 10000, "left")
+    love.graphics.printf(utils.formatScore(self.simularity) .. " similar", x, y + th + 10, tw, "center")
   end
 end
 

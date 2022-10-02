@@ -14,6 +14,8 @@ local buttons
 local bagLocations
 local slideAnim
 
+local DEBUG_shouldUpdateScorer = false
+
 local function newSlideAnimation()
   local animation = {
     duration = 0.1,
@@ -63,11 +65,27 @@ local function loadUI()
     buttons[3] = newButton(clearButton, canvasButtonX, 400)
 end
 
-local function drawDebug(scorer, texture, sprite, mx, my)
+local function debugUpdateScorer(state)
+  if debug then
+    local data = state.reference:getData()
+    state.scorer:update(data["maskData"], data["maskSprite"], state.workspace:getImageData())
+  end
+end
+
+local function drawDebug(state, texture, sprite, mx, my)
+    if DEBUG_shouldUpdateScorer then
+      debugUpdateScorer(state)
+      DEBUG_shouldUpdateScorer = false
+    end
+
     love.graphics.push()
+
+    -- draw a mini version of what the scorer is seeing
     love.graphics.scale(0.5, 0.5)
-    scorer:drawDebug(texture, sprite)
+    state.scorer:drawDebug(texture, sprite)
     love.graphics.pop()
+
+    -- write the coords next to the cursor
     love.graphics.printf(mx .. ", " .. my, mx+10, my, 40, "left")
 end
 
@@ -183,31 +201,31 @@ function SG.drawScene(scene, state)
 
   if debug then
       local data = state.reference:getData()
-      drawDebug(state.scorer, data["textureImg"], data["textureSprite"], mx, my)
+      drawDebug(state, data["textureImg"], data["textureSprite"], mx, my)
   end
 
   return true
 end
 
 function SG.handleMousepress(state, x, y)
-  --first, check to see if you're trying to pick up an item from a bag
   local item = utils.detectWhichObjPressed(x, y, bagLocations)
   local UIButton = utils.detectWhichObjPressed(x, y, buttons)
+
+  --first, check to see if you're trying to pick up an item from a bag
   if item ~= 0 then
     state.workspace:selectItem(item)
-  --if not, then see if you're trying to place an item you have selected
+
   elseif state.workspace.selectedItem ~= nil then
+    --if not, then see if you're trying to place an item you have selected
     placeItem(state, x, y)
-    if debug then
-      local data = state.reference:getData()
-      state.scorer:update(data["maskData"], data["maskSprite"], state.workspace:getImageData())
-    end
+
   elseif UIButton ~= 0 then
     if UIButton == 2 then
       undoItem(state)
     elseif UIButton == 3 then
       clearWorkspace(state)
     end
+
   else
     --then check to see if you've clicked on an item that's already been placed
     local placedItem = state.workspace:itemToMoveOnCanvas(x, y)
@@ -215,6 +233,8 @@ function SG.handleMousepress(state, x, y)
       removeItem(placedItem)
     end
   end
+
+  DEBUG_shouldUpdateScorer = true
 end
 
 function SG.handleKeypress(state, key, isrepeat)
@@ -230,27 +250,29 @@ function SG.handleKeypress(state, key, isrepeat)
         return false
     end
 
+    local handled = true
+
     if key == "z" then
       state.workspace:undoItemPlacement()
-        return true
-      elseif key == "c" then
+    elseif key == "c" then
         clearWorkspace(state)
-        return true
-      elseif key == "q" then
+    elseif key == "q" then
         state.workspace:mirrorItem(false)
-        return true
-      elseif key == "w" then
+    elseif key == "w" then
         state.workspace:mirrorItem(true)
-        return true
-      elseif key == "h" then
+    elseif key == "h" then
         state:setScene(Scenes.HELP)
-        return true
     elseif key == "space" then
         nextRound(state)
-        return true
+    else
+      handled = false
     end
 
-    return false
+    if handled then
+      DEBUG_shouldUpdateScorer = true
+    end
+
+    return handled
 end
 
 return SG
