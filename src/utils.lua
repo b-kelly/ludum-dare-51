@@ -1,6 +1,18 @@
 local U = {}
 U.__index = U
 
+--TODO global
+ScoreRank = {
+  AA = 1,
+  A = 2,
+  B = 3,
+  C = 4,
+  D = 5,
+  F = 6,
+  FF = 7,
+  CHEATER = 8
+}
+
 function U.drawToCanvas(canvas, fn)
     love.graphics.setCanvas({
         canvas,
@@ -110,21 +122,46 @@ function U.drawMask(mask, quad, x, y, fn)
     love.graphics.setStencilTest()
 end
 
-function U.formatScore(score)
-  local output = "F"
-
+function U.getScoreRank(score)
   if score == 1 then
-    output = "CHEATER"
+    return ScoreRank.CHEATER
   elseif score > 0.95 then
-    output = "A+"
+    return ScoreRank.AA
   elseif score > 0.9 then
-    output = "A"
+    return ScoreRank.A
   elseif score > 0.8 then
-    output = "B"
+    return ScoreRank.B
   elseif score > 0.7 then
-    output = "C"
+    return ScoreRank.C
   elseif score > 0.6 then
+    return ScoreRank.D
+  elseif score <= 0 then
+    return ScoreRank.FF
+  end
+
+  return ScoreRank.F
+end
+
+function U.formatScore(score)
+  local rank = U.getScoreRank(score)
+  local output = "ERROR"
+
+  if rank == ScoreRank.CHEATER then
+    output = "CHEATER"
+  elseif rank == ScoreRank.AA then
+    output = "A+"
+  elseif rank == ScoreRank.A then
+    output = "A"
+  elseif rank == ScoreRank.B then
+    output = "B"
+  elseif rank == ScoreRank.C then
+    output = "C"
+  elseif rank == ScoreRank.D then
       output = "D"
+  elseif rank == ScoreRank.F then
+      output = "F"
+  elseif rank == ScoreRank.FF then
+      output = "AWFUL"
   end
 
   if debug then
