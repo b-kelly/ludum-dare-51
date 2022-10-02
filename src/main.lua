@@ -78,7 +78,9 @@ end
 
 function love.keypressed(key, scancode, isrepeat)
   if key == "r" then
-    workspace:rotateItem()
+    workspace:rotateItem(false)
+  elseif key == "e" then
+    workspace:rotateItem(true)
   end
 
   if isrepeat then

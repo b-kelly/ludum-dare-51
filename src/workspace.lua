@@ -105,9 +105,10 @@ function W:removeItem(itemIndex)
   table.remove(self.objects, itemIndex)
 end
 
-function W.rotateItem(self)
+function W.rotateItem(self, counterClockwise)
+  local mod = counterClockwise and -1 or 1
   -- rotate 3.6 degrees
-  self.itemRotation = self.itemRotation + 0.05 * math.pi
+  self.itemRotation = self.itemRotation + 0.05 * mod * math.pi
 end
 
 function W.undoItemPlacement(self)
