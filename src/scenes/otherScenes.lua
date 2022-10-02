@@ -5,6 +5,11 @@ local SO = {}
 SO.__index = SO
 
 local titleBg
+local introBg
+local howToPlayBg
+local beginBg
+local mainTextFont
+local meta = {}
 
 local function drawGameOverScreen(scorer)
   love.graphics.print("Game Over", 0, 0)
@@ -26,6 +31,13 @@ local function newTextBox(text, x, y)
   love.graphics.setColor(1, 1, 1)
 end
 
+local function activateRoundEndScreen(state)
+  local lastRound = state.scorer.roundScores[#state.scorer.roundScores]
+  meta = {
+    response = strings.getRandomScoreResponse(lastRound.score)
+  }
+end
+
 local function drawRoundEndScreen(scorer)
   -- TODO
   local lastRound = scorer.roundScores[#scorer.roundScores]
@@ -33,7 +45,7 @@ local function drawRoundEndScreen(scorer)
   love.graphics.print("Finished round "..lastRound.round.."; score "..lastRound.score.."; seconds "..lastRound.secondsSpent, 0, 20)
 
   -- TODO do it right! This is lazy as heck
-  response = response and response or strings.getRandomScoreResponse(lastRound.score)
+  local response = meta.response or "ERROR DID NOT ACTIVATE"
   newTextBox(response, 0, 40)
 end
 
@@ -50,8 +62,28 @@ function SO.load()
   introBg = love.graphics.newImage("assets/introCard.png")
   howToPlayBg = love.graphics.newImage("assets/howToPlayCard.png")
   beginBg = love.graphics.newImage("assets/beginCard.png")
-  
+
   mainTextFont = love.graphics.newFont("assets/fonts/SignikaNegative-Medium.ttf")
+end
+
+function SO.activate(scene, state)
+  meta = {}
+
+  if scene == Scenes.GAME then
+    return false
+  end
+
+  if scene == Scenes.GAME_OVER then
+    --activateGameOverScreen(state.scorer)
+  elseif scene == Scenes.TITLE then
+    --activateTitleScreen()
+  elseif scene == Scenes.ROUND_END then
+    activateRoundEndScreen(state)
+  elseif scene == Scenes.HELP then
+    --activateHelpScreen()
+  end
+
+  return true
 end
 
 function SO.drawScene(scene, state)

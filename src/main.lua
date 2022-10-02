@@ -28,10 +28,15 @@ function love.load(arg)
 end
 
 function love.update(dt)
-  if gameState.scene == Scenes.GAME then
-    if gameState.sceneNeedsActivation then
+  if gameState.sceneNeedsActivation then
+    if otherScenes.activate(gameState.scene, gameState) then
+      -- do nothing
+    elseif gameState.scene == Scenes.GAME then
       gameScene.activate()
     end
+  end
+
+  if gameState.scene == Scenes.GAME then
     gameScene.update(dt)
   end
 
