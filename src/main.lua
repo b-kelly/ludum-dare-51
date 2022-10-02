@@ -131,7 +131,7 @@ function nextRound()
     return
   end
 
-  reference:setIdx(round)
+  reference:nextIdx()
   workspace:reset()
   gameState:setScene(Scenes.ROUND_END)
 end

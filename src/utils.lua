@@ -32,6 +32,23 @@ function detectWhichObjPressed(mx, my, tbl)
   return 0
 end
 
+function shuffledArr(max)
+  local arr = {}
+
+  for i = 1, max do
+    table.insert(arr, i)
+  end
+
+  for i = 1, max do
+    local rand = love.math.random(i, max)
+    local tmp = arr[i]
+    arr[i] = arr[rand]
+    arr[rand] = tmp
+  end
+
+  return arr
+end
+
 Scenes = {
   TITLE = 1,
   HELP = 2,

@@ -10,7 +10,7 @@ function GS.new()
   local self = setmetatable({
     scene = Scenes.TITLE,
     spentPoints = 0,
-    currentRound = 0
+    currentRound = 1
   }, GS)
 
   return self

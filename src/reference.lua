@@ -14,6 +14,8 @@ function R.new()
   local maskData = love.image.newImageData("assets/targetObjectMasks.png")
   local masks = love.graphics.newImage(maskData)
 
+  local randOrder = shuffledArr(spritesX * spritesY)
+
   local self = setmetatable({
     maskData = maskData,
     maskImg = masks,
@@ -21,16 +23,14 @@ function R.new()
     canvas = love.graphics.newCanvas(width, height),
     textures = loadSpritesheet(textures, spritesX, spritesY, spriteWidth),
     masks = loadSpritesheet(masks, spritesX, spritesY, spriteWidth),
-    currentIdx = 1
+    currentIdx = 1,
+    randOrder = randOrder
   }, R)
 
   return self
 end
 
-function R.setIdx(self, idx)
-  -- TODO
-  --self.currentIdx = idx
-
+function R.nextIdx(self, idx)
   idx = self.currentIdx + 1
 
   if idx < 1 or idx > spritesX * spritesY then
@@ -55,11 +55,13 @@ function R.draw(self)
 end
 
 function R.getData(self)
+  local idx = self.randOrder[self.currentIdx]
+
   return {
     textureImg = self.textureImg,
     maskData = self.maskData,
-    textureSprite = self.textures[self.currentIdx],
-    maskSprite = self.masks[self.currentIdx],
+    textureSprite = self.textures[idx],
+    maskSprite = self.masks[idx],
   }
 end
 
