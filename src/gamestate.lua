@@ -6,7 +6,7 @@ local GS = {}
 GS.__index = GS
 
 local MAX_SECONDS = 10
-local MAX_ROUNDS = 24 -- max different masks
+local MAX_ROUNDS = 10 -- max rounds to send the player through
     
   --load main scene-specific audio
 local timerSound = love.audio.newSource("assets/audio/tickTock.wav", "static")
@@ -28,19 +28,6 @@ end
 
 local function resetSeconds(self)
   self.spentSeconds = 0
-end
-
-local function nextRound(self)
-  local newRound = self.currentRound + 1
-
-  if newRound > MAX_ROUNDS then
-    return -1
-  end
-
-  self.spentSeconds = 0
-  self.currentRound = self.currentRound + 1
-
-  return self.currentRound
 end
 
 function GS.new()
@@ -82,6 +69,8 @@ function GS.nextScene(self)
     self:setScene(Scenes.INTRO_HELP)
   elseif self.scene == Scenes.INTRO_HELP then
     self:setScene(Scenes.INTRO_BEGIN)
+  elseif self.scene == Scenes.ROUND_END and self.currentRound >= MAX_ROUNDS then
+    self:setScene(Scenes.GAME_OVER)
   elseif self.scene == Scenes.INTRO_BEGIN or self.scene == Scenes.ROUND_END then
     self:setScene(Scenes.NEW_REQUEST)
   elseif self.scene == Scenes.HELP or self.scene == Scenes.NEW_REQUEST then
@@ -146,13 +135,9 @@ function GS.nextRound(self)
   local data = self.reference:getData(self.reference.currentIdx)
   self.lastResult = self.workspace:getImageData()
   self.scorer:lockIn(data["maskData"], data["maskSprite"], self.lastResult, self.spentSeconds, self.currentRound, self.reference.currentIdx)
-  local round = nextRound(self)
 
-  if round == -1 then
-    self:setScene(Scenes.GAME_OVER)
-    return false
-  end
-
+  self.spentSeconds = 0
+  self.currentRound = self.currentRound + 1
   self.reference:_nextIdx()
   self.selectedItem = nil
   self.workspace:_reset()
