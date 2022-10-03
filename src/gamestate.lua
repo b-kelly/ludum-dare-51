@@ -14,16 +14,6 @@ local timerFull = love.audio.newSource("assets/audio/timerFull.wav", "static")
 local referenceArrives = love.audio.newSource("assets/audio/referenceArriving.mp3", "static")
 timerSound:setVolume(.5)
 
-local function canSpendSecond(spentSeconds)
-  local newSeconds = spentSeconds + 1
-
-  if newSeconds > MAX_SECONDS then
-    return false, 0
-  end
-
-  return true, newSeconds
-end
-
 local function refundSecond(self)
   local newSeconds = self.spentSeconds - 1
 
@@ -102,8 +92,18 @@ function GS.nextScene(self)
   return self.sceneNeedsActivation
 end
 
+function GS.canSpendSecond(self)
+  local newSeconds = self.spentSeconds + 1
+
+  if newSeconds > MAX_SECONDS then
+    return false, 0
+  end
+
+  return true, newSeconds
+end
+
 function GS.placeItem(self, x, y)
-  local canSpend, newSeconds = canSpendSecond(self.spentSeconds)
+  local canSpend, newSeconds = self:canSpendSecond()
   if canSpend and self.workspace:_placeItem(self.selectedItem, x, y) then
     self.spentSeconds = newSeconds
     if newSeconds == MAX_SECONDS then

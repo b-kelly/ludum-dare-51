@@ -286,7 +286,7 @@ function SG.handleMousepress(state, x, y)
   local UIButton = utils.detectWhichObjPressed(x, y, buttons)
 
   --first, check to see if you're trying to pick up an item from a bag
-  if item ~= 0 then
+  if state:canSpendSecond() and item ~= 0 then
     state:selectItem(item)
     grabItemSound:play()
 
