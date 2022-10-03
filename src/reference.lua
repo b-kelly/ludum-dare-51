@@ -21,8 +21,8 @@ function R.new()
     maskImg = masks,
     textureImg = textures,
     canvas = love.graphics.newCanvas(width, height),
-    textures = utils.loadSpritesheet(textures, spritesX, spritesY, spriteWidth, spriteWidth),
-    masks = utils.loadSpritesheet(masks, spritesX, spritesY, spriteWidth, spriteWidth),
+    textures = utils.loadSpritesheet(textures, spritesX, spritesY),
+    masks = utils.loadSpritesheet(masks, spritesX, spritesY),
     currentIdx = 1,
     randOrder = randOrder
   }, R)

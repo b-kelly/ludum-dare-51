@@ -69,8 +69,11 @@ local function newQuad(xCoord, yCoord, spriteWidth, spriteHeight, sheet)
   return love.graphics.newQuad(xCoord, yCoord, spriteWidth, spriteHeight, sheet)
 end
 
-function U.loadSpritesheet(sheet, xCount, yCount, spriteWidth, spriteHeight)
+function U.loadSpritesheet(sheet, xCount, yCount)
   local arr = {}
+
+  local spriteHeight = math.floor(sheet:getHeight() / yCount)
+  local spriteWidth = math.floor(sheet:getWidth() / xCount)
 
   for y=0,yCount-1 do
     local yCoord = y * spriteHeight

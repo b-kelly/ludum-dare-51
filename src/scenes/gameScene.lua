@@ -11,25 +11,47 @@ local undoButton
 local clearButton
 local buttons
 local bagLocations
-local slideAnim
-local gremlinAnim
+local frameSlideAnim
 local gremlinSpriteSheet
 local timerSpriteSheet
 local timer
 local grabItemSound
+local wandSpriteSheet
+
+local shouldProceedToNextRound = false
+
+local wandAnims = {
+  gremlinHand = nil,
+  wandMove1 = nil,
+  sparkles = nil,
+  wandMove2 = nil
+}
 
 local DEBUG_shouldUpdateScorer = false
 
-local function newSlideAnimation(sheet, xCount, yCount)
+local function newSlideAnimation(duration, distance, fn)
   local animation = {
-    duration = 0.1,
+    playing = false,
+    duration = duration,
     time = 0,
-    positionPct = 0
+    positionPct = 0,
+    distance = distance,
+    offset = 0,
+    callback = fn,
+    callbackCalled = false
   }
   animation.__index = animation
 
   function animation.update(self, dt)
+    if not self.playing then
+      return
+    end
+
     if self.positionPct == 1 then
+      if self.callback and not self.callbackCalled then
+        self.callbackCalled = true
+        self.callback()
+      end
       return
     end
 
@@ -39,26 +61,37 @@ local function newSlideAnimation(sheet, xCount, yCount)
     end
 
     self.positionPct = self.time / self.duration
+    self.offset = self.distance * self.positionPct
   end
 
   return animation
 end
 
-local function newSpriteAnimation(sheet, xCount, yCount)
-  local sprites = utils.loadSpritesheet(sheet, xCount, yCount, 64, 156)
+local function newSpriteAnimation(sheet, xCount, yCount, duration, fn)
+  local sprites = utils.loadSpritesheet(sheet, xCount, yCount)
   local animation = {
     playing = false,
     img = sheet,
     sprites = sprites,
-    duration = 1.0,
+    duration = duration,
     time = 0,
     currentFrameIdx = 1,
-    totalFrames = xCount * yCount
+    totalFrames = xCount * yCount,
+    callback = fn,
+    callbackCalled = false
   }
   animation.__index = animation
 
   function animation.update(self, dt)
-    if not self.playing or self.currentFrameIdx == self.totalFrames then
+    if not self.playing then
+      return
+    end
+
+    if self.currentFrameIdx == self.totalFrames then
+      if self.callback and not self.callbackCalled then
+        self.callbackCalled = true
+        self.callback()
+      end
       return
     end
 
@@ -95,6 +128,8 @@ local function loadUI()
     clearButton = love.graphics.newImage('assets/clearButton.png')
     grabItemSound = love.audio.newSource("assets/audio/grabFromBag.wav", "static")
     gremlinSpriteSheet = love.graphics.newImage("assets/gremlinHandSheet.png")
+    wandSpriteSheet = love.graphics.newImage("assets/wandSpriteSheet.png")
+
     buttons = {}
     local canvasButtonX = 170
     buttons[1] = newButton(undoButton, canvasButtonX, 380)
@@ -168,9 +203,8 @@ local function drawUI(state, mx, my)
     love.graphics.draw(bg, 0, 0)
 
     -- calculate the position of the reference area as it slides in
-    local refAreaEnd = 100
     local refGridOffset = 10
-    local refAreaX = slideAnim.positionPct * refAreaEnd
+    local refAreaX = frameSlideAnim.offset
 
     -- draw the reference area bg + reference area + grid
     love.graphics.draw(referenceArea, refAreaX, 80)
@@ -189,8 +223,10 @@ local function drawUI(state, mx, my)
       love.graphics.draw(b.img, b.x1, b.y1, 0, .8, .8)
     end
 
-    -- draw the gremlin's hand
-    love.graphics.draw(gremlinSpriteSheet, gremlinAnim.sprites[gremlinAnim.currentFrameIdx], 550, 600 - 156)
+    -- draw the gremlin's hand + wand
+    local xOffset = wandAnims.wandMove1.offset + wandAnims.wandMove2.offset
+    love.graphics.draw(wandSpriteSheet, wandAnims.sparkles.sprites[wandAnims.sparkles.currentFrameIdx], 585 - xOffset, 260)
+    love.graphics.draw(gremlinSpriteSheet, wandAnims.gremlinAnim.sprites[wandAnims.gremlinAnim.currentFrameIdx], 585 - xOffset, 600 - 156)
 end
 
 function SG.load()
@@ -199,21 +235,39 @@ function SG.load()
 end
 
 function SG.activate()
-  slideAnim = newSlideAnimation()
-  gremlinAnim = newSpriteAnimation(gremlinSpriteSheet, 4, 3)
+  shouldProceedToNextRound = false
+  frameSlideAnim = newSlideAnimation(0.1, 80)
+  frameSlideAnim.playing = true
 
-  -- TODO animation should trigger based on something
-  gremlinAnim.playing = true
+  wandAnims.gremlinAnim = newSpriteAnimation(gremlinSpriteSheet, 4, 3, 0.5, function ()
+    wandAnims.wandMove1.playing = true
+  end)
+
+  wandAnims.wandMove1 = newSlideAnimation(0.5, 80, function ()
+    wandAnims.sparkles.playing = true
+    wandAnims.wandMove2.playing = true
+  end)
+
+  wandAnims.sparkles = newSpriteAnimation(wandSpriteSheet, 7, 1, 1.0)
+
+  wandAnims.wandMove2 = newSlideAnimation(1.0, 260)
 end
 
 function SG.update(dt)
-  slideAnim:update(dt)
-  gremlinAnim:update(dt)
+  frameSlideAnim:update(dt)
+  wandAnims.gremlinAnim:update(dt)
+  wandAnims.wandMove1:update(dt)
+  wandAnims.sparkles:update(dt)
+  wandAnims.wandMove2:update(dt)
 end
 
 function SG.drawScene(scene, state)
   if scene ~= Scenes.GAME then
     return false
+  end
+
+  if shouldProceedToNextRound then
+    state:nextRound()
   end
 
   local mx, my = love.mouse.getPosition()
@@ -284,7 +338,11 @@ function SG.handleKeypress(state, key, isrepeat)
     elseif key == "h" then
       state:setScene(Scenes.HELP)
     elseif key == "space" then
-      state:nextRound()
+      wandAnims.wandMove2.callback = function ()
+        -- calling state:nextRound() in here causes some weird race condition/capturing issues
+        shouldProceedToNextRound = true
+      end
+      wandAnims.gremlinAnim.playing = true
     else
       handled = false
     end
