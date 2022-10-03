@@ -29,14 +29,16 @@ local wandAnims = {
 
 local DEBUG_shouldUpdateScorer = false
 
-local function newSlideAnimation(duration, distance, fn)
+local function newSlideAnimation(duration, distanceX, distanceY, fn)
   local animation = {
     playing = false,
     duration = duration,
     time = 0,
     positionPct = 0,
-    distance = distance,
-    offset = 0,
+    distanceX = distanceX,
+    distanceY = distanceY,
+    offsetX = 0,
+    offsetY = 0,
     callback = fn,
     callbackCalled = false
   }
@@ -61,7 +63,8 @@ local function newSlideAnimation(duration, distance, fn)
     end
 
     self.positionPct = self.time / self.duration
-    self.offset = self.distance * self.positionPct
+    self.offsetX = self.distanceX * self.positionPct
+    self.offsetY = self.distanceY * self.positionPct
   end
 
   return animation
@@ -201,7 +204,7 @@ local function drawUI(state, mx, my)
 
     -- calculate the position of the reference area as it slides in
     local refGridOffset = 10
-    local refAreaX = frameSlideAnim.offset
+    local refAreaX = frameSlideAnim.offsetX
 
     -- draw the reference area bg + reference area + grid
     love.graphics.draw(referenceArea, refAreaX, 80)
@@ -231,7 +234,7 @@ local function drawUI(state, mx, my)
    -- end
 
     -- draw the gremlin's hand + wand
-    local xOffset = wandAnims.wandMove1.offset + wandAnims.wandMove2.offset
+    local xOffset = wandAnims.wandMove1.offsetX + wandAnims.wandMove2.offsetX
     love.graphics.draw(wandSpriteSheet, wandAnims.sparkles.sprites[wandAnims.sparkles.currentFrameIdx], 585 - xOffset, 260)
     love.graphics.draw(gremlinSpriteSheet, wandAnims.gremlinAnim.sprites[wandAnims.gremlinAnim.currentFrameIdx], 585 - xOffset, 600 - 156)
 end
@@ -245,21 +248,30 @@ function SG.activate()
   jobFinished = false
   shouldProceedToNextRound = false
 
-  frameSlideAnim = newSlideAnimation(0.1, 80)
+  frameSlideAnim = newSlideAnimation(0.1, 80, 0)
   frameSlideAnim.playing = true
 
-  wandAnims.gremlinAnim = newSpriteAnimation(gremlinSpriteSheet, 4, 3, 0.5, function ()
+  wandAnims.gremlinAnim = newSpriteAnimation(gremlinSpriteSheet, 4, 3, 0.25, function ()
     wandAnims.wandMove1.playing = true
   end)
 
-  wandAnims.wandMove1 = newSlideAnimation(0.5, 80, function ()
+  -- we want the entire wand movement animation to complete in this duration
+  local wandMoveDuration = 1.0
+  -- calculate how long the first and second durations should run for
+  local wandDistance1 = 80
+  local wandDistance2 = 260
+  local durationPerPixel = wandMoveDuration / (wandDistance1 + wandDistance2)
+  local wandDuration1 = durationPerPixel * wandDistance1
+  local wandDuration2 = durationPerPixel * wandDistance2
+
+  wandAnims.wandMove1 = newSlideAnimation(wandDuration1, wandDistance1, 0, function ()
     wandAnims.sparkles.playing = true
     wandAnims.wandMove2.playing = true
   end)
 
   wandAnims.sparkles = newSpriteAnimation(wandSpriteSheet, 7, 1, 1.0)
 
-  wandAnims.wandMove2 = newSlideAnimation(1.0, 260)
+  wandAnims.wandMove2 = newSlideAnimation(wandDuration2, wandDistance2, 0)
 end
 
 function SG.update(dt)
