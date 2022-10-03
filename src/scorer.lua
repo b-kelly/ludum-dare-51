@@ -80,7 +80,15 @@ local function getImageSimilarity(target, result)
     similarity = similarity + results[i]
   end
 
-  return (similarity / #results), results
+  local similarityAvg = (similarity / #results)
+  
+  local final = similarityAvg
+
+  if final < 0.8 then
+    final = final + 0.05
+  end
+
+  return final, results
 end
 
 function S.new()
