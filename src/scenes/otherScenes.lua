@@ -70,14 +70,12 @@ local function drawRoundEndScreen(state)
 
   -- draw the reference image
   state.reference:drawItem(meta.lastRound.referenceIdx, xLeft, yTop)
-  --love.graphics.printf("Target", xLeft, yTop + gapY + imgWidth, imgWidth, "center")
 
   -- draw the result image
   local xLeft2 = xLeft + imgWidth + gapX
   utils.drawMask(meta.resultImg, nil, xLeft2, yTop, function()
     love.graphics.draw(meta.refData.textureImg, meta.refData.textureSprite, xLeft2, yTop)
   end)
-  --love.graphics.printf("Result", xLeft2, yTop + gapY + imgWidth, imgWidth, "center")
 
   -- print the score
   love.graphics.printf(utils.formatScore(meta.lastRound.score) .. ". It took " .. meta.lastRound.secondsSpent .. " seconds to complete.", 0, yTop + gapY + imgWidth + gapY, 800, "center")

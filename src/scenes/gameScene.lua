@@ -7,9 +7,6 @@ local bg
 local referenceArea
 local referenceAreaGrid
 local workspaceGrid
-local undoButton
-local clearButton
-local buttons
 local bagLocations
 local frameSlideAnim
 local gremlinSpriteSheet
@@ -127,18 +124,12 @@ local function loadUI()
     referenceArea = love.graphics.newImage('assets/referenceBackground.png')
     referenceAreaGrid = love.graphics.newImage('assets/referenceBackground_grid.png')
     workspaceGrid = love.graphics.newImage('assets/workingCanvas_grid.png')
-    --undoButton = love.graphics.newImage('assets/undoButton.png')
-    --clearButton = love.graphics.newImage('assets/clearButton.png')
     grabItemSound = love.audio.newSource("assets/audio/grabFromBag.wav", "static")
     gremlinSpriteSheet = love.graphics.newImage("assets/gremlinHandSheet.png")
     wandSpriteSheet = love.graphics.newImage("assets/wandSpriteSheet.png")
     outCover = love.graphics.newImage("assets/outCover.png")
     bagCover = love.graphics.newImage("assets/bagCover.png")
 
-    --buttons = {}
-    --local canvasButtonX = 170
-    --buttons[1] = newButton(undoButton, canvasButtonX, 380)
-    --buttons[2] = newButton(clearButton, canvasButtonX, 440)
     local timerWidth = 64
     timer = {}
     for i=0, 11 do
@@ -301,7 +292,6 @@ end
 
 function SG.handleMousepress(state, x, y)
   local item = utils.detectWhichObjPressed(x, y, bagLocations)
-  --local UIButton = utils.detectWhichObjPressed(x, y, buttons)
 
   --first, check to see if you're trying to pick up an item from a bag
   if state:canSpendSecond() and item ~= 0 then
@@ -311,13 +301,6 @@ function SG.handleMousepress(state, x, y)
   elseif state.selectedItem ~= nil then
     --if not, then see if you're trying to place an item you have selected
     state:placeItem(x, y)
-
-  --elseif UIButton ~= 0 then
-   -- if UIButton == 1 then
-    --  state:undoItem()
-   -- elseif UIButton == 2 then
-     -- state:clearWorkspace(state)
-   -- end
 
   else
     --then check to see if you've clicked on an item that's already been placed
