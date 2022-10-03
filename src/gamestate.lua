@@ -1,6 +1,7 @@
 local W = require "workspace"
 local S = require "scorer"
 local R = require "reference"
+local utils = require "utils"
 
 local GS = {}
 GS.__index = GS
@@ -174,6 +175,18 @@ end
 
 function GS.selectItem(self, itemIndex)
   self.selectedItem = itemIndex
+end
+
+function GS.getTipJarContents(self)
+  local totalAmt = 0
+
+  for i=1, #self.scorer.roundScores do
+    local score = self.scorer.roundScores[i].score
+    local _, __, amt = utils.getScoreRank(score)
+    totalAmt = totalAmt + amt
+  end
+
+  return totalAmt
 end
 
 return GS
