@@ -8,7 +8,7 @@ local conversations = {
     {"Gobby, how're you doing in there?", "It's a bit hot, and these carrots are starting to smell a little funny. Oh, a customer!", nil, "That sounds like a lovely plan, and our contraption can gladly accomplish it. (Gobby, shhhh in there, they'll hear you!)"},
     {"Wonder if we'll get any customers.", "If only it were that easy.", nil, "Man, look at that customer! I'm good."},
     {"Sometimes I feel as if Gorbo the Great's genius is wasted on these kinds of projects.", "Sometimes *I* feel as if Gobby's genius is perfectly suited to these kinds of projects!", nil, "Certainly. Well, let's see just how suited your genius is."},
-    {"Ah, what a nice breeze we're having today, eh, Gobby?.", "Gobby wouldn't know... Gobby's in a stump.", nil, "Yup! Okay, magical contraption, do your thing!"},
+    {"Ah, what a nice breeze we're having today, eh, Gobby?", "Gobby wouldn't know... Gobby's in a stump.", nil, "Yup! Okay, magical contraption, do your thing!"},
     {"Step right up, step right up! Get your objects made here!", "But please don't step on my stump!", nil, "It'll be ready in a jiffy! Smart folks choose Gorbo and Gobby's!"},
     {"Hey Gobby, ever wonder what's outside this forest?", "Sometimes I wonder what's outside this stump... I used to remember...", nil, "Yes yes yes! Keep going, contraption! You can do it!"},
     {"Hey, wanna switch spots for a bit?", "Would I ever! Wow, Gorbo, thanks, I'm getting a bit cramped in here.", nil, "Coming right up! Er, maybe next time, Gobby."},
