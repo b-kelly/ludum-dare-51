@@ -189,4 +189,8 @@ function GS.getTipJarContents(self)
   return totalAmt
 end
 
+function GS.getRoundInfo(self)
+  return self.currentRound, MAX_ROUNDS
+end
+
 return GS

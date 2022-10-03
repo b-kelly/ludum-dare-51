@@ -236,6 +236,9 @@ local function drawUI(state, mx, my)
 
     -- draw tip jar contents
     love.graphics.printf("$"..state:getTipJarContents(), 0, 0, 100, "left")
+    -- draw the round counter
+    local round, maxRound = state:getRoundInfo()
+    love.graphics.printf("Round "..round.."/"..maxRound, 0, 20, 100, "left")
 
     --for i=1, #buttons do
      -- local b = buttons[i]
