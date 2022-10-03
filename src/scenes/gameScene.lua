@@ -70,7 +70,7 @@ local function newSlideAnimation(duration, distanceX, distanceY, fn)
   return animation
 end
 
-local function newSpriteAnimation(sheet, xCount, yCount, duration, fn)
+local function newSpriteAnimation(sheet, xCount, yCount, duration, loop, fn)
   local sprites = utils.loadSpritesheet(sheet, xCount, yCount)
   local animation = {
     playing = false,
@@ -80,6 +80,7 @@ local function newSpriteAnimation(sheet, xCount, yCount, duration, fn)
     time = 0,
     currentFrameIdx = 1,
     totalFrames = xCount * yCount,
+    loop = loop,
     callback = fn,
     callbackCalled = false
   }
@@ -90,22 +91,29 @@ local function newSpriteAnimation(sheet, xCount, yCount, duration, fn)
       return
     end
 
-    if self.currentFrameIdx == self.totalFrames then
+    if self.currentFrameIdx == self.totalFrames and not self.loop then
       if self.callback and not self.callbackCalled then
         self.callbackCalled = true
         self.callback()
       end
+      self.playing = false
       return
     end
 
     self.time = self.time + dt
-    if self.time >= self.duration then
+    if self.time >= self.duration and not self.loop then
       self.time = self.duration
     end
 
     local frameDur = self.duration / self.totalFrames
 
-    self.currentFrameIdx = math.ceil(self.time / frameDur)
+    local newFrameIdx = (math.floor(self.time / frameDur) % self.totalFrames) + 1
+
+    if debug and newFrameIdx ~= self.currentFrameIdx then
+      print("new frame: "..newFrameIdx.."; old frame: "..self.currentFrameIdx.."; totalFrames: "..self.totalFrames)
+    end
+
+    self.currentFrameIdx = newFrameIdx
   end
 
   return animation
@@ -252,7 +260,7 @@ function SG.activate()
   frameSlideAnim = newSlideAnimation(0.1, 80, 0)
   frameSlideAnim.playing = true
 
-  wandAnims.gremlinAnim = newSpriteAnimation(gremlinSpriteSheet, 4, 3, 0.25, function ()
+  wandAnims.gremlinAnim = newSpriteAnimation(gremlinSpriteSheet, 4, 3, 0.25, false, function ()
     wandAnims.wandMove1.playing = true
   end)
 
@@ -265,12 +273,15 @@ function SG.activate()
   local wandDuration1 = durationPerPixel * wandDistance1
   local wandDuration2 = durationPerPixel * wandDistance2
 
+  -- how many times to loop the sparkles animation over its total duration
+  local sparklesLoopCount = 5
+
   wandAnims.wandMove1 = newSlideAnimation(wandDuration1, wandDistance1, 50, function ()
     wandAnims.sparkles.playing = true
     wandAnims.wandMove2.playing = true
   end)
 
-  wandAnims.sparkles = newSpriteAnimation(wandSpriteSheet, 7, 1, 1.0)
+  wandAnims.sparkles = newSpriteAnimation(wandSpriteSheet, 7, 1, wandDuration2 / sparklesLoopCount, true)
 
   wandAnims.wandMove2 = newSlideAnimation(wandDuration2, wandDistance2, 0)
 end
