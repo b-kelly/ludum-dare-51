@@ -8,27 +8,60 @@ S.__index = S
 local WINDOW_COUNT = 4
 
 local function gradeImageSimularityForWindow(target, result, window)
--- there may be a better way of doing this...
+  -- there may be a better way of doing this...
   -- assumes both images are the same height/width
   local tx, ty, tw, th = window:getViewport()
 
-  local matchingPixelCount = 0
-  local totalPixelsExamined = 0
+  -- algo inspired by SSIM, simplified for monochrome images of the same size: https://en.wikipedia.org/wiki/Structural_similarity
+  local ux
+  local uy
+  local ox
+  local oy
+  local oxy
+
+  -- constants
+  local l = 1
+  local k1 = 0.01
+  local k2 = 0.03
+  local c1 = (k1 * l) * (k1 * l)
+  local c2 = (k2 * l) * (k2 * l)
+
+  local n = th * tw
+
+  -- calculate our pixel based values
+  for x = 0, tw - 1 do
+    for y = 0, th - 1 do
+      local r1, g1, b1, tarAlpha = target:getPixel(tx + x, ty + y)
+      local r2, g2, b2, resAlpha = result:getPixel(tx + x, ty + y)
+      ux = ux + tarAlpha
+      uy = uy + resAlpha
+    end
+  end
+
+  ux = ux / n
+  uy = uy / n
 
   for x = 0, tw - 1 do
     for y = 0, th - 1 do
       local r1, g1, b1, tarAlpha = target:getPixel(tx + x, ty + y)
       local r2, g2, b2, resAlpha = result:getPixel(tx + x, ty + y)
+      ox = ox + math.pow((tarAlpha - ux), 2)
+      oy = oy + math.pow((tarAlpha - ux), 2)
 
-      if tarAlpha == resAlpha then
-        matchingPixelCount = matchingPixelCount + 1
-      end
-
-      totalPixelsExamined = totalPixelsExamined + 1
+      oxy = oxy + (tarAlpha - ux) * (resAlpha - uy)
     end
   end
 
-  return matchingPixelCount / (tw * th)
+  ox = math.pow(ox / (n - 1), 0.5)
+  oy = math.pow(oy / (n - 1), 0.5)
+  oxy = oxy / n
+
+  local ssimNum = (2 * ux * uy + c1) * (2 * oxy + c2)
+  local ssimDenom = (ux * ux + uy * uy + c1) * (ox * ox + oy * oy + c2)
+
+  local ssim = ssimNum / ssimDenom
+
+  return ssim
 end
 
 local function getImageSimilarity(target, result)
@@ -37,22 +70,15 @@ local function getImageSimilarity(target, result)
   local windows = utils.loadSpritesheet(love.graphics.newImage(target), WINDOW_COUNT, WINDOW_COUNT)
 
   local results = {}
-  for i=1,(WINDOW_COUNT*WINDOW_COUNT) do
+  for i = 1, (WINDOW_COUNT * WINDOW_COUNT) do
     table.insert(results, gradeImageSimularityForWindow(target, result, windows[i]))
   end
 
   -- now average the results
-  local debugStr = ""
   local similarity = 0
-  for i=1,#results do
+  for i = 1, #results do
     similarity = similarity + results[i]
-    debugStr = debugStr..results[i]..", "
-    if i % 4 == 0 then
-      debugStr = debugStr.."\n"
-    end
   end
-
-  print(debugStr.."\n\n")
 
   return (similarity / #results), results
 end
@@ -126,18 +152,18 @@ function S.drawDebug(self, texture, textureSprite)
 
   if self.similarity ~= nil then
     local win = tw / WINDOW_COUNT
-    for i=1,WINDOW_COUNT do
+    for i = 1, WINDOW_COUNT do
       love.graphics.rectangle("fill", x + win * i, y, 2, th)
     end
-    for i=1,WINDOW_COUNT do
+    for i = 1, WINDOW_COUNT do
       love.graphics.rectangle("fill", x, y + win * i, tw, 2)
     end
 
-    for i=1,#self.similarityDebug do
+    for i = 1, #self.similarityDebug do
       local wx = (i - 1) % WINDOW_COUNT
       local wy = math.ceil(i / WINDOW_COUNT) - 1
       local score = math.floor(self.similarityDebug[i] * 10000) / 100
-      love.graphics.printf(score.."", x + wx * win, y + wy * win, win, "center")
+      love.graphics.printf(score .. "", x + wx * win, y + wy * win, win, "center")
     end
 
     love.graphics.printf(utils.formatScore(self.similarity), x, y + th + 10, tw, "center")
