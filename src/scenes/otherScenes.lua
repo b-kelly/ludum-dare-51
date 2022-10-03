@@ -107,7 +107,7 @@ local function drawRoundEndScreen(state)
   local xLeft = 88
   local imgWidth = 256
   local gapX = 100
-  local gapY = 42
+  local gapY = 36
 
   love.graphics.draw(resultsBg, 0, 0)
 
@@ -117,13 +117,19 @@ local function drawRoundEndScreen(state)
   -- draw the result image
   local xLeft2 = xLeft + imgWidth + gapX
   utils.drawMaskFromImg(meta.resultImg, meta.refData.textureImg, meta.refData.textureSprite, xLeft2, yTop)
-
+  
+  local round, maxRound = state:getRoundInfo()
   -- print the score
-  love.graphics.printf(utils.formatScore(meta.lastRound.score) .. ". It took " .. meta.lastRound.secondsSpent .. " seconds to complete.", 0, yTop + gapY + imgWidth + gapY, 800, "center")
+  love.graphics.printf("============= Round "..round-1 .."/"..maxRound.." Results =============", 0, yTop + gapY + imgWidth + gapY-24, 800, "center")
+  love.graphics.printf(utils.formatScore(meta.lastRound.score), 0, yTop + gapY + imgWidth + gapY, 800, "center")
+  love.graphics.printf(meta.lastRound.secondsSpent .. " seconds to complete", 0, yTop + gapY + imgWidth + gapY + 24, 800, "center")
 
+  --print the tips
+  love.graphics.printf("earned "..state:getTipJarContents().." coins as tip", 0, yTop + gapY + imgWidth + gapY + 48, 800, "center")
+  
   --print the badge
   local badge = SO.getBadge(meta.lastRound.score)
-  love.graphics.draw(badge, 400, 300)
+  love.graphics.draw(badge, 410, 280)
 
   local response = meta.response or "ERROR DID NOT ACTIVATE"
 

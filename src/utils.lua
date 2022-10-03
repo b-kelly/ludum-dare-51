@@ -160,7 +160,7 @@ function U.formatScore(score)
   local _, output = U.getScoreRank(score)
 
   local pct = math.floor(score * 1000) / 10
-  output = output .. " (" .. pct .. "% similar)"
+  output = pct .. "% match"
 
   return output
 end

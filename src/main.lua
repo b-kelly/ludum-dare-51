@@ -18,7 +18,6 @@ Scenes = {
 }
 
 local gameState
-local mainTextFont
 
 function love.load(arg)
     --require("mobdebug").start()
