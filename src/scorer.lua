@@ -13,11 +13,11 @@ local function gradeImageSimularityForWindow(target, result, window)
   local tx, ty, tw, th = window:getViewport()
 
   -- algo inspired by SSIM, simplified for monochrome images of the same size: https://en.wikipedia.org/wiki/Structural_similarity
-  local ux
-  local uy
-  local ox
-  local oy
-  local oxy
+  local ux = 0
+  local uy = 0
+  local ox = 0
+  local oy = 0
+  local oxy = 0
 
   -- constants
   local l = 1
