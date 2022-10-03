@@ -115,6 +115,7 @@ local function drawRoundEndScreen(state)
   love.graphics.printf(response, 32, 484, 600, "left")
 
   drawRandomCustomer(638, 448, state.currentCustomerData)
+  love.graphics.printf(customerNames[state.currentCustomerData.name], 540, 440, 110, "center")
 end
 
 local function drawHelpScreen()
@@ -155,6 +156,7 @@ local function drawNewRequestScreen(state)
   end
 
   drawRandomCustomer(640, 308, state.currentCustomerData)
+  love.graphics.printf(customerNames[state.currentCustomerData.name], 540, 302, 110, "center")
 end
 
 function SO.load()

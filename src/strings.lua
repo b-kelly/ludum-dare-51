@@ -133,7 +133,7 @@ local requests = {
     }
 }
 
-local customerNames = {
+customerNames = {
   "Esmeralda",
   "Jiminy",
   "Rogerette",
@@ -152,15 +152,15 @@ local customerNames = {
   "Riverine",
   "Vivian",
   "Willow",
-  "Twig-eater",
+  "Gorbalina",
   "Stompy",
   "Rhiannon",
-  "Toad-hopper",
-  "Mush-goom",
+  "Hooper",
+  "Franto",
   "Isolde",
-  "Hammer-heart",
-  "Crickets-bane",
-  "Feather-hat",
+  "Gertilda",
+  "Banfalda",
+  "Kartina",
   "Gonzor",
   "Groggle"
 }

@@ -35,7 +35,8 @@ local function genRandomCustomer()
     clothes = love.math.random(1, TOTAL_CUSTOMER_SPRITES),
     face = love.math.random(1, TOTAL_CUSTOMER_SPRITES),
     hair = love.math.random(1, TOTAL_CUSTOMER_SPRITES),
-    head = love.math.random(1, TOTAL_CUSTOMER_SPRITES)
+    head = love.math.random(1, TOTAL_CUSTOMER_SPRITES),
+    name = love.math.random(1, #customerNames)
   }
 end
 
