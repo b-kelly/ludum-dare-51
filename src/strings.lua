@@ -5,17 +5,18 @@ S.__index = S
 -- bg is hard-coded for "Gorbo" -> "Gobby" -> "Customer" -> "Gorbo"
 -- nil entry will be replaced by the customer's request text
 local conversations = {
-    {"Gobby, how're you doing in there?", "It's a bit hot, and these carrots are starting to smell a little funny. Oh, a customer!", nil, "That sounds like a lovely plan, and our contraption can gladly accomplish it. (Gobby, shhhh in there, they'll hear you!"},
+    {"Gobby, how're you doing in there?", "It's a bit hot, and these carrots are starting to smell a little funny. Oh, a customer!", nil, "That sounds like a lovely plan, and our contraption can gladly accomplish it. (Gobby, shhhh in there, they'll hear you!)"},
     {"Wonder if we'll get any customers.", "If only it were that easy.", nil, "Man, I'm good."},
 }
 
+--I copied some of these twice across ratings because they apply to more than one.
 local responses = {
     [ScoreRank.AA] = {"Wow, we got a miracle worker over here! What an achievement!", "Do my eyes deceive me?! This looks just like the real thing!"},
     [ScoreRank.B] = {"I can definitely tell what you were going for, here. Wholly adequate. Thank you!", "This looks almost like what I thought I'd get when I showed up here!"},
-    [ScoreRank.C] = {"test C1", "test C2"},
-    [ScoreRank.D] = {"test D1", "test D2"},
-    [ScoreRank.F] = {"test F1", "test F2"},
-    [ScoreRank.FF] = {"test FF1", "test FF2"},
+    [ScoreRank.C] = {"Well, I suppose it could have been worse! Thank you for this nearly-identifiable object!", "This was definitely almost somewhat correct, so I will give you a definitely almost somewhat tip."},
+    [ScoreRank.D] = {"Oh! Um... how... nice! I will treasure this... thing... forever.", "Wow, cool! When do I get the item I actually ordered? Oh, wait, what? Ah. Er, thank you?"},
+    [ScoreRank.F] = {"Thank you SO much for this BLOB.", "I... do I really have to pay for this?", "It's almost like you threw random objects together in a random pattern...", "Hey, Gorbo? I think your machine is broken..."},
+    [ScoreRank.FF] = {"It's almost like you threw random objects together in a random pattern...", "Hey, Gorbo? I think your machine is broken...", "Thank you SO much for this BLOB.", "I... do I really have to pay for this?"},
     [ScoreRank.CHEATER] = {"Dang, did you cheat? Because it's effectively impossible to get a perfect score. You can do better.", "Tsk tsk. Cheating, are we? What a shame."}
 }
 
