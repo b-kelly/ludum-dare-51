@@ -17,8 +17,10 @@ local timerSpriteSheet
 local timer
 local grabItemSound
 local wandSpriteSheet
+local outCover
 
 local shouldProceedToNextRound = false
+local jobFinished = false
 
 local wandAnims = {
   gremlinHand = nil,
@@ -129,6 +131,7 @@ local function loadUI()
     grabItemSound = love.audio.newSource("assets/audio/grabFromBag.wav", "static")
     gremlinSpriteSheet = love.graphics.newImage("assets/gremlinHandSheet.png")
     wandSpriteSheet = love.graphics.newImage("assets/wandSpriteSheet.png")
+    outCover = love.graphics.newImage("assets/outCover.png")
 
     buttons = {}
     local canvasButtonX = 170
@@ -137,6 +140,7 @@ local function loadUI()
     local timerWidth = 64
     timer = {}
     for i=0, 11 do
+---@diagnostic disable-next-line: missing-parameter, param-type-mismatch
       timer[i] = love.graphics.newQuad(i * timerWidth, 0, 64, 58, timerSpriteSheet)
     end
 end
@@ -216,6 +220,11 @@ local function drawUI(state, mx, my)
     state:drawSelectedItem(mx, my)
     love.graphics.draw(workspaceGrid, 260, 314)
 
+    -- draw the out cover if the player is still working
+    if not jobFinished then
+      love.graphics.draw(outCover, 635, 310)
+    end
+
     drawSecondsGauge(state:seconds())
 
     for i=1, #buttons do
@@ -235,7 +244,9 @@ function SG.load()
 end
 
 function SG.activate()
+  jobFinished = false
   shouldProceedToNextRound = false
+
   frameSlideAnim = newSlideAnimation(0.1, 80)
   frameSlideAnim.playing = true
 
@@ -343,6 +354,7 @@ function SG.handleKeypress(state, key, isrepeat)
         shouldProceedToNextRound = true
       end
       wandAnims.gremlinAnim.playing = true
+      jobFinished = true
     else
       handled = false
     end
