@@ -12,7 +12,6 @@ local meta = {}
 local grandFantasy
 local backgroundBeatz
 local goblinMischief
-local gameOverMusic
 local dialogBg
 
 local function drawGameOverScreen(scorer)
@@ -35,35 +34,6 @@ end
 local function drawIntroBeginScreen()
   love.graphics.draw(beginBg, 0, 0)
   love.graphics.print("Press 'Enter' to begin!", 360, 560)
-end
-
-local function newTextBox(name, text, x, y, avatarIsOnRight)
-  -- TODO this could probably be better served w/ an image bg
-  -- TODO need support for image on the right vs left
-
-  local nameBoxHeight = 20
-  local nameBoxWidth = 100
-  local avatarHeight = 100
-  local inset = 8
-  local largeBoxWidth = 800 - avatarHeight - (inset)
-  local nbOffset = nameBoxHeight / 2
-  local xLeft = x + avatarHeight + inset
-  local smallXLeft = xLeft + nameBoxHeight
-  local yTop = y + nbOffset
-  local smallYTop = y
-
-  -- draw the boxes the same color as reference grid bg
-  love.graphics.setColor(0.22, 0.19, 0.29)
-  love.graphics.rectangle("fill", xLeft, yTop, largeBoxWidth, avatarHeight - nbOffset)
-  love.graphics.rectangle("fill", smallXLeft, smallYTop, nameBoxWidth, nameBoxHeight)
-
-  --draw the avatar box
-  love.graphics.setColor(1, 1, 1)
-  love.graphics.rectangle("fill", x, y, avatarHeight, avatarHeight)
-
-  love.graphics.setColor(1, 1, 1)
-  love.graphics.printf(name, smallXLeft, smallYTop, nameBoxWidth, "center")
-  love.graphics.printf(text, xLeft + inset, yTop + inset + nbOffset, 800, "left")
 end
 
 local function activateRoundEndScreen(state)
@@ -95,13 +65,12 @@ local function drawRoundEndScreen(state)
   end)
   love.graphics.printf("Result", xLeft2, yTop + gap + imgWidth, imgWidth, "center")
 
-  local textHeight = 40 --TODO ???
-
   -- print the score
-  love.graphics.printf(utils.formatScore(meta.lastRound.score) .. " " .. meta.lastRound.secondsSpent .. " seconds to complete", xLeft, yTop + gap + imgWidth + textHeight, 800, "center")
+  love.graphics.printf(utils.formatScore(meta.lastRound.score) .. " " .. meta.lastRound.secondsSpent .. " seconds to complete", xLeft, yTop + gap + imgWidth + 40, 800, "center")
 
   local response = meta.response or "ERROR DID NOT ACTIVATE"
-  newTextBox("Customer", response, 0, 500)
+  
+  love.graphics.printf(response, 0, 600 - 50, 800, "center")
 end
 
 local function drawHelpScreen()
@@ -116,7 +85,7 @@ local function activateNewRequestScreen(state)
   meta = {
     conversation = strings.getRandomConversation(state.reference:getItemIdx(state.reference.currentIdx))
   }
-  if state.currentRound ~= 1 then 
+  if state.currentRound ~= 1 then
     love.audio.stop()
     goblinMischief:play()
   end
@@ -124,10 +93,16 @@ end
 
 local function drawNewRequestScreen()
   love.graphics.draw(dialogBg)
-  local gap = 8
+  local yGap = 36
+  local xGap = 32
   local convo = meta.conversation or {{name = "ERROR", text = "NewRequestScreen DID NOT ACTIVATE"}}
   for i=1,#convo do
-    newTextBox(convo[i]["name"], convo[i]["text"], 0, (100 * (i - 1)) + (gap * (i - 1)))
+    local idx = i - 1
+    local avatarOnLeft = i == 1 or i == #convo
+    local xLeft = avatarOnLeft and (xGap + 150) or xGap
+    local yTop = 150 * idx + yGap
+
+    love.graphics.printf(convo[i], xLeft, yTop, 600, "left")
   end
 end
 
@@ -140,7 +115,6 @@ function SO.load()
   grandFantasy = love.audio.newSource("assets/audio/grandFantasy.mp3", "stream")
   backgroundBeatz = love.audio.newSource("assets/audio/backgroundBeatz.mp3", "stream")
   goblinMischief = love.audio.newSource("assets/audio/goblinMischief.mp3", "stream")
-  gameOverMusic = love.audio.newSource("assets/audio/imperfectCopySong.mp3", "stream")
 
   grandFantasy:seek(2, "seconds")
   grandFantasy:setVolume(.3)

@@ -2,15 +2,11 @@ local utils = require "utils"
 local S = {}
 S.__index = S
 
--- creates a new convo entry
-local function c(name, text)
-    return { name = name, text = text }
-end
-
--- nil entry is where the customer's request goes
+-- bg is hard-coded for "Gorbo" -> "Gobby" -> "Customer" -> "Gorbo"
+-- nil entry will be replaced by the customer's request text
 local conversations = {
-    {c("Gorbo", "Sure hot today"), c("Gobby", "Here comes a customer"), nil, c("Gorbo", "We can do that")},
-    {c("Gorbo", "Wonder if we'll get any customers"), nil, c("Gorbo", "Most certainly!"), c("Gobby", "Wow, do that again")},
+    {"Sure is hot today.", "Here comes a customer.", nil, "We can do that."},
+    {"Wonder if we'll get any customers.", "If only it were that easy.", nil, "Man, I'm good."},
 }
 
 local responses = {
@@ -133,7 +129,7 @@ function S.getRandomConversation(itemIdx)
 
     for i=1,#convo do
         if convo[i] == nil then
-            convo[i] = c("Customer", request)
+            convo[i] = request
         end
     end
 
