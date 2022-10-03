@@ -37,7 +37,7 @@ end
 
 local function drawIntroBeginScreen()
   love.graphics.draw(beginBg, 0, 0)
-  love.graphics.print("Press 'Enter' or click to begin!", 340, 560)
+  love.graphics.print("Press 'Enter' or click to begin!", 300, 560)
 end
 
 local function activateRoundEndScreen(state)
@@ -48,12 +48,13 @@ local function activateRoundEndScreen(state)
     resultImg = love.graphics.newImage(state.lastResult),
     refData = state.reference:getData(lastRound.referenceIdx)
   }
+  state.shouldBlockBag = false
   love.audio.stop()
   backgroundBeatz:play()
 end
 
 local function drawRoundEndScreen(state)
-  local yTop = 32
+  local yTop = 24
   local xLeft = 84
   local imgWidth = 256
   local gapX = 124
@@ -75,7 +76,7 @@ local function drawRoundEndScreen(state)
 
   -- print the score
   love.graphics.printf(utils.formatScore(meta.lastRound.score) .. " " .. meta.lastRound.secondsSpent .. " seconds to complete", 0, yTop + gapY + imgWidth + gapY, 800, "center")
-
+  
   local response = meta.response or "ERROR DID NOT ACTIVATE"
   
   love.graphics.printf(response, 32, 478, 600, "left")
@@ -84,7 +85,7 @@ end
 local function drawHelpScreen()
   -- TODO
   love.graphics.draw(howToPlayBg, 0, 0)
-  love.graphics.print("Press 'Enter' or click to continue", 340, 560)
+  love.graphics.print("Press 'Enter' or click to continue", 300, 560)
   love.graphics.printf("Click on a bag of items to select one, and then click on your working area to place it. You have 10 'seconds' - turns on the timer - to complete the request. If you misclick you can always undo or clear to start over!", 100, 140, 600, "center")
   love.graphics.printf("Controls:", 200, 240, 600, "left")
   love.graphics.printf("E, R - Rotate item left/right", 300, 240, 600, "left")
@@ -93,7 +94,6 @@ local function drawHelpScreen()
   love.graphics.printf("C - Clear", 300, 360, 600, "left")
   love.graphics.printf("H - Show help", 300, 400, 600, "left")
   love.graphics.printf("Space - Complete object and end round", 300, 440, 600, "left")
-  --love.graphics.printf("Controls: rotate (e, r); flip (q, w); finalize (space); undo (z); clear (c); show help (h)", 100, 200, 600, "left")
 end
 
 local function activateNewRequestScreen(state)
@@ -108,7 +108,7 @@ end
 
 local function drawNewRequestScreen()
   love.graphics.draw(dialogBg)
-  local yGap = 36
+  local yGap = 42
   local xGap = 32
   local convo = meta.conversation or {{name = "ERROR", text = "NewRequestScreen DID NOT ACTIVATE"}}
   for i=1,#convo do

@@ -18,6 +18,7 @@ local timer
 local grabItemSound
 local wandSpriteSheet
 local outCover
+local bagCover
 
 local shouldProceedToNextRound = false
 local jobFinished = false
@@ -132,6 +133,7 @@ local function loadUI()
     gremlinSpriteSheet = love.graphics.newImage("assets/gremlinHandSheet.png")
     wandSpriteSheet = love.graphics.newImage("assets/wandSpriteSheet.png")
     outCover = love.graphics.newImage("assets/outCover.png")
+    bagCover = love.graphics.newImage("assets/bagCover.png")
 
     buttons = {}
     local canvasButtonX = 170
@@ -219,7 +221,12 @@ local function drawUI(state, mx, my)
     state.workspace:draw(mx, my)
     state:drawSelectedItem(mx, my)
     love.graphics.draw(workspaceGrid, 260, 314)
-
+    
+    --if bags should be blocked then throw the bag blocker up
+    if state.shouldBlockBags then
+      love.graphics.draw(bagCover, 256, 50)
+    end
+    
     -- draw the out cover if the player is still working
     if not jobFinished then
       love.graphics.draw(outCover, 635, 310)
