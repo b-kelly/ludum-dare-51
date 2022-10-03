@@ -7,7 +7,7 @@ local GS = {}
 GS.__index = GS
 
 local MAX_SECONDS = 10
-local MAX_ROUNDS = 10 -- max rounds to send the player through
+local MAX_ROUNDS = 1 -- max rounds to send the player through
 
 local _customerSheetXCount = 7
 local _customerSheetYCount = 4
