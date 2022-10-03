@@ -12,13 +12,15 @@ local clearButton
 local buttons
 local bagLocations
 local slideAnim
+local gremlinAnim
+local gremlinSpriteSheet
 local timerSpriteSheet
 local timer
-local grabItemSound = love.audio.newSource("assets/audio/grabFromBag.wav", "static")
+local grabItemSound
 
 local DEBUG_shouldUpdateScorer = false
 
-local function newSlideAnimation()
+local function newSlideAnimation(sheet, xCount, yCount)
   local animation = {
     duration = 0.1,
     time = 0,
@@ -42,6 +44,37 @@ local function newSlideAnimation()
   return animation
 end
 
+local function newSpriteAnimation(sheet, xCount, yCount)
+  local sprites = utils.loadSpritesheet(sheet, xCount, yCount, 64, 156)
+  local animation = {
+    playing = false,
+    img = sheet,
+    sprites = sprites,
+    duration = 1.0,
+    time = 0,
+    currentFrameIdx = 1,
+    totalFrames = xCount * yCount
+  }
+  animation.__index = animation
+
+  function animation.update(self, dt)
+    if not self.playing or self.currentFrameIdx == self.totalFrames then
+      return
+    end
+
+    self.time = self.time + dt
+    if self.time >= self.duration then
+      self.time = self.duration
+    end
+
+    local frameDur = self.duration / self.totalFrames
+
+    self.currentFrameIdx = math.ceil(self.time / frameDur)
+  end
+
+  return animation
+end
+
 local function newButton(buttonImg, buttonX, buttonY)
   return {
     img = buttonImg,
@@ -60,6 +93,8 @@ local function loadUI()
     workspaceGrid = love.graphics.newImage('assets/workingCanvas_grid.png')
     undoButton = love.graphics.newImage('assets/undoButton.png')
     clearButton = love.graphics.newImage('assets/clearButton.png')
+    grabItemSound = love.audio.newSource("assets/audio/grabFromBag.wav", "static")
+    gremlinSpriteSheet = love.graphics.newImage("assets/gremlinHandSheet.png")
     buttons = {}
     local canvasButtonX = 170
     buttons[1] = newButton(undoButton, canvasButtonX, 380)
@@ -67,7 +102,7 @@ local function loadUI()
     local timerWidth = 64
     timer = {}
     for i=0, 11 do
-      timer[i] = love.graphics.newQuad(i*timerWidth, 0, 64, 58, timerSpriteSheet)
+      timer[i] = love.graphics.newQuad(i * timerWidth, 0, 64, 58, timerSpriteSheet)
     end
 end
 
@@ -125,13 +160,11 @@ local function selectTimerSprite(maxSeconds, secondsSpent)
 end
 
 local function drawSecondsGauge(seconds)
-  -- TODO some sort of gauge/graphic for seconds?
   local timerSprite = selectTimerSprite(seconds.max, seconds.spent)
   love.graphics.draw(timerSpriteSheet, timer[timerSprite], 66, 390)
 end
 
 local function drawUI(state, mx, my)
-  
     love.graphics.draw(bg, 0, 0)
 
     -- calculate the position of the reference area as it slides in
@@ -155,6 +188,9 @@ local function drawUI(state, mx, my)
       local b = buttons[i]
       love.graphics.draw(b.img, b.x1, b.y1, 0, .8, .8)
     end
+
+    -- draw the gremlin's hand
+    love.graphics.draw(gremlinSpriteSheet, gremlinAnim.sprites[gremlinAnim.currentFrameIdx], 550, 600 - 156)
 end
 
 function SG.load()
@@ -164,10 +200,15 @@ end
 
 function SG.activate()
   slideAnim = newSlideAnimation()
+  gremlinAnim = newSpriteAnimation(gremlinSpriteSheet, 4, 3)
+
+  -- TODO animation should trigger based on something
+  gremlinAnim.playing = true
 end
 
 function SG.update(dt)
   slideAnim:update(dt)
+  gremlinAnim:update(dt)
 end
 
 function SG.drawScene(scene, state)

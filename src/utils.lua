@@ -64,19 +64,19 @@ function U.shuffledArr(max)
   return arr
 end
 
-local function newQuad(xCoord, yCoord, spriteSize, sheet)
+local function newQuad(xCoord, yCoord, spriteWidth, spriteHeight, sheet)
 ---@diagnostic disable-next-line: missing-parameter
-  return love.graphics.newQuad(xCoord, yCoord, spriteSize, spriteSize, sheet)
+  return love.graphics.newQuad(xCoord, yCoord, spriteWidth, spriteHeight, sheet)
 end
 
-function U.loadSpritesheet(sheet, xCount, yCount, spriteSize)
+function U.loadSpritesheet(sheet, xCount, yCount, spriteWidth, spriteHeight)
   local arr = {}
 
   for y=0,yCount-1 do
-    local yCoord = y * spriteSize
+    local yCoord = y * spriteHeight
     for x=0,xCount-1 do
-      local xCoord = x * spriteSize
-      local quad = newQuad(xCoord, yCoord, spriteSize, sheet)
+      local xCoord = x * spriteWidth
+      local quad = newQuad(xCoord, yCoord, spriteWidth, spriteHeight, sheet)
       table.insert(arr, quad)
     end
   end
@@ -104,7 +104,7 @@ local mask_shader = love.graphics.newShader[[
 
 local function drawStencil(mask, quad, x, y)
   if quad == nil then
-    quad = newQuad(0, 0, mask:getWidth(), mask)
+    quad = newQuad(0, 0, mask:getWidth(), mask:getHeight(), mask)
   end
 
    love.graphics.setShader(mask_shader)

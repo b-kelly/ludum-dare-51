@@ -22,7 +22,7 @@ function W.new()
     canvas = love.graphics.newCanvas(width, height),
     texture = texture,
     textureData = textureData,
-    sprites = utils.loadSpritesheet(texture, spritesX, spritesY, spriteWidth),
+    sprites = utils.loadSpritesheet(texture, spritesX, spritesY, spriteWidth, spriteWidth),
     objects = {},
     itemRotation = 0,
     isMirrorX = false,
