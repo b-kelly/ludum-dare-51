@@ -24,17 +24,20 @@ end
 
 local function drawTitleScreen()
   love.graphics.draw(titleBg, 0, 0)
-  love.graphics.print("Press 'Enter' to continue", 160, 330)
+  love.graphics.print("Press 'Enter' or click to continue", 160, 330)
 end
 
 local function drawIntroStoryScreen()
   love.graphics.draw(introBg, 0, 0)
-  love.graphics.print("Press 'Enter' to continue", 460, 560)
+  love.graphics.printf("I'm Gorbo the Great, it's ... GREAT ... to meet you! Gobby and I had the best business idea, but I'll let you in on it because we need your help.", 100, 140, 600, "center")
+  love.graphics.printf("We realized that we could be using our magic for good! And by 'good' I mean profit! You see, people want things. And we have other things that we can TRANSMUTE into those things, with just a bit of magic. And also trash we found in the forest.", 100, 220, 600, "center")
+  love.graphics.printf("You'll be helping Gobby by using random forest items to copy the shape of the customer's request.", 400, 360, 300, "center")
+  love.graphics.print("Press 'Enter' or click to continue", 440, 560)
 end
 
 local function drawIntroBeginScreen()
   love.graphics.draw(beginBg, 0, 0)
-  love.graphics.print("Press 'Enter' to begin!", 360, 560)
+  love.graphics.print("Press 'Enter' or click to begin!", 340, 560)
 end
 
 local function activateRoundEndScreen(state)
@@ -81,9 +84,16 @@ end
 local function drawHelpScreen()
   -- TODO
   love.graphics.draw(howToPlayBg, 0, 0)
-  love.graphics.print("Press 'Enter' to continue", 360, 560)
-
-  love.graphics.printf("Controls: rotate (e, r); flip (q, w); finalize (space); undo (z); clear (c); show help (h)", 0, 20, 600, "left")
+  love.graphics.print("Press 'Enter' or click to continue", 340, 560)
+  love.graphics.printf("Click on a bag of items to select one, and then click on your working area to place it. You have 10 'seconds' - turns on the timer - to complete the request. If you misclick you can always undo or clear to start over!", 100, 140, 600, "center")
+  love.graphics.printf("Controls:", 200, 240, 600, "left")
+  love.graphics.printf("E, R - Rotate item left/right", 300, 240, 600, "left")
+  love.graphics.printf("Q, W - Flip item horizontally/vertically", 300, 280, 600, "left")
+  love.graphics.printf("Z - Undo", 300, 320, 600, "left")
+  love.graphics.printf("C - Clear", 300, 360, 600, "left")
+  love.graphics.printf("H - Show help", 300, 400, 600, "left")
+  love.graphics.printf("Space - Complete object and end round", 300, 440, 600, "left")
+  --love.graphics.printf("Controls: rotate (e, r); flip (q, w); finalize (space); undo (z); clear (c); show help (h)", 100, 200, 600, "left")
 end
 
 local function activateNewRequestScreen(state)

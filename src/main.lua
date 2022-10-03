@@ -35,6 +35,10 @@ function love.load(arg)
 end
 
 function love.update(dt)
+  
+  if debug then
+    love.audio.stop()
+  end
   if gameState.sceneNeedsActivation then
     if otherScenes.activate(gameState.scene, gameState) then
       -- do nothing

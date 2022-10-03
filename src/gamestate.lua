@@ -12,7 +12,7 @@ local MAX_ROUNDS = 24 -- max different masks
 local timerSound = love.audio.newSource("assets/audio/tickTock.wav", "static")
 local timerFull = love.audio.newSource("assets/audio/timerFull.wav", "static")
 local referenceArrives = love.audio.newSource("assets/audio/referenceArriving.mp3", "static")
-timerSound:setVolume(.5)
+timerSound:setVolume(.7)
 
 local function refundSecond(self)
   local newSeconds = self.spentSeconds - 1

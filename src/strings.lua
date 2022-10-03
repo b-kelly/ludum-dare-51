@@ -5,18 +5,18 @@ S.__index = S
 -- bg is hard-coded for "Gorbo" -> "Gobby" -> "Customer" -> "Gorbo"
 -- nil entry will be replaced by the customer's request text
 local conversations = {
-    {"Sure is hot today.", "Here comes a customer.", nil, "We can do that."},
+    {"Gobby, how're you doing in there?", "It's a bit hot, and these carrots are starting to smell a little funny. Oh, a customer!", nil, "That sounds like a lovely plan, and our contraption can gladly accomplish it. (Gobby, shhhh in there, they'll hear you!"},
     {"Wonder if we'll get any customers.", "If only it were that easy.", nil, "Man, I'm good."},
 }
 
 local responses = {
-    [ScoreRank.AA] = {"test AA1", "test AA2"},
-    [ScoreRank.B] = {"test B1", "test B2"},
+    [ScoreRank.AA] = {"Wow, we got a miracle worker over here! What an achievement!", "Do my eyes deceive me?! This looks just like the real thing!"},
+    [ScoreRank.B] = {"I can definitely tell what you were going for, here. Wholly adequate. Thank you!", "This looks almost like what I thought I'd get when I showed up here!"},
     [ScoreRank.C] = {"test C1", "test C2"},
     [ScoreRank.D] = {"test D1", "test D2"},
     [ScoreRank.F] = {"test F1", "test F2"},
     [ScoreRank.FF] = {"test FF1", "test FF2"},
-    [ScoreRank.CHEATER] = {"test CHEATER1", "test CHEATER2"}
+    [ScoreRank.CHEATER] = {"Dang, did you cheat? Because it's effectively impossible to get a perfect score. You can do better.", "Tsk tsk. Cheating, are we? What a shame."}
 }
 
 local requests = {
@@ -116,6 +116,38 @@ local requests = {
         "test cat 1",
         "test cat 2",
     },
+}
+
+local customerNames = {
+  "Esmerelda",
+  "Jiminy",
+  "Rogerette",
+  "Felicity",
+  "Robin",
+  "Genevieve",
+  "Bobbert",
+  "Grinny",
+  "Alastair",
+  "Elrica",
+  "Griffin",
+  "Edith",
+  "Lance",
+  "Arturo",
+  "Percy",
+  "Riverine",
+  "Vivian",
+  "Willow",
+  "Twig-eater",
+  "Stompy",
+  "Rhiannon",
+  "Toad-hopper",
+  "Mush-goom",
+  "Isolde",
+  "Hammer-heart",
+  "Crickets-bane",
+  "Feather-hat",
+  "Gonzor",
+  "Groggle"
 }
 
 local function getRandomEntry(arr)
