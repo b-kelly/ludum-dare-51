@@ -18,7 +18,7 @@ local outCover
 local bagCover
 
 local shouldProceedToNextRound = false
-local jobFinished = false
+local workspaceLockedIn = false -- user signaled they are done, but we're still playing the animation
 
 local wandAnims = {
   gremlinHand = nil,
@@ -230,7 +230,7 @@ local function drawUI(state, mx, my)
     end
     
     -- draw the out cover if the player is still working
-    if not jobFinished then
+    if not workspaceLockedIn then
       love.graphics.draw(outCover, 635, 310)
     end
 
@@ -254,7 +254,7 @@ function SG.load()
 end
 
 function SG.activate()
-  jobFinished = false
+  workspaceLockedIn = false
   shouldProceedToNextRound = false
 
   frameSlideAnim = newSlideAnimation(0.1, 80, 0)
@@ -315,6 +315,10 @@ function SG.drawScene(scene, state)
 end
 
 function SG.handleMousepress(state, x, y)
+  if workspaceLockedIn then
+    return false
+  end
+
   local item = utils.detectWhichObjPressed(x, y, bagLocations)
 
   --first, check to see if you're trying to pick up an item from a bag
@@ -338,6 +342,10 @@ function SG.handleMousepress(state, x, y)
 end
 
 function SG.handleKeypress(state, key, isrepeat)
+  if workspaceLockedIn then
+    return false
+  end
+
     if key == "r" then
       state.workspace:rotateItem(false)
         return true
@@ -368,7 +376,7 @@ function SG.handleKeypress(state, key, isrepeat)
         shouldProceedToNextRound = true
       end
       wandAnims.gremlinAnim.playing = true
-      jobFinished = true
+      workspaceLockedIn = true
     else
       handled = false
     end
