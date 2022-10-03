@@ -7,6 +7,7 @@ GS.__index = GS
 
 local MAX_SECONDS = 10
 local MAX_ROUNDS = 10 -- max rounds to send the player through
+
     
   --load main scene-specific audio
 local timerSound = love.audio.newSource("assets/audio/tickTock.wav", "static")

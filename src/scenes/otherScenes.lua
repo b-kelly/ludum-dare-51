@@ -19,12 +19,25 @@ local badgeB
 local badgeC
 local badgeD
 local badgeF
+local gameOverBg
 
 local function drawGameOverScreen(scorer)
-  love.graphics.print("Game Over", 0, 0)
-
-  love.graphics.print("Best round: " .. scorer.best.round .. " " .. utils.formatScore(scorer.best.score), 0, 20)
-  love.graphics.print("Worst round: " .. scorer.worst.round .. " " .. utils.formatScore(scorer.worst.score), 0, 40)
+  local xWorst = 100
+  local xBest = 400
+  local yBoth = 100
+  love.graphics.draw(gameOverBg)
+  --utils.drawMask(meta.resultImg, nil, xLeft2, yTop, function()
+  --love.graphics.draw(self.worst.imageData.textureImg, self.worst.imageData.textureSprite, xWorst, yBoth)
+  --end)
+  love.graphics.print("Round " .. scorer.best.round .. ":", 20, 160)
+  love.graphics.print(math.floor(scorer.best.score*100) .."%", 40, 180)
+  local bestBadge = SO.getBadge(scorer.best.score)
+  love.graphics.draw(bestBadge, 100, 300)
+  
+  love.graphics.print("Round " .. scorer.worst.round .. ":", 690, 160)
+  love.graphics.print(math.floor(scorer.worst.score*100) .."%", 710, 180)
+  local worstBadge = SO.getBadge(scorer.worst.score)
+  love.graphics.draw(worstBadge, 400, 300)
 end
 
 local function drawTitleScreen()
@@ -42,6 +55,7 @@ end
 
 local function drawIntroBeginScreen()
   love.graphics.draw(beginBg, 0, 0)
+  love.graphics.printf("You have 10 rounds to earn as many tips as you can.", 300, 400, 300, "center")
   love.graphics.print("Press 'Enter' or click to begin!", 300, 560)
 end
 
@@ -90,7 +104,6 @@ local function drawRoundEndScreen(state)
 end
 
 local function drawHelpScreen()
-  -- TODO
   love.graphics.draw(howToPlayBg, 0, 0)
   love.graphics.print("Press 'Enter' or click to continue", 300, 560)
   love.graphics.printf("Click on a bag of items to select one, and then click on your working area to place it. You have 10 'seconds' - turns on the timer - to complete the request. If you misclick you can always undo or clear to start over!", 100, 140, 600, "center")
@@ -135,6 +148,7 @@ function SO.load()
   beginBg = love.graphics.newImage("assets/beginCard.png")
   dialogBg = love.graphics.newImage("assets/dialogueBg.png")
   resultsBg = love.graphics.newImage("assets/resultsCard.png")
+  gameOverBg = love.graphics.newImage("assets/gameOverCard.png")
   badgeA = love.graphics.newImage("assets/badgeA.png")
   badgeB = love.graphics.newImage("assets/badgeB.png")
   badgeC = love.graphics.newImage("assets/badgeC.png")
