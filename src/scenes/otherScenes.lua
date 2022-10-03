@@ -34,6 +34,8 @@ local function drawRandomCustomer(x, y, customer)
 end
 
 local function activateGameOverScreen(state)
+  love.audio.stop()
+  gameOverSong:play()
   local worst = state.scorer.worst
   local best = state.scorer.best
   meta = {
@@ -205,14 +207,17 @@ function SO.load()
   grandFantasy = love.audio.newSource("assets/audio/grandFantasy.mp3", "stream")
   backgroundBeatz = love.audio.newSource("assets/audio/backgroundBeatz.mp3", "stream")
   goblinMischief = love.audio.newSource("assets/audio/goblinMischief.mp3", "stream")
+  gameOverSong = love.audio.newSource("assets/audio/imperfectCopySong.mp3", "stream")
 
   grandFantasy:seek(2, "seconds")
   grandFantasy:setVolume(.3)
   backgroundBeatz:setVolume(.2)
   goblinMischief:setVolume(.3)
+  gameOverSong:setVolume(.3)
   grandFantasy:setLooping(true)
   goblinMischief:setLooping(true)
-  backgroundBeatz:setLooping(true)
+  backgroundBeatz:setLooping(false)
+  gameOverSong:setLooping(false)
 end
 
 function SO.activate(scene, state)
