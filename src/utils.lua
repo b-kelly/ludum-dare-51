@@ -120,7 +120,6 @@ local function drawStencil(mask, quad, x, y)
    love.graphics.setShader()
 end
 
--- mask is love.Image
 function U.drawMask(mask, quad, x, y, fn)
     love.graphics.stencil(function()
         drawStencil(mask, quad, x, y)
@@ -128,6 +127,12 @@ function U.drawMask(mask, quad, x, y, fn)
     love.graphics.setStencilTest("greater", 0)
     fn()
     love.graphics.setStencilTest()
+end
+
+function U.drawMaskFromImg(imgData, textureImg, textureSprite, x, y)
+  U.drawMask(imgData, nil, x, y, function()
+    love.graphics.draw(textureImg, textureSprite, x, y)
+  end)
 end
 
 -- returns: rank, formatted, tipAmount

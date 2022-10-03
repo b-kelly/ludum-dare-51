@@ -34,11 +34,15 @@ local function drawRandomCustomer(x, y, customer)
 end
 
 local function activateGameOverScreen(state)
+  local worst = state.scorer.worst
+  local best = state.scorer.best
   meta = {
-    worst = state.scorer.worst,
-    best = state.scorer.best,
-    worstImg = love.graphics.newImage(state.scorer.worst.imageData),
-    bestImg = love.graphics.newImage(state.scorer.best.imageData)
+    worst = worst,
+    best = best,
+    worstImg = love.graphics.newImage(worst.imageData),
+    bestImg = love.graphics.newImage(best.imageData),
+    worstRefData = state.reference:getData(worst.referenceIdx),
+    bestRefData = state.reference:getData(best.referenceIdx)
   }
 end
 
@@ -50,8 +54,8 @@ local function drawGameOverScreen(state)
   local yBoth = 100
   love.graphics.draw(gameOverBg)
 
-  love.graphics.draw(meta.worstImg, xWorst, yBoth)
-  love.graphics.draw(meta.bestImg, xBest, yBoth)
+  utils.drawMaskFromImg(meta.worstImg, meta.worstRefData.textureImg, meta.worstRefData.textureSprite, xWorst, yBoth)
+  utils.drawMaskFromImg(meta.bestImg, meta.bestRefData.textureImg, meta.bestRefData.textureSprite, xBest, yBoth)
 
   love.graphics.print("Round " .. best.round .. ":", 20, 160)
   love.graphics.print(math.floor(best.score*100) .."%", 40, 180)
@@ -110,9 +114,7 @@ local function drawRoundEndScreen(state)
 
   -- draw the result image
   local xLeft2 = xLeft + imgWidth + gapX
-  utils.drawMask(meta.resultImg, nil, xLeft2, yTop, function()
-    love.graphics.draw(meta.refData.textureImg, meta.refData.textureSprite, xLeft2, yTop)
-  end)
+  utils.drawMaskFromImg(meta.resultImg, meta.refData.textureImg, meta.refData.textureSprite, xLeft2, yTop)
 
   -- print the score
   love.graphics.printf(utils.formatScore(meta.lastRound.score) .. ". It took " .. meta.lastRound.secondsSpent .. " seconds to complete.", 0, yTop + gapY + imgWidth + gapY, 800, "center")
