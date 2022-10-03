@@ -26,20 +26,11 @@ local customerHair
 local customerHead
 local customerSheet
 
-local function genRandomCustomer()
-  return {
-    clothes = utils.getRandomEntry(customerSheet),
-    face = utils.getRandomEntry(customerSheet),
-    hair = utils.getRandomEntry(customerSheet),
-    head = utils.getRandomEntry(customerSheet)
-  }
-end
-
 local function drawRandomCustomer(x, y, customer)
-  love.graphics.draw(customerClothes, customer.clothes, x, y)
-  love.graphics.draw(customerHead, customer.head, x, y)
-  love.graphics.draw(customerFace, customer.face, x, y)
-  love.graphics.draw(customerHair, customer.hair, x, y)
+  love.graphics.draw(customerClothes, customerSheet[customer.clothes], x, y)
+  love.graphics.draw(customerHead, customerSheet[customer.head], x, y)
+  love.graphics.draw(customerFace, customerSheet[customer.face], x, y)
+  love.graphics.draw(customerHair, customerSheet[customer.hair], x, y)
 end
 
 local function drawGameOverScreen(scorer)
@@ -86,8 +77,7 @@ local function activateRoundEndScreen(state)
     lastRound = lastRound,
     response = strings.getRandomScoreResponse(lastRound.score),
     resultImg = love.graphics.newImage(state.lastResult),
-    refData = state.reference:getData(lastRound.referenceIdx),
-    customer = genRandomCustomer()
+    refData = state.reference:getData(lastRound.referenceIdx)
   }
   state.shouldBlockBag = false
   love.audio.stop()
@@ -124,7 +114,7 @@ local function drawRoundEndScreen(state)
 
   love.graphics.printf(response, 32, 484, 600, "left")
 
-  drawRandomCustomer(638, 448, meta.customer)
+  drawRandomCustomer(638, 448, state.currentCustomerData)
 end
 
 local function drawHelpScreen()
@@ -142,8 +132,7 @@ end
 
 local function activateNewRequestScreen(state)
   meta = {
-    conversation = strings.getRandomConversation(state.reference:getItemIdx(state.reference.currentIdx)),
-    customer = genRandomCustomer()
+    conversation = strings.getRandomConversation(state.reference:getItemIdx(state.reference.currentIdx))
   }
   if state.currentRound ~= 1 then
     love.audio.stop()
@@ -151,7 +140,7 @@ local function activateNewRequestScreen(state)
   end
 end
 
-local function drawNewRequestScreen()
+local function drawNewRequestScreen(state)
   love.graphics.draw(dialogBg)
   local yGap = 42
   local xGap = 32
@@ -165,7 +154,7 @@ local function drawNewRequestScreen()
     love.graphics.printf(convo[i], xLeft, yTop, 600, "left")
   end
 
-  drawRandomCustomer(640, 308, meta.customer)
+  drawRandomCustomer(640, 308, state.currentCustomerData)
 end
 
 function SO.load()
@@ -240,7 +229,7 @@ function SO.drawScene(scene, state)
   elseif scene == Scenes.INTRO_BEGIN then
     drawIntroBeginScreen()
   elseif scene == Scenes.NEW_REQUEST then
-    drawNewRequestScreen()
+    drawNewRequestScreen(state)
   end
 
   return true

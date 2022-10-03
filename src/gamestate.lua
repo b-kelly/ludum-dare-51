@@ -8,6 +8,10 @@ GS.__index = GS
 local MAX_SECONDS = 10
 local MAX_ROUNDS = 10 -- max rounds to send the player through
 
+local _customerSheetXCount = 7
+local _customerSheetYCount = 4
+local TOTAL_CUSTOMER_SPRITES = _customerSheetXCount * _customerSheetYCount
+
 --load main scene-specific audio
 local timerSound = love.audio.newSource("assets/audio/tickTock.wav", "static")
 local timerFull = love.audio.newSource("assets/audio/timerFull.wav", "static")
@@ -26,6 +30,15 @@ local function refundSecond(self)
   return true
 end
 
+local function genRandomCustomer()
+  return {
+    clothes = love.math.random(1, TOTAL_CUSTOMER_SPRITES),
+    face = love.math.random(1, TOTAL_CUSTOMER_SPRITES),
+    hair = love.math.random(1, TOTAL_CUSTOMER_SPRITES),
+    head = love.math.random(1, TOTAL_CUSTOMER_SPRITES)
+  }
+end
+
 local function resetSeconds(self)
   self.spentSeconds = 0
 end
@@ -36,6 +49,7 @@ function GS.new()
     sceneNeedsActivation = true,
     spentSeconds = 0,
     currentRound = 1,
+    currentCustomerData = nil,
     workspace = W.new(),
     scorer = S.new(),
     reference = R.new(),
@@ -72,6 +86,7 @@ function GS.nextScene(self)
   elseif self.scene == Scenes.ROUND_END and self.currentRound >= MAX_ROUNDS then
     self:setScene(Scenes.GAME_OVER)
   elseif self.scene == Scenes.INTRO_BEGIN or self.scene == Scenes.ROUND_END then
+    self.currentCustomerData = genRandomCustomer()
     self:setScene(Scenes.NEW_REQUEST)
   elseif self.scene == Scenes.HELP or self.scene == Scenes.NEW_REQUEST then
     self:setScene(Scenes.GAME)
