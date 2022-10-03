@@ -33,22 +33,34 @@ local function drawRandomCustomer(x, y, customer)
   love.graphics.draw(customerHair, customerSheet[customer.hair], x, y)
 end
 
-local function drawGameOverScreen(scorer)
+local function activateGameOverScreen(state)
+  meta = {
+    worst = state.scorer.worst,
+    best = state.scorer.best,
+    worstImg = love.graphics.newImage(state.scorer.worst.imageData),
+    bestImg = love.graphics.newImage(state.scorer.best.imageData)
+  }
+end
+
+local function drawGameOverScreen(state)
+  local worst = meta.worst
+  local best = meta.best
   local xWorst = 100
   local xBest = 400
   local yBoth = 100
   love.graphics.draw(gameOverBg)
-  --utils.drawMask(meta.resultImg, nil, xLeft2, yTop, function()
-  --love.graphics.draw(self.worst.imageData.textureImg, self.worst.imageData.textureSprite, xWorst, yBoth)
-  --end)
-  love.graphics.print("Round " .. scorer.best.round .. ":", 20, 160)
-  love.graphics.print(math.floor(scorer.best.score*100) .."%", 40, 180)
-  local bestBadge = SO.getBadge(scorer.best.score)
+
+  love.graphics.draw(meta.worstImg, xWorst, yBoth)
+  love.graphics.draw(meta.bestImg, xBest, yBoth)
+
+  love.graphics.print("Round " .. best.round .. ":", 20, 160)
+  love.graphics.print(math.floor(best.score*100) .."%", 40, 180)
+  local bestBadge = SO.getBadge(best.score)
   love.graphics.draw(bestBadge, 100, 300)
-  
-  love.graphics.print("Round " .. scorer.worst.round .. ":", 690, 160)
-  love.graphics.print(math.floor(scorer.worst.score*100) .."%", 710, 180)
-  local worstBadge = SO.getBadge(scorer.worst.score)
+
+  love.graphics.print("Round " .. worst.round .. ":", 690, 160)
+  love.graphics.print(math.floor(worst.score*100) .."%", 710, 180)
+  local worstBadge = SO.getBadge(worst.score)
   love.graphics.draw(worstBadge, 400, 300)
 end
 
@@ -90,7 +102,6 @@ local function drawRoundEndScreen(state)
   local imgWidth = 256
   local gapX = 100
   local gapY = 42
-
 
   love.graphics.draw(resultsBg, 0, 0)
 
@@ -198,7 +209,7 @@ function SO.activate(scene, state)
   end
 
   if scene == Scenes.GAME_OVER then
-    --activateGameOverScreen(state.scorer)
+    activateGameOverScreen(state)
   elseif scene == Scenes.TITLE then
     --TODO put this in a function probs
     grandFantasy:play()
