@@ -130,47 +130,29 @@ function U.drawMask(mask, quad, x, y, fn)
     love.graphics.setStencilTest()
 end
 
+-- returns: rank, formatted, tipAmount
 function U.getScoreRank(score)
   if score == 1 then
-    return ScoreRank.CHEATER
+    return ScoreRank.CHEATER, "CHEATER", -100
   elseif score > 0.95 then
-    return ScoreRank.AA
+    return ScoreRank.AA, "A+", 5
   elseif score > 0.9 then
-    return ScoreRank.A
+    return ScoreRank.A, "A", 4
   elseif score > 0.8 then
-    return ScoreRank.B
+    return ScoreRank.B, "B", 3
   elseif score > 0.7 then
-    return ScoreRank.C
+    return ScoreRank.C, "C", 2
   elseif score > 0.6 then
-    return ScoreRank.D
+    return ScoreRank.D, "D", 1
   elseif score <= 0 then
-    return ScoreRank.FF
+    return ScoreRank.FF, "AWFUL", 0
   end
 
-  return ScoreRank.F
+  return ScoreRank.F, "F", 0
 end
 
 function U.formatScore(score)
-  local rank = U.getScoreRank(score)
-  local output = "ERROR"
-
-  if rank == ScoreRank.CHEATER then
-    output = "CHEATER"
-  elseif rank == ScoreRank.AA then
-    output = "A+"
-  elseif rank == ScoreRank.A then
-    output = "A"
-  elseif rank == ScoreRank.B then
-    output = "B"
-  elseif rank == ScoreRank.C then
-    output = "C"
-  elseif rank == ScoreRank.D then
-      output = "D"
-  elseif rank == ScoreRank.F then
-      output = "F"
-  elseif rank == ScoreRank.FF then
-      output = "AWFUL"
-  end
+  local _, output = U.getScoreRank(score)
 
   local pct = math.floor(score * 1000) / 10
   output = output .. " (" .. pct .. "% similar)"

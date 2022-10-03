@@ -234,6 +234,9 @@ local function drawUI(state, mx, my)
 
     drawSecondsGauge(state:seconds())
 
+    -- draw tip jar contents
+    love.graphics.printf("$"..state:getTipJarContents(), 0, 0, 100, "left")
+
     --for i=1, #buttons do
      -- local b = buttons[i]
      -- love.graphics.draw(b.img, b.x1, b.y1, 0, .8, .8)
