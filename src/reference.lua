@@ -7,7 +7,6 @@ local spritesX = 4
 local spritesY = 6
 local width = 256
 local height = 256
-local spriteWidth = 256
 
 function R.new()
   local textures = love.graphics.newImage("assets/targetObjectTextures.png")
@@ -55,12 +54,12 @@ function R.getItemIdx(self, idx)
 end
 
 function R.getData(self, idx)
-  idx = self:getItemIdx(idx)
+  local ridx = self:getItemIdx(idx)
   return {
     textureImg = self.textureImg,
     maskData = self.maskData,
-    textureSprite = self.textures[idx],
-    maskSprite = self.masks[idx],
+    textureSprite = self.textures[ridx],
+    maskSprite = self.masks[ridx],
   }
 end
 

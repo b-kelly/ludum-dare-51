@@ -172,13 +172,16 @@ function S.getRandomConversation(itemIdx)
     local convo = utils.getRandomEntry(conversations)
     local request = utils.getRandomEntry(requests[itemIdx])
 
+    local newConvo = {}
     for i=1,#convo do
         if convo[i] == nil then
-            convo[i] = request
+            table.insert(newConvo, request)
+        else
+            table.insert(newConvo, convo[i])
         end
     end
 
-    return convo
+    return newConvo
 end
 
 function S.getRandomScoreResponse(score)
