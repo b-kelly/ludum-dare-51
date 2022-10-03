@@ -173,4 +173,25 @@ function U.formatScore(score)
   return output
 end
 
+function U.getBadge(score)
+  local rank = U.getScoreRank(score)
+  
+  if rank == ScoreRank.CHEATER then
+    return badgeF
+  elseif rank == ScoreRank.AA then
+    return badgeA
+  elseif rank == ScoreRank.A then
+    return badgeA
+  elseif rank == ScoreRank.B then
+    return badgeB
+  elseif rank == ScoreRank.C then
+    return badgeC
+  elseif rank == ScoreRank.D then
+    return badgeD
+  else
+    return badgeF
+  end
+end
+
+
 return U

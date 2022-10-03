@@ -14,6 +14,11 @@ local grandFantasy
 local backgroundBeatz
 local goblinMischief
 local dialogBg
+local badgeA
+local badgeB
+local badgeC
+local badgeD
+local badgeF
 
 local function drawGameOverScreen(scorer)
   love.graphics.print("Game Over", 0, 0)
@@ -54,10 +59,10 @@ local function activateRoundEndScreen(state)
 end
 
 local function drawRoundEndScreen(state)
-  local yTop = 24
-  local xLeft = 84
+  local yTop = 36
+  local xLeft = 88
   local imgWidth = 256
-  local gapX = 124
+  local gapX = 100
   local gapY = 42
 
 
@@ -65,21 +70,25 @@ local function drawRoundEndScreen(state)
 
   -- draw the reference image
   state.reference:drawItem(meta.lastRound.referenceIdx, xLeft, yTop)
-  love.graphics.printf("Target", xLeft, yTop + gapY + imgWidth, imgWidth, "center")
+  --love.graphics.printf("Target", xLeft, yTop + gapY + imgWidth, imgWidth, "center")
 
   -- draw the result image
   local xLeft2 = xLeft + imgWidth + gapX
   utils.drawMask(meta.resultImg, nil, xLeft2, yTop, function()
     love.graphics.draw(meta.refData.textureImg, meta.refData.textureSprite, xLeft2, yTop)
   end)
-  love.graphics.printf("Result", xLeft2, yTop + gapY + imgWidth, imgWidth, "center")
+  --love.graphics.printf("Result", xLeft2, yTop + gapY + imgWidth, imgWidth, "center")
 
   -- print the score
-  love.graphics.printf(utils.formatScore(meta.lastRound.score) .. " " .. meta.lastRound.secondsSpent .. " seconds to complete", 0, yTop + gapY + imgWidth + gapY, 800, "center")
+  love.graphics.printf(utils.formatScore(meta.lastRound.score) .. ". It took " .. meta.lastRound.secondsSpent .. " seconds to complete.", 0, yTop + gapY + imgWidth + gapY, 800, "center")
+  
+  --print the badge
+  local badge = SO.getBadge(meta.lastRound.score)
+  love.graphics.draw(badge, 400, 300)
   
   local response = meta.response or "ERROR DID NOT ACTIVATE"
   
-  love.graphics.printf(response, 32, 478, 600, "left")
+  love.graphics.printf(response, 32, 484, 600, "left")
 end
 
 local function drawHelpScreen()
@@ -128,6 +137,12 @@ function SO.load()
   beginBg = love.graphics.newImage("assets/beginCard.png")
   dialogBg = love.graphics.newImage("assets/dialogueBg.png")
   resultsBg = love.graphics.newImage("assets/resultsCard.png")
+  badgeA = love.graphics.newImage("assets/badgeA.png")
+  badgeB = love.graphics.newImage("assets/badgeB.png")
+  badgeC = love.graphics.newImage("assets/badgeC.png")
+  badgeD = love.graphics.newImage("assets/badgeD.png")
+  badgeF = love.graphics.newImage("assets/badgeF.png")
+  
   grandFantasy = love.audio.newSource("assets/audio/grandFantasy.mp3", "stream")
   backgroundBeatz = love.audio.newSource("assets/audio/backgroundBeatz.mp3", "stream")
   goblinMischief = love.audio.newSource("assets/audio/goblinMischief.mp3", "stream")
@@ -183,6 +198,26 @@ function SO.drawScene(scene, state)
   end
 
   return true
+end
+
+function SO.getBadge(score)
+  local rank = utils.getScoreRank(score)
+  
+  if rank == ScoreRank.CHEATER then
+    return badgeF
+  elseif rank == ScoreRank.AA then
+    return badgeA
+  elseif rank == ScoreRank.A then
+    return badgeA
+  elseif rank == ScoreRank.B then
+    return badgeB
+  elseif rank == ScoreRank.C then
+    return badgeC
+  elseif rank == ScoreRank.D then
+    return badgeD
+  else
+    return badgeF
+  end
 end
 
 function SO.handleMousepress(gameState, x, y)
