@@ -26,6 +26,7 @@ local conversations = {
 --I copied some of these twice across ratings because they apply to more than one.
 local responses = {
     [ScoreRank.AA] = {"Wow, we got a miracle worker over here! What an achievement!", "Do my eyes deceive me?! This looks just like the real thing!"},
+    [ScoreRank.A] = {"Now *that* is an incredible likeness. This is exactly what I needed.", "Do my eyes deceive me?! This looks just like the real thing!"},
     [ScoreRank.B] = {"I can definitely tell what you were going for, here. Wholly adequate. Thank you!", "This looks almost like what I thought I'd get when I showed up here!"},
     [ScoreRank.C] = {"Well, I suppose it could have been worse! Thank you for this nearly-identifiable object!", "This was definitely almost somewhat correct, so I will give you a definitely almost somewhat tip."},
     [ScoreRank.D] = {"Oh! Um... how... nice! I will treasure this... thing... forever.", "Wow, cool! When do I get the item I actually ordered? Oh, wait, what? Ah. Er, thank you?"},

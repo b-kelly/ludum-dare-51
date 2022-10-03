@@ -123,6 +123,10 @@ function GS.placeItem(self, x, y)
 end
 
 function GS.undoItem(self)
+  if self.selectedItem ~= nil then
+    self.selectedItem = nil
+    return
+  end
   if refundSecond(self) then
     self.workspace:_undoItemPlacement()
   end

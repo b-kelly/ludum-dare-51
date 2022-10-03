@@ -125,7 +125,8 @@ local function drawRoundEndScreen(state)
   love.graphics.printf(meta.lastRound.secondsSpent .. " seconds to complete", 0, yTop + gapY + imgWidth + gapY + 24, 800, "center")
 
   --print the tips
-  love.graphics.printf("earned "..state:getTipJarContents().." coins as tip", 0, yTop + gapY + imgWidth + gapY + 48, 800, "center")
+  local _, __, tip = utils.getScoreRank(meta.lastRound.score)
+  love.graphics.printf("earned "..tip.." coins as tip", 0, yTop + gapY + imgWidth + gapY + 48, 800, "center")
   
   --print the badge
   local badge = SO.getBadge(meta.lastRound.score)
@@ -209,6 +210,9 @@ function SO.load()
   grandFantasy:setVolume(.3)
   backgroundBeatz:setVolume(.2)
   goblinMischief:setVolume(.3)
+  grandFantasy:setLooping(true)
+  goblinMischief:setLooping(true)
+  backgroundBeatz:setLooping(true)
 end
 
 function SO.activate(scene, state)
