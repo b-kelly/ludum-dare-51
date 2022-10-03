@@ -169,8 +169,17 @@ function SO.drawScene(scene, state)
   return true
 end
 
+function SO.handleMousepress(gameState, x, y)
+  if gameState.scene ~= Scenes.GAME then
+    gameState:nextScene()
+    return true
+  end
+
+  return false
+end
+
 function SO.handleKeypress(gameState, key, scancode, isrepeat)
-  if key == "return" and gameState.scene ~= Scenes.Game then
+  if key == "return" and gameState.scene ~= Scenes.GAME then
     gameState:nextScene()
 
     return true

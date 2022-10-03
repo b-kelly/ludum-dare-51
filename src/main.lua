@@ -64,7 +64,7 @@ function love.draw(dt)
 end
 
 function love.mousepressed(x, y, button)
-  if gameState.scene ~= Scenes.GAME then
+  if otherScenes.handleMousepress(gameState, x, y) then
     return
   elseif gameState.scene == Scenes.GAME then
     gameScene.handleMousepress(gameState, x, y)
