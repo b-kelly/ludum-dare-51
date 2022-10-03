@@ -362,7 +362,7 @@ function SG.handleKeypress(state, key, isrepeat)
       state.workspace:mirrorItem(true)
     elseif key == "h" then
       state:setScene(Scenes.HELP)
-    elseif key == "space" then
+    elseif key == "space" and state:canFinishCurrentRound() then
       wandAnims.wandMove2.callback = function ()
         -- calling state:nextRound() in here causes some weird race condition/capturing issues
         shouldProceedToNextRound = true

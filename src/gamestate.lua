@@ -137,8 +137,12 @@ function GS.clearWorkspace(self)
   self.workspace:_clearItems()
 end
 
+function GS.canFinishCurrentRound(self)
+  return self.spentSeconds >= 1
+end
+
 function GS.nextRound(self)
-  if self.spentSeconds < 1 then
+  if not self:canFinishCurrentRound() then
     return false
   end
 
