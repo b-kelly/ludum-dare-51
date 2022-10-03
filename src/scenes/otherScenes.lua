@@ -20,6 +20,27 @@ local badgeC
 local badgeD
 local badgeF
 local gameOverBg
+local customerClothes
+local customerFace
+local customerHair
+local customerHead
+local customerSheet
+
+local function genRandomCustomer()
+  return {
+    clothes = utils.getRandomEntry(customerSheet),
+    face = utils.getRandomEntry(customerSheet),
+    hair = utils.getRandomEntry(customerSheet),
+    head = utils.getRandomEntry(customerSheet)
+  }
+end
+
+local function drawRandomCustomer(x, y, customer)
+  love.graphics.draw(customerClothes, customer.clothes, x, y)
+  love.graphics.draw(customerHead, customer.head, x, y)
+  love.graphics.draw(customerFace, customer.face, x, y)
+  love.graphics.draw(customerHair, customer.hair, x, y)
+end
 
 local function drawGameOverScreen(scorer)
   local xWorst = 100
@@ -65,7 +86,8 @@ local function activateRoundEndScreen(state)
     lastRound = lastRound,
     response = strings.getRandomScoreResponse(lastRound.score),
     resultImg = love.graphics.newImage(state.lastResult),
-    refData = state.reference:getData(lastRound.referenceIdx)
+    refData = state.reference:getData(lastRound.referenceIdx),
+    customer = genRandomCustomer()
   }
   state.shouldBlockBag = false
   love.audio.stop()
@@ -93,14 +115,16 @@ local function drawRoundEndScreen(state)
 
   -- print the score
   love.graphics.printf(utils.formatScore(meta.lastRound.score) .. ". It took " .. meta.lastRound.secondsSpent .. " seconds to complete.", 0, yTop + gapY + imgWidth + gapY, 800, "center")
-  
+
   --print the badge
   local badge = SO.getBadge(meta.lastRound.score)
   love.graphics.draw(badge, 400, 300)
-  
+
   local response = meta.response or "ERROR DID NOT ACTIVATE"
-  
+
   love.graphics.printf(response, 32, 484, 600, "left")
+
+  drawRandomCustomer(638, 448, meta.customer)
 end
 
 local function drawHelpScreen()
@@ -118,7 +142,8 @@ end
 
 local function activateNewRequestScreen(state)
   meta = {
-    conversation = strings.getRandomConversation(state.reference:getItemIdx(state.reference.currentIdx))
+    conversation = strings.getRandomConversation(state.reference:getItemIdx(state.reference.currentIdx)),
+    customer = genRandomCustomer()
   }
   if state.currentRound ~= 1 then
     love.audio.stop()
@@ -139,6 +164,8 @@ local function drawNewRequestScreen()
 
     love.graphics.printf(convo[i], xLeft, yTop, 600, "left")
   end
+
+  drawRandomCustomer(640, 308, meta.customer)
 end
 
 function SO.load()
@@ -154,7 +181,14 @@ function SO.load()
   badgeC = love.graphics.newImage("assets/badgeC.png")
   badgeD = love.graphics.newImage("assets/badgeD.png")
   badgeF = love.graphics.newImage("assets/badgeF.png")
-  
+
+  customerClothes = love.graphics.newImage("assets/customerSheetClothes.png")
+  customerFace = love.graphics.newImage("assets/customerSheetFace.png")
+  customerHair = love.graphics.newImage("assets/customerSheetHair.png")
+  customerHead = love.graphics.newImage("assets/customerSheetHead.png")
+  -- all the sheets are the same dimension/layout, so we really only need one set of quads
+  customerSheet = utils.loadSpritesheet(customerClothes, 7, 4)
+
   grandFantasy = love.audio.newSource("assets/audio/grandFantasy.mp3", "stream")
   backgroundBeatz = love.audio.newSource("assets/audio/backgroundBeatz.mp3", "stream")
   goblinMischief = love.audio.newSource("assets/audio/goblinMischief.mp3", "stream")

@@ -109,10 +109,6 @@ local function newSpriteAnimation(sheet, xCount, yCount, duration, loop, fn)
 
     local newFrameIdx = (math.floor(self.time / frameDur) % self.totalFrames) + 1
 
-    if debug and newFrameIdx ~= self.currentFrameIdx then
-      print("new frame: "..newFrameIdx.."; old frame: "..self.currentFrameIdx.."; totalFrames: "..self.totalFrames)
-    end
-
     self.currentFrameIdx = newFrameIdx
   end
 

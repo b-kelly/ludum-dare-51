@@ -165,14 +165,11 @@ local customerNames = {
   "Groggle"
 }
 
-local function getRandomEntry(arr)
-    local idx = love.math.random(1, #arr)
-    return arr[idx]
-end
+
 
 function S.getRandomConversation(itemIdx)
-    local convo = getRandomEntry(conversations)
-    local request = getRandomEntry(requests[itemIdx])
+    local convo = utils.getRandomEntry(conversations)
+    local request = utils.getRandomEntry(requests[itemIdx])
 
     for i=1,#convo do
         if convo[i] == nil then
@@ -187,7 +184,7 @@ function S.getRandomScoreResponse(score)
     local rank = utils.getScoreRank(score)
     local tab = responses[rank]
 
-    return getRandomEntry(tab)
+    return utils.getRandomEntry(tab)
 end
 
 return S

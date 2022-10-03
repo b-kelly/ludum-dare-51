@@ -47,6 +47,11 @@ function U.detectWhichObjPressed(mx, my, tbl)
   return 0
 end
 
+function U.getRandomEntry(arr)
+  local idx = love.math.random(1, #arr)
+  return arr[idx]
+end
+
 function U.shuffledArr(max)
   local arr = {}
 
