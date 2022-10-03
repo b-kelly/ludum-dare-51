@@ -225,7 +225,7 @@ local function drawUI(state, mx, my)
     love.graphics.draw(workspaceGrid, 260, 314)
     
     --if bags should be blocked then throw the bag blocker up
-    if state.shouldBlockBags then
+    if not state:canSpendSecond() then
       love.graphics.draw(bagCover, 256, 50)
     end
     

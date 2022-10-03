@@ -53,8 +53,7 @@ function GS.new()
     scorer = S.new(),
     reference = R.new(),
     selectedItem = nil,
-    lastResult = nil,
-    shouldBlockBags = false
+    lastResult = nil
   }, GS)
 
   return self
@@ -108,7 +107,6 @@ function GS.placeItem(self, x, y)
   if canSpend and self.workspace:_placeItem(self.selectedItem, x, y) then
     self.spentSeconds = newSeconds
     if newSeconds == MAX_SECONDS then
-      self.shouldBlockBags = true
       timerFull:play()
     else
       timerSound:play()
@@ -128,7 +126,6 @@ function GS.removeItem(self, placedItem)
   if refundSecond(self) then
     self:selectItem(self.workspace.objects[placedItem].idx)
     self.workspace:_removeItem(placedItem)
-    self.shouldBlockBags = false
   end
 end
 
