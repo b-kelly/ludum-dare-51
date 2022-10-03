@@ -2,7 +2,7 @@ local GS = require "gamestate"
 local otherScenes = require "scenes/otherScenes"
 local gameScene = require "scenes/gameScene"
 
-debug = true
+debug = false
 
 -- TODO global
 Scenes = {
