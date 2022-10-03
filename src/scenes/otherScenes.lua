@@ -7,6 +7,7 @@ SO.__index = SO
 local titleBg
 local introBg
 local howToPlayBg
+local resultsBg
 local beginBg
 local meta = {}
 local grandFantasy
@@ -49,28 +50,32 @@ local function activateRoundEndScreen(state)
 end
 
 local function drawRoundEndScreen(state)
-  local yTop = 0
-  local xLeft = 0
+  local yTop = 32
+  local xLeft = 84
   local imgWidth = 256
-  local gap = 8
+  local gapX = 124
+  local gapY = 42
+
+
+  love.graphics.draw(resultsBg, 0, 0)
 
   -- draw the reference image
   state.reference:drawItem(meta.lastRound.referenceIdx, xLeft, yTop)
-  love.graphics.printf("Target", xLeft, yTop + gap + imgWidth, imgWidth, "center")
+  love.graphics.printf("Target", xLeft, yTop + gapY + imgWidth, imgWidth, "center")
 
   -- draw the result image
-  local xLeft2 = xLeft + imgWidth + gap
+  local xLeft2 = xLeft + imgWidth + gapX
   utils.drawMask(meta.resultImg, nil, xLeft2, yTop, function()
     love.graphics.draw(meta.refData.textureImg, meta.refData.textureSprite, xLeft2, yTop)
   end)
-  love.graphics.printf("Result", xLeft2, yTop + gap + imgWidth, imgWidth, "center")
+  love.graphics.printf("Result", xLeft2, yTop + gapY + imgWidth, imgWidth, "center")
 
   -- print the score
-  love.graphics.printf(utils.formatScore(meta.lastRound.score) .. " " .. meta.lastRound.secondsSpent .. " seconds to complete", xLeft, yTop + gap + imgWidth + 40, 800, "center")
+  love.graphics.printf(utils.formatScore(meta.lastRound.score) .. " " .. meta.lastRound.secondsSpent .. " seconds to complete", 0, yTop + gapY + imgWidth + gapY, 800, "center")
 
   local response = meta.response or "ERROR DID NOT ACTIVATE"
   
-  love.graphics.printf(response, 0, 600 - 50, 800, "center")
+  love.graphics.printf(response, 32, 478, 600, "left")
 end
 
 local function drawHelpScreen()
@@ -112,6 +117,7 @@ function SO.load()
   howToPlayBg = love.graphics.newImage("assets/howToPlayCard.png")
   beginBg = love.graphics.newImage("assets/beginCard.png")
   dialogBg = love.graphics.newImage("assets/dialogueBg.png")
+  resultsBg = love.graphics.newImage("assets/resultsCard.png")
   grandFantasy = love.audio.newSource("assets/audio/grandFantasy.mp3", "stream")
   backgroundBeatz = love.audio.newSource("assets/audio/backgroundBeatz.mp3", "stream")
   goblinMischief = love.audio.newSource("assets/audio/goblinMischief.mp3", "stream")
