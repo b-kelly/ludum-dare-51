@@ -6,7 +6,21 @@ S.__index = S
 -- nil entry will be replaced by the customer's request text
 local conversations = {
     {"Gobby, how're you doing in there?", "It's a bit hot, and these carrots are starting to smell a little funny. Oh, a customer!", nil, "That sounds like a lovely plan, and our contraption can gladly accomplish it. (Gobby, shhhh in there, they'll hear you!)"},
-    {"Wonder if we'll get any customers.", "If only it were that easy.", nil, "Man, I'm good."},
+    {"Wonder if we'll get any customers.", "If only it were that easy.", nil, "Man, look at that customer! I'm good."},
+    {"Sometimes I feel as if Gorbo the Great's genius is wasted on these kinds of projects.", "Sometimes *I* feel as if Gobby's genius is perfectly suited to these kinds of projects!", nil, "Certainly. Well, let's see just how suited your genius is."},
+    {"Ah, what a nice breeze we're having today, eh, Gobby?.", "Gobby wouldn't know... Gobby's in a stump.", nil, "Yup! Okay, magical contraption, do your thing!"},
+    {"Step right up, step right up! Get your objects made here!", "But please don't step on my stump!", nil, "It'll be ready in a jiffy! Smart folks choose Gorbo and Gobby's!"},
+    {"Hey Gobby, ever wonder what's outside this forest?", "Sometimes I wonder what's outside this stump... I used to remember...", nil, "Yes yes yes! Keep going, contraption! You can do it!"},
+    {"Hey, wanna switch spots for a bit?", "Would I ever! Wow, Gorbo, thanks, I'm getting a bit cramped in here.", nil, "Coming right up! Er, maybe next time, Gobby."},
+    {"Get your objects here! Ready in 10 or it's free!", "You know, 10 seconds isn't a very long time to get this done. Can't I have 30?", nil, "Can do, can do. This contraption is SO fast, just you watch!"},
+    {"Gorbo.", "Gobby.", nil, "Our contraption can do that!."},
+    {"Gorbo.", "Gobby.", nil, "We'll get on that right away."},
+    {"Gorbo.", "Gobby.", nil, "Absolutely!."},
+    {"Gorbo.", "Gobby.", nil, "Yes, I think we can manage that."},
+    {"Gorbo.", "Gobby.", nil, "Of course."},
+    {"Gorbo.", "Gobby.", nil, "Sure can."},
+    {"Gorbo.", "Gobby.", nil, "It'll be ready in two shakes of a goblin's ears."},
+    {"Gorbo.", "Gobby.", nil, "Yep, it'll be ready in 10 or my name ain't Gorbo."}
 }
 
 --I copied some of these twice across ratings because they apply to more than one.
@@ -22,43 +36,43 @@ local responses = {
 
 local requests = {
     {
-        "test kettle 1",
-        "test kettle 2",
+        "Hello there, I seem to have misplaced my tea kettle. I can't heat up water for my magic potions anymore! Can you help?",
+        "Hi! I heard of this thing called a ... kettle? It magically makes anything hot? Incredible! Can you make those here?",
     },
     {
-        "test flask 1",
-        "test flask 2",
+        "Ahem... hello. I need a love potion. Don't ask questions, and also don't tell Gorzoo about it. Can you do it?",
+        "Oh, cool! You can make anything?? I need a potion! It doesn't have to do anything, I just want it to look cool on my shelf. How about it?",
     },
     {
-        "test dagger 2",
-        "test dagger 1",
+        "Greetings! Can magically created daggers be traced back to their owners? Asking for a friend. Also can you make me one? I mean, my friend.",
+        "Hullo. I would like to stab things please. Meat, the floor, an apple, et cetera. Can you help me with, say, a large knife of some kind?",
     },
     {
-        "test purse 1",
-        "test purse 2",
+        "Hey, are you able to get coins outta that contraption? Is that like wishing for more wishes from a genie? Don't think about it too much, can you make me a coinpurse?",
+        "Good morrow! One coinpurse please. With coins included, if you please. Else, why bother?",
     },
     {
-        "test lute 1",
-        "test lute 2",
+        "Hello! I need to impress Gorinthia with my lute-playing skills. Unfortunately I do not have a lute. Can you help?",
+        "Good day, Gorbo! Does having a lute automatically make me a world-class bard superstar? Probably! Can you make me one?",
     },
     {
-        "test scroll 1",
-        "test scroll 2",
+        "Err, hi Gorbo. Where's Gobby? No matter. Anyway, I forgot to do my homework. I mean, my dog ate it. Can you make me a scroll that has a book report on it? Any book.",
+        "Hiya! I need a scroll I can read in the local potion shop so I look smart and cool. Can I get a really smart one? Like philosophy or something.",
     },
     {
-        "test hat 1",
-        "test hat 2",
+        "Oh, hey, Gorbo! Your hat is SO cool. I would like one just like it. Not for impersonation reasons, for Looking Cool reasons. How about it?",
+        "Hello, is this the amazing machine thing? Can I have something made? Maybe like... a hat?",
     },
     {
-        "test goblet 1",
-        "test goblet 2",
+        "Muah-ha-ha. Gorbo, my friend! I need a goblet. Ideally, it will be a beautiful and fancy goblet that nobody would EVER suspect could possibly contain poison. What do you think?",
+        "Hey, Gorbo? I may have accidentally broken my mom's favorite goblet and I really need a new one. Like, really fast. Can you do that?",
     },
     {
-        "test candle 1",
-        "test candle 2",
+        "Good day! It is so dark in my cave and I keep tripping on Stalactites. Stalagmites? Anyway I keep tripping on them. Could you make me a candlestick?",
+        "Hello! I would like to order one candlestick, please. With a candle on it. Ooh, can it even already be lit up? I ran out of matches.",
     },
     {
-        "test dolly 1",
+        "Oh Gorbo I'm so glad to see you. I forgot to buy my daughter a gift for Solstice and she REALLY wanted this one doll, and it's all sold out at the toymaker's! Is there any way you could make one just like it?",
         "test dolly 2",
     },
     {
