@@ -45,8 +45,8 @@ end
 local function drawGameOverScreen(state)
   local worst = meta.worst
   local best = meta.best
-  local xWorst = 100
-  local xBest = 400
+  local xWorst = 400
+  local xBest = 120
   local yBoth = 100
   love.graphics.draw(gameOverBg)
 
@@ -62,6 +62,8 @@ local function drawGameOverScreen(state)
   love.graphics.print(math.floor(worst.score*100) .."%", 710, 180)
   local worstBadge = SO.getBadge(worst.score)
   love.graphics.draw(worstBadge, 400, 300)
+  
+  love.graphics.printf(state:getTipJarContents().." total coins", 400, 440, 200, "center")
 end
 
 local function drawTitleScreen()
@@ -230,7 +232,7 @@ function SO.drawScene(scene, state)
   end
 
   if scene == Scenes.GAME_OVER then
-    drawGameOverScreen(state.scorer)
+    drawGameOverScreen(state)
   elseif scene == Scenes.TITLE then
     drawTitleScreen()
   elseif scene == Scenes.ROUND_END then
