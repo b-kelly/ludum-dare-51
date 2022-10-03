@@ -235,8 +235,9 @@ local function drawUI(state, mx, my)
 
     -- draw the gremlin's hand + wand
     local xOffset = wandAnims.wandMove1.offsetX + wandAnims.wandMove2.offsetX
-    love.graphics.draw(wandSpriteSheet, wandAnims.sparkles.sprites[wandAnims.sparkles.currentFrameIdx], 585 - xOffset, 260)
-    love.graphics.draw(gremlinSpriteSheet, wandAnims.gremlinAnim.sprites[wandAnims.gremlinAnim.currentFrameIdx], 585 - xOffset, 600 - 156)
+    local yOffset = wandAnims.wandMove1.offsetY + wandAnims.wandMove2.offsetY
+    love.graphics.draw(wandSpriteSheet, wandAnims.sparkles.sprites[wandAnims.sparkles.currentFrameIdx], 585 - xOffset, 260 + yOffset)
+    love.graphics.draw(gremlinSpriteSheet, wandAnims.gremlinAnim.sprites[wandAnims.gremlinAnim.currentFrameIdx], 585 - xOffset, 444 + yOffset)
 end
 
 function SG.load()
@@ -264,7 +265,7 @@ function SG.activate()
   local wandDuration1 = durationPerPixel * wandDistance1
   local wandDuration2 = durationPerPixel * wandDistance2
 
-  wandAnims.wandMove1 = newSlideAnimation(wandDuration1, wandDistance1, 0, function ()
+  wandAnims.wandMove1 = newSlideAnimation(wandDuration1, wandDistance1, 50, function ()
     wandAnims.sparkles.playing = true
     wandAnims.wandMove2.playing = true
   end)
