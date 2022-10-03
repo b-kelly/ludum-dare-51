@@ -16,6 +16,7 @@ local grabItemSound
 local wandSpriteSheet
 local outCover
 local bagCover
+local wandSound
 
 local shouldProceedToNextRound = false
 local workspaceLockedIn = false -- user signaled they are done, but we're still playing the animation
@@ -136,6 +137,7 @@ local function loadUI()
     wandSpriteSheet = love.graphics.newImage("assets/wandSpriteSheet.png")
     outCover = love.graphics.newImage("assets/outCover.png")
     bagCover = love.graphics.newImage("assets/bagCover.png")
+    wandSound = love.audio.newSource("assets/audio/wandSound.wav", "static")
 
     local timerWidth = 64
     timer = {}
@@ -367,6 +369,7 @@ function SG.handleKeypress(state, key, isrepeat)
     elseif key == "h" then
       state:setScene(Scenes.HELP)
     elseif key == "space" and state:canFinishCurrentRound() then
+      wandSound:play()
       wandAnims.wandMove2.callback = function ()
         -- calling state:nextRound() in here causes some weird race condition/capturing issues
         shouldProceedToNextRound = true

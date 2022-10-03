@@ -60,7 +60,7 @@ end
 local function drawIntroStoryScreen()
   love.graphics.draw(introBg, 0, 0)
   love.graphics.printf("I'm Gorbo the Great, it's ... GREAT ... to meet you! Gobby and I had the best business idea, but I'll let you in on it because we need your help.", 100, 140, 600, "center")
-  love.graphics.printf("We realized that we could be using our magic for good! And by 'good' I mean profit! You see, people want things. And we have other things that we can TRANSMUTE into those things, with just a bit of magic. And also trash we found in the forest.", 100, 220, 600, "center")
+  love.graphics.printf("We realized that we could be using our magic for good! And by 'good' I mean profit! You see, people want things. And we can TRANSMUTE those things, with just a bit of magic. And also trash we found in the forest.", 100, 220, 600, "center")
   love.graphics.printf("You'll be helping Gobby by using random forest items to copy the shape of the customer's request.", 400, 360, 300, "center")
   love.graphics.print("Press 'Enter' or click to continue", 440, 560)
 end
