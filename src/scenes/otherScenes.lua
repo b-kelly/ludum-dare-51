@@ -204,10 +204,10 @@ function SO.load()
   -- all the sheets are the same dimension/layout, so we really only need one set of quads
   customerSheet = utils.loadSpritesheet(customerClothes, 7, 4)
 
-  grandFantasy = love.audio.newSource("assets/audio/grandFantasy.mp3", "stream")
-  backgroundBeatz = love.audio.newSource("assets/audio/backgroundBeatz.mp3", "stream")
-  goblinMischief = love.audio.newSource("assets/audio/goblinMischief.mp3", "stream")
-  gameOverSong = love.audio.newSource("assets/audio/imperfectCopySong.mp3", "stream")
+  grandFantasy = love.audio.newSource("assets/audio/GrandFantasy.mp3", "stream")
+  backgroundBeatz = love.audio.newSource("assets/audio/BackgroundBeatz.mp3", "stream")
+  goblinMischief = love.audio.newSource("assets/audio/GoblinMischief.mp3", "stream")
+  gameOverSong = love.audio.newSource("assets/audio/ImperfectCopySong.mp3", "stream")
 
   grandFantasy:seek(2, "seconds")
   grandFantasy:setVolume(.3)
