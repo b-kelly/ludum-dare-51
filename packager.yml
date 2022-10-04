@@ -1,10 +1,10 @@
 name: ludum-dare-51
-version: 0.0.1
+version: 0.1.0
 assets:
   - "./src/**/*.lua"
   - ./src/assets/**/*
 targets:
   - love
-  # - win-32
-  # - win-64
-  # - mac
+  - win-32
+  - win-64
+  - mac

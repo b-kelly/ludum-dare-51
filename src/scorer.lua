@@ -64,7 +64,7 @@ local function gradeImageSimularityForWindow(target, result, window)
   return ssim
 end
 
-local function getImageSimilarity(target, result)
+local function getImageSimilarity(target, result, secondsSpent)
   -- break the image up into smaller pieces, rank each, then average the rankings
   -- TODO creates a new image every time
   local windows = utils.loadSpritesheet(love.graphics.newImage(target), WINDOW_COUNT, WINDOW_COUNT)
@@ -84,10 +84,19 @@ local function getImageSimilarity(target, result)
   
   local final = similarityAvg
 
-  if final < 0.8 then
+  if final < 0.85 then
+    if secondsSpent >= 5 then
+      if final < .05 and secondsSpent >= 7 then
+        final = .05
+      end
+      final = final + .05
+    end
     final = final + 0.05
   end
-
+  
+  if ((final * 100) % 10) == 9 then
+    final = final + .01
+  end
   return final, results
 end
 
@@ -104,16 +113,16 @@ function S.new()
   return self
 end
 
-function S.update(self, referenceImgData, referenceImgQuad, currentImgData)
+function S.update(self, referenceImgData, referenceImgQuad, currentImgData, secondsSpent)
   local data = utils.singleImageData(referenceImgData, referenceImgQuad)
 
   self.currentData = currentImgData
 
-  self.similarity, self.similarityDebug = getImageSimilarity(data, currentImgData)
+  self.similarity, self.similarityDebug = getImageSimilarity(data, currentImgData, secondsSpent)
 end
 
 function S.lockIn(self, referenceImgData, referenceImgQuad, currentImgData, secondsSpent, round, idx)
-  self:update(referenceImgData, referenceImgQuad, currentImgData)
+  self:update(referenceImgData, referenceImgQuad, currentImgData, secondsSpent)
 
   local entry = {
     secondsSpent = secondsSpent,
