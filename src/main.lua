@@ -23,20 +23,19 @@ function love.load(arg)
     --require("mobdebug").start()
     love.keyboard.setKeyRepeat(true)
     mainTextFont = love.graphics.newFont("assets/fonts/SignikaNegative-Medium.ttf", 20)
-    
-
-    -- load the scenes
-    otherScenes.load()
-    gameScene.load()
 
     -- load up the backing state
     gameState = GS.new()
+
+    -- load the scenes
+    otherScenes.load(gameState)
+    gameScene.load(gameState)
 end
 
 function love.update(dt)
   
   if debug then
-    love.audio.stop()
+    gameState:stopAudio()
   end
   if gameState.sceneNeedsActivation then
     if otherScenes.activate(gameState.scene, gameState) then

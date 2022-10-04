@@ -126,18 +126,18 @@ local function newButton(buttonImg, buttonX, buttonY)
   }
 end
 
-local function loadUI()
+local function loadUI(state)
     bg = love.graphics.newImage('assets/background.png')
     timerSpriteSheet = love.graphics.newImage('assets/timerSpriteSheet.png')
     referenceArea = love.graphics.newImage('assets/referenceBackground.png')
     referenceAreaGrid = love.graphics.newImage('assets/referenceBackground_grid.png')
     workspaceGrid = love.graphics.newImage('assets/workingCanvas_grid.png')
-    grabItemSound = love.audio.newSource("assets/audio/grabFromBag.wav", "static")
+    grabItemSound = state:loadAudioSource("assets/audio/grabFromBag.wav", "static")
     gremlinSpriteSheet = love.graphics.newImage("assets/gremlinHandSheet.png")
     wandSpriteSheet = love.graphics.newImage("assets/wandSpriteSheet.png")
     outCover = love.graphics.newImage("assets/outCover.png")
     bagCover = love.graphics.newImage("assets/bagCover.png")
-    wandSound = love.audio.newSource("assets/audio/wandSound.wav", "static")
+    wandSound = state:loadAudioSource("assets/audio/wandSound.wav", "static")
 
     local timerWidth = 64
     timer = {}
@@ -248,8 +248,8 @@ local function drawUI(state, mx, my)
     love.graphics.draw(gremlinSpriteSheet, wandAnims.gremlinAnim.sprites[wandAnims.gremlinAnim.currentFrameIdx], 585 - xOffset, 444 + yOffset)
 end
 
-function SG.load()
-    loadUI()
+function SG.load(state)
+    loadUI(state)
     loadBagLocations()
 end
 
@@ -324,7 +324,7 @@ function SG.handleMousepress(state, x, y)
   --first, check to see if you're trying to pick up an item from a bag
   if state:canSpendSecond() and item ~= 0 then
     state:selectItem(item)
-    grabItemSound:play()
+    state:playAudioSource(grabItemSound)
 
   elseif state.selectedItem ~= nil then
     --if not, then see if you're trying to place an item you have selected
@@ -371,7 +371,7 @@ function SG.handleKeypress(state, key, isrepeat)
     elseif key == "h" then
       state:setScene(Scenes.HELP)
     elseif key == "space" and state:canFinishCurrentRound() then
-      wandSound:play()
+      state:playAudioSource(wandSound)
       wandAnims.wandMove2.callback = function ()
         -- calling state:nextRound() in here causes some weird race condition/capturing issues
         shouldProceedToNextRound = true

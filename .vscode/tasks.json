@@ -1,22 +1,36 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "start",
-            "windows": {
-                "command": "love ./src"
-            },
-            "linux": {
-                "command": "love ./src"
-            },
-            "osx": {
-                "command": "open -n -a love ./src"
-            },
-            "type": "shell",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "start",
+      "windows": {
+        "command": "love ./src"
+      },
+      "linux": {
+        "command": "love ./src"
+      },
+      "osx": {
+        "command": "open -n -a love ./src"
+      },
+      "type": "shell",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "npm",
+      "script": "package",
+      "problemMatcher": [],
+      "label": "npm: package",
+      "detail": "love-packager package"
+    },
+    {
+      "type": "npm",
+      "script": "serve",
+      "problemMatcher": [],
+      "label": "npm: serve",
+      "detail": "npm run build:web && http-server ./dist/web"
+    }
+  ]
 }

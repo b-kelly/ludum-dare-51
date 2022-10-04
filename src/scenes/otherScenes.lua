@@ -34,8 +34,8 @@ local function drawRandomCustomer(x, y, customer)
 end
 
 local function activateGameOverScreen(state)
-  love.audio.stop()
-  gameOverSong:play()
+  state:stopAudio()
+  state:playAudioSource(gameOverSong)
   local worst = state.scorer.worst
   local best = state.scorer.best
   meta = {
@@ -100,8 +100,8 @@ local function activateRoundEndScreen(state)
     refData = state.reference:getData(lastRound.referenceIdx)
   }
   state.shouldBlockBag = false
-  love.audio.stop()
-  backgroundBeatz:play()
+  state:stopAudio()
+  state:playAudioSource(backgroundBeatz)
 end
 
 local function drawRoundEndScreen(state)
@@ -160,8 +160,8 @@ local function activateNewRequestScreen(state)
     conversation = strings.getRandomConversation(state.reference:getItemIdx(state.reference.currentIdx))
   }
   if state.currentRound ~= 1 then
-    love.audio.stop()
-    goblinMischief:play()
+    state:stopAudio()
+    state:playAudioSource(goblinMischief)
   end
 end
 
@@ -183,7 +183,7 @@ local function drawNewRequestScreen(state)
   love.graphics.printf(customerNames[state.currentCustomerData.name], 540, 302, 110, "center")
 end
 
-function SO.load()
+function SO.load(state)
   titleBg = love.graphics.newImage("assets/title.png")
   introBg = love.graphics.newImage("assets/introCard.png")
   howToPlayBg = love.graphics.newImage("assets/howToPlayCard.png")
@@ -204,10 +204,10 @@ function SO.load()
   -- all the sheets are the same dimension/layout, so we really only need one set of quads
   customerSheet = utils.loadSpritesheet(customerClothes, 7, 4)
 
-  grandFantasy = love.audio.newSource("assets/audio/GrandFantasy.mp3", "stream")
-  backgroundBeatz = love.audio.newSource("assets/audio/BackgroundBeatz.mp3", "stream")
-  goblinMischief = love.audio.newSource("assets/audio/GoblinMischief.mp3", "stream")
-  gameOverSong = love.audio.newSource("assets/audio/ImperfectCopySong.mp3", "stream")
+  grandFantasy = state:loadAudioSource("assets/audio/GrandFantasy.mp3", "stream")
+  backgroundBeatz = state:loadAudioSource("assets/audio/BackgroundBeatz.mp3", "stream")
+  goblinMischief = state:loadAudioSource("assets/audio/GoblinMischief.mp3", "stream")
+  gameOverSong = state:loadAudioSource("assets/audio/ImperfectCopySong.mp3", "stream")
 
   grandFantasy:seek(2, "seconds")
   grandFantasy:setVolume(.3)
@@ -231,7 +231,7 @@ function SO.activate(scene, state)
     activateGameOverScreen(state)
   elseif scene == Scenes.TITLE then
     --TODO put this in a function probs
-    grandFantasy:play()
+    state:playAudioSource(grandFantasy)
   elseif scene == Scenes.ROUND_END then
     activateRoundEndScreen(state)
   elseif scene == Scenes.HELP or scene == Scenes.INTRO_HELP then

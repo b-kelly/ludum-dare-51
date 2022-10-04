@@ -13,11 +13,9 @@ local _customerSheetXCount = 7
 local _customerSheetYCount = 4
 local TOTAL_CUSTOMER_SPRITES = _customerSheetXCount * _customerSheetYCount
 
---load main scene-specific audio
-local timerSound = love.audio.newSource("assets/audio/tickTock.wav", "static")
-local timerFull = love.audio.newSource("assets/audio/timerFull.wav", "static")
-local referenceArrives = love.audio.newSource("assets/audio/referenceArriving.mp3", "static")
-timerSound:setVolume(.7)
+local timerSound
+local timerFull
+local referenceArrives
 
 local function refundSecond(self)
   local newSeconds = self.spentSeconds - 1
@@ -56,10 +54,44 @@ function GS.new()
     scorer = S.new(),
     reference = R.new(),
     selectedItem = nil,
-    lastResult = nil
+    lastResult = nil,
+    audioSources = {},
+    playingAudio = {},
   }, GS)
 
+  --load main scene-specific audio
+  timerSound = self:loadAudioSource("assets/audio/tickTock.wav", "static")
+  timerFull = self:loadAudioSource("assets/audio/timerFull.wav", "static")
+  referenceArrives = self:loadAudioSource("assets/audio/referenceArriving.mp3", "static")
+  timerSound:setVolume(.7)
   return self
+end
+
+function GS.loadAudioSource(self, filename, type)
+  local source = love.audio.newSource(filename, type)
+  table.insert(self.audioSources, timerSound)
+  return source
+end
+
+function GS.playAudioSource(self, source)
+  if love.system.getOS() == "Web" then
+    return
+  end
+
+  table.insert(self.playingAudio, source)
+  source:play()
+end
+
+function GS.stopAudio(self)
+  if love.system.getOS() == "Web" then
+    return
+  end
+
+  if not pcall(function()
+    love.audio.stop(self.playingAudio)
+  end) then
+    -- ¯\_(ツ)_/¯
+  end
 end
 
 function GS.seconds(self)
@@ -92,7 +124,7 @@ function GS.nextScene(self)
     self:setScene(Scenes.NEW_REQUEST)
   elseif self.scene == Scenes.HELP or self.scene == Scenes.NEW_REQUEST then
     self:setScene(Scenes.GAME)
-    referenceArrives:play()
+    self:playAudioSource(referenceArrives)
   end
 
   return self.sceneNeedsActivation
@@ -113,9 +145,9 @@ function GS.placeItem(self, x, y)
   if canSpend and self.workspace:_placeItem(self.selectedItem, x, y) then
     self.spentSeconds = newSeconds
     if newSeconds == MAX_SECONDS then
-      timerFull:play()
+      self:playAudioSource(timerFull)
     else
-      timerSound:play()
+      self:playAudioSource(timerSound)
     end
   end
 
